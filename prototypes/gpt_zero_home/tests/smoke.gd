@@ -55,7 +55,7 @@ func _run() -> void:
             printerr("SMOKE_FAIL: touch targets too small ", view)
             quit(1)
             return
-        var ratio := home.scenery.size.x / home.scenery.size.y
+        var ratio: float = float(home.scenery.size.x) / float(home.scenery.size.y)
         if absf(ratio - 1.6) > 0.001:
             printerr("SMOKE_FAIL: artwork distorted at ", view)
             quit(1)
