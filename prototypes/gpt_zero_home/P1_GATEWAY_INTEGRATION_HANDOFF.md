@@ -1,3 +1,5 @@
+> **更新（P1 v2）**：深寻已经报告 Python 服务端权威世界执行器可完成路径动作。本文件保留早期 P1 对接讨论；当前对接方案已改为 **Godot Web 只渲染、Python v2 执行世界**。请优先阅读 [P1_V2_PUBLIC_VIEWER_HANDOFF.md](P1_V2_PUBLIC_VIEWER_HANDOFF.md)，不要沿用本文件中以 Godot headless 为主执行者的旧假设。
+
 # 深寻 P1 意图网关 × Godot：隔离对接协议 V0.1（待双方确认）
 
 **基于**：深寻转达的 P1 测试报告（Python 标准库 + SQLite、端口 8200、`/admin/register`、`/admin/revoke`、`/observation`、`/intent`、`/receipt/{event_id}`）。**尚未获取完整后端源码，不能宣称真实 HTTP 端到端已通过。**
