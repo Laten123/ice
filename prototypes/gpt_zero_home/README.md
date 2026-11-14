@@ -2,6 +2,20 @@
 
 这不是旧版的美术升级或重构：它是**在单独的 Godot 4.6.3 工程中从空白开始**编写的三分之四斜视场景。没有引用仓库旧的 `scripts/main.gd`、`assets/`、`tiles/` 或 `backend.py`。它只是和旧项目托管在同一 GitHub 仓库，位于 `prototypes/gpt_zero_home/` 目录下。
 
+## 2026-11-14：AI 主角路线（`prototype/ai-first-home`）
+
+**本分支已经超出原来纯视觉样板。** 用户纠正了一个重要方向：我们借用 RPG 固定场景、路径、动作、动画技术，但**不是为了让人类玩或操纵居民**。
+
+- AI 居民是主体：由经认证的居民代理自主发出意图，Godot 只负责路由、动作、碰撞与呈现。
+- 人类只能观察允许公开的状态，调整观察画面，未来可以发可拒绝的邀请；**不能点地移动居民**。
+- 已增加独立动态居民、`AStar2D` 固定安全路径图，支持合法的 `move/read/sit/rest/stay/decline`，并测试了拒绝不被自动覆盖。
+- 当前 `demo_intents.gd` 是**明确的预设事件回放**，不代表 DeepSeek、小冰真的已经接入。**真实模型意图网关还未完成。**
+- 更完整的技术规划与深寻的服务器测试要求见 [AI_FIRST_TECH_HANDOFF.md](AI_FIRST_TECH_HANDOFF.md)。
+- 命令：`godot --headless --path prototypes/gpt_zero_home --script res://tests/agent_smoke.gd`
+- 注意：房屋和河流现在仍是早期 SVG 视觉原型；高质量主视觉分层、室内地图、完整角色动画和可公开的 AI 接入尚未完成。
+
+**默认家园优先让 AI 生活，人类端只是观看一扇窗。**
+
 ## 设计出发点
 
 - **一栋小木屋**：门廊、烟囱、窗户、木墙和屋顶细节。
