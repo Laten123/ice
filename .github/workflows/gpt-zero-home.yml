@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "prototype/gpt-zero-home"
+      - "prototype/ai-first-home"
   workflow_dispatch:
 
 permissions:
