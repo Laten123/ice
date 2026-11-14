@@ -1953,22 +1953,7 @@
 <circle cx="514" cy="330" r="2" fill="#eac7b1"/>
 <circle cx="522" cy="333" r="5" fill="#527a55"/>
 <circle cx="530" cy="333" r="5" fill="#527a55"/>
-<ellipse cx="423" cy="469" rx="16" ry="5" fill="#4e6450"/>
-<rect x="418" y="461" width="5" height="8" fill="#554741"/>
-<rect x="427" y="461" width="5" height="8" fill="#554741"/>
-<rect x="416" y="449" width="18" height="16" fill="#74859a"/>
-<rect x="416" y="442" width="18" height="12" fill="#f0d2b2"/>
-<rect x="415" y="440" width="20" height="6" fill="#53607b"/>
-<rect x="419" y="450" width="3" height="3" fill="#3d3539"/>
-<rect x="429" y="450" width="3" height="3" fill="#3d3539"/>
-<ellipse cx="566" cy="441" rx="16" ry="5" fill="#4e6450"/>
-<rect x="561" y="433" width="5" height="8" fill="#554741"/>
-<rect x="570" y="433" width="5" height="8" fill="#554741"/>
-<rect x="559" y="421" width="18" height="16" fill="#d6c1d2"/>
-<rect x="559" y="414" width="18" height="12" fill="#f0d2b2"/>
-<rect x="558" y="412" width="20" height="6" fill="#aecbd1"/>
-<rect x="562" y="422" width="3" height="3" fill="#3d3539"/>
-<rect x="572" y="422" width="3" height="3" fill="#3d3539"/>
+<!-- Original pre-painted characters removed: resident actors are now dynamic Godot nodes. -->
 <rect x="500.9947348982096" y="583.2236432672944" width="3" height="3" fill="#f2cc96"/>
 <rect x="883.7869858965278" y="483.0273114265874" width="3" height="3" fill="#d6b4ca"/>
 <rect x="800.1095033437014" y="422.2032695559319" width="3" height="3" fill="#e0ddae"/>
