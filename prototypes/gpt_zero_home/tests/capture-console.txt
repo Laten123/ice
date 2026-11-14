@@ -26,3 +26,7 @@ FIRST_HOME_READY time=morning
 CAPTURE_VIEW preview-phone-landscape.png requested=(853, 384) window=(853, 384) root=(853, 384) logical_scene=(853.0, 384.0) image=(853, 384) result=0
 FIRST_HOME_READY time=dusk
 CAPTURE_VIEW preview-phone-portrait.png requested=(390, 844) window=(390, 844) root=(390, 844) logical_scene=(390.0, 844.0) image=(390, 844) result=0
+RESIDENT_STATE 00000000-0000-4000-8000-000000000001 move
+RESIDENT_STATE 00000000-0000-4000-8000-000000000001 stay
+FIRST_HOME_READY time=morning
+CAPTURE_VIEW preview-residents-demo.png requested=(960, 600) window=(960, 600) root=(960, 600) logical_scene=(960.0, 600.0) image=(960, 600) result=0
