@@ -60,10 +60,13 @@ func _run() -> void:
         return
     # A layout call must not undo the requested 26-point device-relative text.
     staging._apply_layout(Vector2(480, 480))
-    var logical_per_pixel: float = 480.0 / maxf(240.0, float(staging.get_window().size.y))
-    var expected_size: int = int(round(26.0 * logical_per_pixel))
-    if staging.debug_status.get_theme_font_size("font_size") != expected_size:
-        _fail("responsive layout overwrote DBG26 font size")
+    var physical_height: float = float(staging.get_window().size.y)
+    if physical_height < 240.0:
+        physical_height = 480.0
+    var expected_size: int = int(round(26.0 * 480.0 / physical_height))
+    var actual_size: int = staging.debug_status.get_theme_font_size("font_size")
+    if actual_size != expected_size:
+        _fail("responsive layout overwrote DBG26 font size: actual=" + str(actual_size) + " expected=" + str(expected_size) + " physical_height=" + str(physical_height))
         return
     server_packet["revision"] = 11725
     server_packet["residents"] = []
