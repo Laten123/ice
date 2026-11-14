@@ -31,5 +31,7 @@ jobs:
           if grep -E "SCRIPT ERROR|Parse Error|Failed loading resource|ERROR:.*script" /tmp/gpt-home-import.log; then
             exit 1
           fi
+      - name: Validate DeepSeek server test launcher
+        run: bash -n prototypes/gpt_zero_home/tests/server_verify.sh
       - name: Check responsive home and touch UI
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/smoke.gd
