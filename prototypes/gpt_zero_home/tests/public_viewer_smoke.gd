@@ -106,7 +106,8 @@ func _run() -> void:
     if first.position != view.graph.zone_position("door") or first.remaining_zones.size() != 3:
         _fail("P1 v2 route display failed")
         return
-    first._process(7.0)
+    await process_frame
+    await process_frame
     if first.position != view.graph.zone_position("door"):
         _fail("viewer invented motion without a newer authoritative snapshot")
         return
@@ -124,7 +125,8 @@ func _run() -> void:
     if first.position != view.graph.zone_position("path") or first.remaining_zones.size() != 2:
         _fail("viewer failed to advance exactly to the server-confirmed waypoint")
         return
-    first._process(20.0)
+    await process_frame
+    await process_frame
     if first.position != view.graph.zone_position("path"):
         _fail("viewer interpolated toward an unconfirmed waypoint")
         return
