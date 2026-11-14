@@ -49,6 +49,11 @@ var pan_x := 0.0
 var last_revision: int = -1
 var have_public_snapshot := false
 var fetching := false
+var debug_status: Label
+var last_error_code := "INIT"
+var last_http_code := 0
+var last_http_result := -1
+var last_public_count := 0
 
 func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
@@ -90,6 +95,17 @@ func _build_visuals() -> void:
     title_label.add_theme_font_size_override("font_size", 20)
     title_label.add_theme_color_override("font_color", Color("#fff5df"))
     header.add_child(title_label)
+
+    debug_status = Label.new()
+    debug_status.name = "StagingEnglishDiagnostics"
+    debug_status.text = "P1 STAGING: INIT"
+    debug_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    debug_status.add_theme_font_size_override("font_size", 14)
+    debug_status.add_theme_color_override("font_color", Color("#ffffff"))
+    debug_status.add_theme_color_override("font_shadow_color", Color("#12252a"))
+    debug_status.add_theme_constant_override("shadow_offset_y", 2)
+    debug_status.visible = use_same_origin_public_feed
+    add_child(debug_status)
 
     status = Label.new()
     status.name = "PublicOnlyStatus"
@@ -196,6 +212,9 @@ func _apply_layout(view: Vector2) -> void:
     status.add_theme_font_size_override("font_size", int(round(13.0 * logical_per_pixel)))
     status.size = Vector2(view.x - margin * 2.0, 70.0 * logical_per_pixel)
     hint.size = Vector2(view.x - margin * 2.0, 32.0 * logical_per_pixel)
+    debug_status.position = Vector2(margin, 65.0 * logical_per_pixel)
+    debug_status.size = Vector2(view.x - margin * 2.0, 38.0 * logical_per_pixel)
+    debug_status.add_theme_font_size_override("font_size", int(round(12.0 * logical_per_pixel)))
     _position_art(view)
 
 func _position_art(view: Vector2) -> void:
@@ -216,6 +235,13 @@ func _gui_input(event: InputEvent) -> void:
         pan_x += event.relative.x
         _position_art(size)
         accept_event()
+
+func _debug(code: String) -> void:
+    last_error_code = code
+    if debug_status != null and use_same_origin_public_feed:
+        debug_status.text = "P1 " + code + " HTTP " + str(last_http_code) + " REV " + str(last_revision) + " N " + str(last_public_count)
+    if use_same_origin_public_feed:
+        print("PUBLIC_VIEWER_DIAG: ", code, " HTTP=", last_http_code, " result=", last_http_result, " revision=", last_revision, " count=", last_public_count)
 
 func _safe_activity(raw: String) -> String:
     var aliases := {
@@ -344,6 +370,7 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
         actors[identity].show_public_state(person["name"], graph.zone_position(person["zone"]), person["activity"], person["remaining"], person["progress"])
     have_public_snapshot = true
     last_revision = new_revision
+    last_public_count = parsed.size()
     _update_status(parsed)
     return true
 
@@ -373,6 +400,7 @@ func start_public_feed(url: String) -> bool:
     if not url.ends_with("/public/world"):
         return false
     public_feed_url = url
+    _debug("FEED_READY")
     fetch_clock.wait_time = maxf(1.0, poll_seconds)
     fetch_clock.start()
     _fetch_public_snapshot()
@@ -382,20 +410,40 @@ func _fetch_public_snapshot() -> void:
     if fetching or public_feed_url.is_empty():
         return
     fetching = true
+    _debug("GET_START")
     # No cookies, resident tokens, admin keys, Authorization or custom headers.
     var error: Error = transport.request(public_feed_url, [], HTTPClient.METHOD_GET)
     if error != OK:
         fetching = false
         status.text = "公开世界快照暂不可用"
+        _debug("REQUEST_START_ERR_" + str(error))
 
 func _on_public_response(result: int, code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
     fetching = false
-    if result != HTTPRequest.RESULT_SUCCESS or code != 200 or body.size() > MAX_RESPONSE_BYTES:
+    last_http_code = code
+    last_http_result = result
+    if result != HTTPRequest.RESULT_SUCCESS:
         status.text = "公开世界快照暂不可用"
+        _debug("TRANSPORT_ERR_" + str(result))
+        return
+    if code != 200:
+        status.text = "公开世界快照暂不可用"
+        _debug("HTTP_ERR_" + str(code))
+        return
+    if body.size() > MAX_RESPONSE_BYTES:
+        status.text = "公开世界快照暂不可用"
+        _debug("BODY_TOO_LARGE")
         return
     var decoded = JSON.parse_string(body.get_string_from_utf8())
-    if typeof(decoded) != TYPE_DICTIONARY or not apply_public_snapshot(decoded):
+    if typeof(decoded) != TYPE_DICTIONARY:
         status.text = "公开世界数据格式不匹配"
+        _debug("JSON_INVALID")
+        return
+    if not apply_public_snapshot(decoded):
+        status.text = "公开世界数据格式不匹配"
+        _debug("SCHEMA_REJECT")
+        return
+    _debug("OK")
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
