@@ -1,3 +1,9 @@
+## 最新架构更正（P1 v2）
+
+深寻已报告 Python v2 作为**世界状态与路径的权威执行端**。所以 Godot Web **只负责展示公开快照**，不应直接接收居民 token，也不再将本地 `home.tscn` 的动作系统作为生产世界状态来源。
+
+默认 Godot 启动已切换至 `scenes/public_viewer.tscn`；它的网络公开源尚未配置，默认展示等待。完整最新对接说明：[P1_V2_PUBLIC_VIEWER_HANDOFF.md](P1_V2_PUBLIC_VIEWER_HANDOFF.md)。之前本文件中的 Godot 本地事件/路径网关保留为离线实验，不代表生产架构。
+
 # 《幻想乡》AI 主角家园 — 给深寻的技术规划与测试交接
 
 **分支**：`prototype/ai-first-home`  
