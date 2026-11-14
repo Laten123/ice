@@ -19,10 +19,10 @@ WARNING: All audio drivers failed, falling back to the dummy driver.
 
 FIRST_HOME_READY time=morning
 FIRST_HOME_READY time=morning
-CAPTURE_VIEW preview-morning.png requested=(960, 600) window=(960, 600) logical_scene=(768.0, 480.0) image=(960, 600) result=0
+CAPTURE_VIEW preview-morning.png requested=(960, 600) window=(960, 600) root=(960, 600) logical_scene=(960.0, 600.0) image=(960, 600) result=0
 FIRST_HOME_READY time=dusk
-CAPTURE_VIEW preview-dusk.png requested=(960, 600) window=(960, 600) logical_scene=(768.0, 480.0) image=(960, 600) result=0
+CAPTURE_VIEW preview-dusk.png requested=(960, 600) window=(960, 600) root=(960, 600) logical_scene=(960.0, 600.0) image=(960, 600) result=0
 FIRST_HOME_READY time=morning
-CAPTURE_VIEW preview-phone-landscape.png requested=(853, 384) window=(853, 384) logical_scene=(768.0, 480.0) image=(960, 600) result=0
+CAPTURE_VIEW preview-phone-landscape.png requested=(853, 384) window=(853, 384) root=(853, 384) logical_scene=(853.0, 384.0) image=(853, 384) result=0
 FIRST_HOME_READY time=dusk
-CAPTURE_VIEW preview-phone-portrait.png requested=(390, 844) window=(390, 844) logical_scene=(768.0, 480.0) image=(960, 600) result=0
+CAPTURE_VIEW preview-phone-portrait.png requested=(390, 844) window=(390, 844) root=(390, 844) logical_scene=(390.0, 844.0) image=(390, 844) result=0
