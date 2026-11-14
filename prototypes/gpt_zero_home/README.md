@@ -2,6 +2,14 @@
 
 这不是旧版的美术升级或重构：它是**在单独的 Godot 4.6.3 工程中从空白开始**编写的三分之四斜视场景。没有引用仓库旧的 `scripts/main.gd`、`assets/`、`tiles/` 或 `backend.py`。它只是和旧项目托管在同一 GitHub 仓库，位于 `prototypes/gpt_zero_home/` 目录下。
 
+## 2026-11-14 真机观察：第二阶段已由深寻报告成功 🌙
+
+**来自深寻与拿铁的手机实测报告**：Android 手机在 VPN 全局模式下，通过独立预览服务 `127.0.0.1:8211` + Cloudflare Quick Tunnel，成功加载 Godot Web 家园场景，并看到公开测试居民 `path-test` 出现在石桌旁。Python 世界公开快照到 Web 观察器的同步已通过；**不是声称真实 DeepSeek 或小冰代理现已入园**，也不是永久部署。
+
+定位出关键阻塞：此前 `HTTPRequest.accept_gzip=true` 与代理压缩响应在 Web 端导致 `RESULT_BODY_DECOMPRESS_FAILED (8)`。依据深寻成功真机实验，本工程正式观察器代码统一设置 `transport.accept_gzip = false`，并在公开 GET 时发送 `Accept-Encoding: identity`；增加本地回归检查。**本分支尚未合入 `main` 或修改阿里云生产服务**。
+
+尚待处理：许可合适的中文字体打包、竖屏构图和最后的像素美术质量；现有 `progress=0.0` 仍只呈现服务端确认的路点，不声明连续平滑行走。
+
 ## 下一次手机联调：零账号临时 HTTPS（测试专用）
 
 **已决定采用 Cloudflare Quick Tunnel 的临时 `trycloudflare.com` 地址，而不是让拿铁买域名、注册账号或开放阿里云安全组 8443。** 这是后续要由深寻在隔离阿里云服务器中运行的测试方案，**目前尚未声称隧道已启动或手机联网已通过**。
