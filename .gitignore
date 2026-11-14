@@ -4,3 +4,12 @@ build/
 *.log
 __pycache__/
 fantasia.db
+
+# Security: never commit server TLS private keys or credentials
+key.pem
+*.key
+*.p12
+*.pfx
+.env
+.env.*
+!.env.example
