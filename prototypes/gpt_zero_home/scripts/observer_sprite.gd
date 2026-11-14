@@ -1,7 +1,8 @@
 extends Node2D
 ## Appearance-only sprite. It has no pathfinding, no movement intents,
 ## no network credentials, and NO API for controlling the world.
-const VISUAL_SPEED := 5.0
+## Public server snapshots are the ONLY source of resident positions.
+## Do not locally lerp between distant zones: doing so can visually cross walls.
 
 var resident_id: String = ""
 var public_name: String = ""
@@ -11,7 +12,8 @@ var main_color: Color = Color("#74859a")
 var hair_color: Color = Color("#53607b")
 var facing_right: bool = true
 var initialized: bool = false
-var walk_phase: float = 0.0
+var remaining_zones: Array[String] = []
+var path_progress: float = 0.0
 
 func configure(identity: String, display_name: String, tint: Color, hair: Color) -> void:
     resident_id = identity
@@ -19,32 +21,24 @@ func configure(identity: String, display_name: String, tint: Color, hair: Color)
     main_color = tint
     hair_color = hair
 
-func show_public_state(display_name: String, scene_position: Vector2, state_name: String) -> void:
+func show_public_state(display_name: String, scene_position: Vector2, state_name: String, public_remaining: Array[String] = [], public_progress: float = 0.0) -> void:
     public_name = display_name
     activity = state_name
+    remaining_zones = public_remaining.duplicate()
+    path_progress = public_progress
     target_position = scene_position
-    if not initialized:
-        position = scene_position
-        initialized = true
+    # Server zone is authoritative: only step to a new trusted waypoint when
+    # a new public snapshot confirms that zone. No client-side route simulation.
+    if initialized and scene_position != position:
+        facing_right = scene_position.x >= position.x
+    position = scene_position
+    initialized = true
     queue_redraw()
-
-func _process(delta: float) -> void:
-    if not initialized:
-        return
-    var difference: Vector2 = target_position - position
-    if difference.length() > 0.4:
-        facing_right = difference.x >= 0.0
-        position = position.lerp(target_position, clampf(delta * VISUAL_SPEED, 0.0, 1.0))
-        walk_phase += delta * 8.0
-        queue_redraw()
-    elif position != target_position:
-        position = target_position
-        queue_redraw()
 
 func _draw() -> void:
     if not initialized:
         return
-    var bob: float = sin(walk_phase) if position.distance_to(target_position) > 1.0 else 0.0
+    var bob: float = 0.0 # Do not animate a walk between unconfirmed points
     draw_colored_polygon(
         PackedVector2Array([Vector2(-12, 1), Vector2(-8, -2), Vector2(8, -2), Vector2(12, 1), Vector2(8, 4), Vector2(-8, 4)]),
         Color(0.10, 0.18, 0.15, 0.50)
