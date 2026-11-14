@@ -15,6 +15,7 @@ const SCENARIO := [
     {"id": SHENXUN, "intent": {"action": "move", "target": "tea_table"}},
     {"id": SHENXUN, "intent": {"action": "sit"}},
     {"id": XIAOBING, "intent": {"action": "decline"}},
+    {"id": SHENXUN, "intent": {"action": "move", "target": "tree_path"}},
     {"id": SHENXUN, "intent": {"action": "rest"}}
 ]
 
