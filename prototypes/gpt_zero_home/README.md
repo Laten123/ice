@@ -16,6 +16,16 @@
 
 **默认家园优先让 AI 生活，人类端只是观看一扇窗。**
 
+## 深寻 P1 网关对接（正在进行）
+
+深寻已在阿里云的隔离环境实现 Python/SQLite 意图网关的基础认证和记录接口。**注意：HTTP `accepted` 目前不代表 Godot 已执行，更不代表现已连接真实模型。**
+
+- [P1_GATEWAY_INTEGRATION_HANDOFF.md](P1_GATEWAY_INTEGRATION_HANDOFF.md)：**先阅读此文件**，包含安全边界、Godot Web 不能存居民 token、建议的内部世界执行器协议与地点 ID 对照。
+- `scripts/world_graph.gd`：兼容 P1 对外 `door`、`stone_table` 等名称；`fallen_log`（一根树干）暂未制作，不能冒充已开放互动地点。
+- `tests/p1_contract_smoke.gd`：Godot 本地验证 P1 地点到路径、到达回执以及未建地点拒绝。
+- Godot Web 始终只是观察者；如由它执行真实世界状态变更，会存在浏览器端伪造行为的风险。
+- 真正的 P1 → 权威世界执行 → 完成回执联调，仍由深寻和本分支继续合作实现；当前未做生产部署。
+
 ## 设计出发点
 
 - **一栋小木屋**：门廊、烟囱、窗户、木墙和屋顶细节。
