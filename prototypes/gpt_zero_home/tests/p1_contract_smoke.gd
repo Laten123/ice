@@ -44,6 +44,41 @@ func _run() -> void:
         _fail("unfinished fallen_log was advertised as available")
         return
 
+    # DeepSeek P1 authoritative weighted adjacency for all 9 public nodes.
+    var weighted_edges: Array = [
+        ["door", "path", 80], ["path", "garden", 120],
+        ["garden", "window", 60], ["path", "old_tree", 140],
+        ["path", "book_corner", 160], ["old_tree", "book_corner", 90],
+        ["book_corner", "stone_table", 40], ["stone_table", "riverside", 60],
+        ["stone_table", "riverbank", 80], ["riverside", "riverbank", 100]
+    ]
+    if graph.BACKEND_EDGES.size() != weighted_edges.size():
+        _fail("wrong number of authoritative Python edges")
+        return
+    for edge in weighted_edges:
+        if graph.backend_edge_weight(edge[0], edge[1]) != edge[2]:
+            _fail("backend route weight mismatch: " + str(edge))
+            return
+        if graph.backend_edge_weight(edge[1], edge[0]) != edge[2]:
+            _fail("backend reverse route weight mismatch: " + str(edge))
+            return
+    if graph.backend_edge_weight("door", "window") != -1:
+        _fail("unexpected direct door-window shortcut")
+        return
+    if graph.backend_edge_weight("path", "riverside") != -1:
+        _fail("obsolete path-riverside shortcut still exists")
+        return
+    var canonical: Array[String] = graph.backend_weighted_route("door", "stone_table")
+    if canonical != ["door", "path", "book_corner", "stone_table"]:
+        _fail("DeepSeek 280-cost path mismatch: " + str(canonical))
+        return
+    var cost: int = 0
+    for i in range(canonical.size() - 1):
+        cost += graph.backend_edge_weight(canonical[i], canonical[i + 1])
+    if cost != 280:
+        _fail("expected 280 weight units but computed " + str(cost))
+        return
+
     var observation: Dictionary = home.observation_for_verified_resident(SHEN)
     var observable: Array = observation["world"]["available_locations"]
     if not observable.has("stone_table") or observable.has("tea_table"):
@@ -90,5 +125,5 @@ func _run() -> void:
         _fail("unfinished fallen_log accepted as navigable")
         return
 
-    print("P1_CONTRACT_OK: backend place IDs, canonical observations, arrival receipt, unfinished scene exclusions")
+    print("P1_CONTRACT_OK: nine-node server weighted graph, 280-weight stone-table route, arrival and exclusions")
     quit(0)
