@@ -13,7 +13,7 @@ const PUBLIC_WORLD_ID := "fantasia.first_home.prototype"
 const VALID_ACTIONS := ["stay", "move", "sit", "read", "rest", "decline"]
 const ALLOWED_PACKET_KEYS := ["schema_version", "world_id", "residents", "revision"]
 const ALLOWED_RESIDENT_KEYS := ["resident_id", "name", "zone", "activity", "pos", "action", "path_progress"]
-const ALLOWED_PATH_KEYS := ["remaining", "progress"]
+const ALLOWED_PATH_KEYS := ["from", "to", "remaining", "progress"]
 const MAX_PUBLIC_WAYPOINTS := 24
 const MAX_RESPONSE_BYTES := 65536
 const MAX_PUBLIC_RESIDENTS := 32
@@ -279,15 +279,27 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
             for key in route_data.keys():
                 if not ALLOWED_PATH_KEYS.has(str(key)):
                     return false
+            # Python is authoritative. "from" is the server-confirmed
+            # current waypoint; "to" is the next, and remaining starts there.
+            # The Python topology is authoritative, so DO NOT use local Godot
+            # AStar edges to veto a route that the server has validated.
+            if typeof(route_data.get("from", null)) != TYPE_STRING or typeof(route_data.get("to", null)) != TYPE_STRING:
+                return false
+            var from_zone: String = route_data["from"]
+            var to_zone: String = route_data["to"]
+            if from_zone != scene_zone or not valid_places.has(from_zone) or not valid_places.has(to_zone):
+                return false
             if not route_data.has("remaining") or typeof(route_data["remaining"]) != TYPE_ARRAY:
                 return false
             var route_parts: Array = route_data["remaining"]
-            if route_parts.size() > MAX_PUBLIC_WAYPOINTS:
+            if route_parts.is_empty() or route_parts.size() > MAX_PUBLIC_WAYPOINTS:
                 return false
             for part in route_parts:
                 if typeof(part) != TYPE_STRING or not valid_places.has(part):
                     return false
                 remaining.append(part)
+            if remaining[0] != to_zone:
+                return false
             if not route_data.has("progress"):
                 return false
             var raw_progress = route_data["progress"]
@@ -298,9 +310,10 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
             if not (progress >= 0.0 and progress <= 1.0):
                 return false
 
-        # Important: P1 v3's "progress" has not been defined as a specific
-        # (from, to) edge fraction. Store and display route metadata, but DO
-        # NOT use it to invent fractional positions or skip trusted waypoints.
+        # P1 v3 does define progress as fraction of from->to. However current
+        # server reports 0.0 and its graph's edges are not yet guaranteed to
+        # match the painted scene. Keep the visual at its confirmed "zone";
+        # don't simulate the path or interpolate across house/river artwork.
         parsed.append({
             "resident_id": identity, "name": display_name, "zone": scene_zone,
             "activity": state_name, "remaining": remaining, "progress": progress
