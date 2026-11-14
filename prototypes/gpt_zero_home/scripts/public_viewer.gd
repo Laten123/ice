@@ -17,6 +17,9 @@ const ALLOWED_PATH_KEYS := ["from", "to", "remaining", "progress"]
 const MAX_PUBLIC_WAYPOINTS := 24
 const MAX_RESPONSE_BYTES := 65536
 const MAX_PUBLIC_RESIDENTS := 32
+# Add an OFL-licensed Chinese font resource in the isolated project before Web export.
+# The default Godot Web fallback font cannot be assumed to contain CJK glyphs.
+const OPTIONAL_CJK_FONT := "res://art/fonts/NotoSansSC-Regular.ttf"
 const PALETTE := [
     [Color("#74859a"), Color("#53607b")],
     [Color("#d6c1d2"), Color("#aecbd1")],
@@ -60,6 +63,7 @@ func _ready() -> void:
     clip_contents = true
     graph = WalkGraph.new()
     _build_visuals()
+    _apply_optional_cjk_font()
     _set_time(false)
     resized.connect(_refresh_layout)
     get_viewport().size_changed.connect(_refresh_layout)
@@ -145,6 +149,18 @@ func _build_visuals() -> void:
     fetch_clock.wait_time = poll_seconds
     fetch_clock.timeout.connect(_fetch_public_snapshot)
     add_child(fetch_clock)
+
+func _apply_optional_cjk_font() -> void:
+    if not ResourceLoader.exists(OPTIONAL_CJK_FONT):
+        if use_same_origin_public_feed:
+            _debug("CJK_FONT_MISSING")
+        return
+    var font_resource = ResourceLoader.load(OPTIONAL_CJK_FONT)
+    if font_resource is Font:
+        for widget in [title_label, status, hint, day_button, dusk_button]:
+            widget.add_theme_font_override("font", font_resource)
+        if use_same_origin_public_feed:
+            _debug("CJK_FONT_READY")
 
 func _panel_style() -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
