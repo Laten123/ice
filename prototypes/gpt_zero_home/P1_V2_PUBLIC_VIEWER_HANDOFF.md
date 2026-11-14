@@ -1,3 +1,27 @@
+# 最新接口进展：深寻 P1 公共快照与 decline 修正
+
+**依据**：拿铁转交的深寻后续实测报告；DeepSeek 服务器源码与端口 8200 未在本会话中直接访问。这份记录不等于已完成真实网络联调。
+
+深寻确认：
+- `decline` 返回 `completed`（detail: declined），被中断的旧移动返回 `interrupted`，SQLite 与 HTTP 状态一致。
+- **真实新增** `GET /public/world`，匿名只读，字段 `schema_version/world_id/revision/residents`；`/observation` 和 `/intent` 无居民 token 仍为 401。
+- 居民移动时报告扩展 `path_progress: {remaining: [...], progress: 0.0}`，其余公开字段为 `resident_id/name/zone/activity`。
+
+Godot 侧配套修改：
+- `scripts/public_viewer.gd` **只允许 HTTPS 的 `/public/world` 公开端点**，不接受 `http://127.0.0.1:8200`、私有 `/observation` 或 `/intent`；默认 `public_feed_url=""`，工程不会自动联网。
+- 接收并检查 `path_progress.remaining`（有效的公共地点 ID、最多 24 项）及 `progress`（有限 0..1 浮点），拒绝未知/私人字段。
+- `scripts/observer_sprite.gd` 根据每次公开快照给出的**权威 `zone` 位置更新角色**，取消从旧点向任意新点直线插值，以免穿墙；显示剩余路点数量。
+- **重要未决**：`progress` 的物理语义未定义——它表示哪一条 `from→to` 边的进度？`remaining` 是否包含当前位置？报告中的 `path → book_corner` 与当前 Godot 图的 `front_path → river_path → tree_path → book_corner` 并非直接相连。**不得随意用两个显示点连直线**。本版只用进度元数据，不擅自进行分段动画。建议深寻下一步明确带边 ID 的 `current_segment: {from, to, progress}`，并与可视地图的路由拓扑统一。
+
+## 真正用手机验证前还有两件事
+
+1. 阿里云的 `127.0.0.1:8200` 仅服务器本机可访问；手机浏览器中的 `127.0.0.1` 是**手机自己**，不是阿里云。不能把测试 HTTP 端口直接设进 Godot Web，更不应为此对公网打开原始 8200 服务。由深寻确认在隔离/受控环境提供合适的 HTTPS 同源只读反向代理（含 CORS、缓存策略和匿名可见性审核）；HTTPS 接口的确切地址仍未知，不得凭空填写。
+2. **匿名公开并不等于所有居民自动同意公开**。公开端点必须只包含居民已经授权展示的身份、地点、活动；隐藏或私密状态不得出现在匿名接口，服务器还应控制访问频率与最小日志暴露。
+
+在公开 HTTPS 地址及可见性规则获得确认之前，Godot 侧只通过离线快照自动测试；**未声称已连上深寻的真实网关，也尚未接入真实模型。**
+
+---
+
 # 深寻 P1 v2 → Godot 只读公开观察器：技术交接
 
 **来源**：拿铁转达的深寻 P1 v2 测试报告。报告称 Python stdlib + SQLite 网关已在 /tmp 隔离部署，支持原生路径模拟、completed/interrupted、token 撤销与限流。**本次尚未取得 P1 v2 源码，也没有直接访问深寻阿里云服务；上述能力属于深寻报告，不代表 ChatGPT 已经端到端实测。**
