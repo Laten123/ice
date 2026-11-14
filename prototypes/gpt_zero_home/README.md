@@ -2,6 +2,16 @@
 
 这不是旧版的美术升级或重构：它是**在单独的 Godot 4.6.3 工程中从空白开始**编写的三分之四斜视场景。没有引用仓库旧的 `scripts/main.gd`、`assets/`、`tiles/` 或 `backend.py`。它只是和旧项目托管在同一 GitHub 仓库，位于 `prototypes/gpt_zero_home/` 目录下。
 
+## 下一次手机联调：零账号临时 HTTPS（测试专用）
+
+**已决定采用 Cloudflare Quick Tunnel 的临时 `trycloudflare.com` 地址，而不是让拿铁买域名、注册账号或开放阿里云安全组 8443。** 这是后续要由深寻在隔离阿里云服务器中运行的测试方案，**目前尚未声称隧道已启动或手机联网已通过**。
+
+- 完整实施与安全约束：[QUICK_TUNNEL_STAGING_HANDOFF.md](QUICK_TUNNEL_STAGING_HANDOFF.md)
+- `tests/preview_public_server.py`：只绑定 `127.0.0.1:8211`，仅代理服务端的 `GET /public/world`，而且只放行显式指定的虚构测试居民；可选从单独 Web 导出目录提供静态资源。
+- `scenes/public_viewer_staging.tscn`：为将来的 Web 测试准备同源 HTTPS 只读连接，**不包含任何居民/管理员 token**。普通 `public_viewer.tscn` 仍默认离线。
+- `tests/preview_public_server_smoke.py`：检查未授权的服务器 API、非 GET 请求、私密静态文件不能通过预览入口。
+- Godot 的 `world_graph.gd` 已镜像深寻提供的九节点十条无向边，参考权重由 Python 提供。**这些不是已核对完的美术路径几何**；今后要根据场景前景遮挡逐段制作动作。
+
 ## 当前默认入口：只读公开观察器（P1 v3 协议准备）
 
 **运行 `godot --path .` 打开的是 `scenes/public_viewer.tscn`，不是旧版 `home.tscn`。**
