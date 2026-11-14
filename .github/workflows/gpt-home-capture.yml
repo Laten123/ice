@@ -31,7 +31,7 @@ jobs:
       - name: Take true in-engine snapshots (both time variants)
         shell: bash
         run: |
-          xvfb-run -a -s "-screen 0 960x600x24" \
+          xvfb-run -a -s "-screen 0 1280x960x24" \
             godot --path prototypes/gpt_zero_home --rendering-driver opengl3 \
             --script res://tests/capture.gd
           ls -lh prototypes/gpt_zero_home/preview-*.png
@@ -47,6 +47,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add prototypes/gpt_zero_home/preview-morning.png prototypes/gpt_zero_home/preview-dusk.png
           if ! git diff --cached --quiet; then
-            git commit -m "preview: render morning and dusk from standalone Godot prototype"
+            git commit -m "preview: refresh desktop and phone captures for independent home"
             git push origin HEAD:prototype/gpt-zero-home
           fi
