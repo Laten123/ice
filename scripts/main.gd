@@ -222,57 +222,63 @@ func _build_map() -> void:
 
 var clouds: Array = []
 
+# Pixel-art sky: solid 4px clusters instead of noisy individual pixels.
 func _build_clouds(cl: CanvasLayer) -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 33
 	for i in 4:
-		var c := Sprite2D.new()
-		var img := Image.create(120, 30, false, Image.FORMAT_RGBA8)
-		for y in 30:
-			for x in 120:
-				var d := Vector2((x - 60) / 60.0, (y - 15) / 15.0).length()
-				if d < 1.0 and rng.randf() > 0.15:
-					img.set_pixel(x, y, Color(1, 1, 1, 0.75))
-		c.texture = ImageTexture.create_from_image(img)
-		c.position = Vector2(100 + i * 320, 30 + rng.randi_range(0, 50))
-		c.set_meta("speed", 4.0 + rng.randf() * 3.0)
-		cl.add_child(c)
-		clouds.append(c)
+		var cloud := Sprite2D.new()
+		var img := Image.create(120, 40, false, Image.FORMAT_RGBA8)
+		for y in range(0, 40, 4):
+			for x in range(0, 120, 4):
+				var p := Vector2(x + 2, y + 2)
+				var left := Vector2((p.x - 30.0) / 27.0, (p.y - 25.0) / 12.0)
+				var center := Vector2((p.x - 60.0) / 33.0, (p.y - 19.0) / 17.0)
+				var right := Vector2((p.x - 89.0) / 27.0, (p.y - 25.0) / 12.0)
+				if left.length_squared() < 1.0 or center.length_squared() < 1.0 or right.length_squared() < 1.0:
+					var shade := Color("#e1eef0") if y >= 29 else Color("#fbf8e9")
+					img.fill_rect(Rect2i(x, y, 4, 4), shade)
+		cloud.texture = ImageTexture.create_from_image(img)
+		cloud.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		cloud.position = Vector2(100 + i * 320, 35 + rng.randi_range(0, 34))
+		cloud.scale = Vector2(1.3, 1.3)
+		cloud.set_meta("speed", 3.0 + rng.randf() * 2.0)
+		cl.add_child(cloud)
+		clouds.append(cloud)
 
 func _build_background() -> void:
-	# 背景层（CanvasLayer，固定在屏幕顶部，视差感）
 	var cl := CanvasLayer.new()
 	cl.layer = 1
 	add_child(cl)
-	# 天空渐变
+	# Quantized gradient makes the sky match a pixel-art world.
 	var sky := Sprite2D.new()
 	var simg := Image.create(1280, 200, false, Image.FORMAT_RGBA8)
 	for y in 200:
+		var t := float(y / 16) / 12.0
+		var tint := Color("#78aed4").lerp(Color("#c8d9bf"), clampf(t, 0.0, 1.0))
 		for x in 1280:
-			var k := y / 200.0
-			simg.set_pixel(x, y, Color(0.25 + k * 0.4, 0.5 + k * 0.3, 0.8 + k * 0.1))
+			simg.set_pixel(x, y, tint)
 	sky.texture = ImageTexture.create_from_image(simg)
-	sky.position = Vector2(640, 30)
+	sky.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sky.position = Vector2(640, 100)
 	sky.z_index = -100
 	cl.add_child(sky)
-	print("背景: cl children=", cl.get_child_count(), " sky_pos=", sky.position, " tex=", sky.texture != null)
-	# 远山（两层波浪）
-	for layer in 2:
-		var mtn := Sprite2D.new()
+	# Flat, stepped mountain contours. Avoid random single-pixel noise.
+	for layer_index in 2:
+		var mountain := Sprite2D.new()
 		var mimg := Image.create(1280, 120, false, Image.FORMAT_RGBA8)
-		var rng := RandomNumberGenerator.new()
-		rng.seed = 11 + layer
 		for x in 1280:
-			var h := int(60 + sin(x * 0.006 + layer * 2.5) * 25 + rng.randf() * 15)
+			var ridge := 57.0 + sin(x * 0.006 + layer_index * 2.5) * 19.0 + sin(x * 0.017) * 6.0
+			var height_px := int(round(ridge / 4.0) * 4.0)
 			for y in 120:
-				if y > 120 - h:
-					var c := Color(0.32, 0.5, 0.35) if layer == 0 else Color(0.22, 0.38, 0.28)
-					mimg.set_pixel(x, y, c)
-		mtn.texture = ImageTexture.create_from_image(mimg)
-		mtn.position = Vector2(640, 80 + layer * 30)
-		mtn.z_index = -90 + layer
-		cl.add_child(mtn)
-	# 云朵
+				if y > 120 - height_px:
+					var tone := Color("#729b87") if layer_index == 0 else Color("#3d6855")
+					mimg.set_pixel(x, y, tone)
+		mountain.texture = ImageTexture.create_from_image(mimg)
+		mountain.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		mountain.position = Vector2(640, 100 + layer_index * 30)
+		mountain.z_index = -90 + layer_index
+		cl.add_child(mountain)
 	_build_clouds(cl)
 
 func _build_path() -> void:
@@ -578,15 +584,15 @@ func _build_zoom_buttons() -> void:
 		cl.add_child(b)
 
 func _build_ui() -> void:
+	# HUD belongs to a screen-space canvas, not the scrolling map.
+	var cl := CanvasLayer.new()
+	cl.layer = 5
+	add_child(cl)
 	label = Label.new()
 	label.position = Vector2(40, 30)
 	label.add_theme_font_size_override("font_size", 22)
 	label.text = "幻想乡 · AI 自主生活（旁观模式）"
-	add_child(label)
-	# 角色对话气泡（屏幕空间的 CanvasLayer）
-	var cl := CanvasLayer.new()
-	cl.layer = 5
-	add_child(cl)
+	cl.add_child(label)
 	bubble_player = Label.new()
 	bubble_player.add_theme_font_size_override("font_size", 18)
 	bubble_player.add_theme_color_override("font_color", Color.WHITE)
@@ -615,8 +621,9 @@ func _bubble_style() -> StyleBoxFlat:
 
 func _build_camera() -> void:
 	camera = Camera2D.new()
-	camera.position = player.position
-	camera.zoom = Vector2(2, 2)
+	# Establishing shot includes the cottage and both residents.
+	camera.position = player.position - Vector2(65, 105)
+	camera.zoom = Vector2(1.5, 1.5)
 	add_child(camera)
 	camera.make_current()
 
