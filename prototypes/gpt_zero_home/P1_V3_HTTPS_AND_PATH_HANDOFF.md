@@ -14,6 +14,12 @@
 
 如果使用受限隧道/带身份保护的测试域名，要确认浏览器拿得到完整的公开快照而不混入居民 token。注意匿名 `GET /public/world` 在有居民授权的情况下仍可能泄露其位置；只拿**测试居民**公开验证，真实居民不得默认授权。
 
+## 关于「让 Godot Web 也走 8443 同源」的限制
+
+你当前的 8443 代理报告明确表示只放行 `GET /public/world` 和 `GET /health`，其他路径返回 404。这意味着它**不能同时托管 Godot Web 静态页面及 WASM/PCK 资源**：若要同源，需要另设经审核的静态资源路由与 MIME/缓存规则，不是只换端口就能成功。更简单的测试方法是：Godot Web 放在另一个受信任 HTTPS 测试站点，`/public/world` 仍是单独 HTTPS 服务，用 CORS 进行纯 GET 读取；如果希望同源，则由已有可信站点的反向代理转发**仅公开**快照路径到 8200，不允许透传 /intent、/observation、/admin。
+
+`Access-Control-Allow-Origin: *` 只适用于**真正无凭证、允许任何人读取**的公开快照。它不负责 HTTPS 证书信任，也不能代替居民的 `public_consent` 检查；将来如加入用户会话或访客私有视图，必须重新定义跨域与凭证策略。
+
 ## 已确认的 Python P1 路段 JSON
 
 ```json
