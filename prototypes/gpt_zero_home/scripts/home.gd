@@ -8,6 +8,7 @@ const ART_SIZE := Vector2(960.0, 600.0)
 const WalkGraph = preload("res://scripts/world_graph.gd")
 const ResidentActor = preload("res://scripts/resident_actor.gd")
 const ScriptedIntentReplay = preload("res://scripts/demo_intents.gd")
+const IntentGateway = preload("res://scripts/intent_gateway.gd")
 const MOBILE_LAYOUT_WIDTH := 540.0
 
 var is_dusk := false
@@ -28,6 +29,9 @@ var residents: Dictionary = {}
 var walk_graph
 var scripted_replay: Node
 var accepted_events: int = 0
+var gateway
+var demo_sequence: int = 0
+var public_event_log: Array[Dictionary] = []
 
 func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
@@ -80,6 +84,10 @@ func _build_residents() -> void:
         resident_layer.add_child(actor)
         residents[info["uuid"]] = actor
 
+    gateway = IntentGateway.new()
+    gateway.configure(residents)
+    gateway.public_receipt.connect(_on_public_receipt)
+
     # Test-only intent replay. This explicitly is NOT autonomous AI.
     scripted_replay = ScriptedIntentReplay.new()
     scripted_replay.name = "ScriptedIntentReplay"
@@ -89,15 +97,29 @@ func _build_residents() -> void:
 func _on_scripted_intent(uuid: String, intent: Dictionary) -> void:
     # The scene has no owner controls or public network intake for movement.
     # A future authenticated server adapter must be built separately.
-    var actor = residents.get(uuid)
-    if actor == null:
-        return
-    if actor.accept_intent(intent):
+    demo_sequence += 1
+    # This stand-in identity exists ONLY in the offline test fixture. A real
+    # client must not supply its own verified_resident_id or bypass authentication.
+    var message := {
+        "event_id": "scripted-event-" + str(demo_sequence),
+        "resident_id": uuid,
+        "action": str(intent.get("action", ""))
+    }
+    if intent.has("target"):
+        message["target"] = intent["target"]
+    var result: Dictionary = gateway.dispatch_verified(message, uuid)
+    if result["status"] == "accepted":
         accepted_events += 1
-        print("RESIDENT_EVENT [scripted-demo] ", actor.public_name, " ", intent)
+    print("RESIDENT_EVENT [scripted-demo ONLY] ", uuid, " ", result["status"])
 
 func _on_resident_state(uuid: String, state_name: String) -> void:
     print("RESIDENT_STATE ", uuid, " ", state_name)
+
+func _on_public_receipt(data: Dictionary) -> void:
+    public_event_log.append(data.duplicate())
+    if public_event_log.size() > 40:
+        public_event_log.pop_front()
+    print("PUBLIC_RECEIPT ", JSON.stringify(data))
 
 func _panel_style() -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
