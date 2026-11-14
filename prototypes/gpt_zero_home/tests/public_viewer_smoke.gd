@@ -97,11 +97,13 @@ func _run() -> void:
     route_packet["residents"][0]["zone"] = "door"
     route_packet["residents"][0]["activity"] = "move"
     route_packet["residents"][0]["path_progress"] = {
+        "from": "door",
+        "to": "path",
         "remaining": ["path", "book_corner", "stone_table"],
         "progress": 0.0
     }
     if not view.apply_public_snapshot(route_packet):
-        _fail("valid P1 v2 path_progress rejected")
+        _fail("valid P1 v3 path_progress rejected")
         return
     if first.position != view.graph.zone_position("door") or first.remaining_zones.size() != 3:
         _fail("P1 v2 route display failed")
@@ -116,6 +118,8 @@ func _run() -> void:
     second_hop["revision"] = 3
     second_hop["residents"][0]["zone"] = "path"
     second_hop["residents"][0]["path_progress"] = {
+        "from": "path",
+        "to": "book_corner",
         "remaining": ["book_corner", "stone_table"],
         "progress": 0.25
     }
@@ -150,6 +154,25 @@ func _run() -> void:
         _fail("unapproved route metadata accepted")
         return
 
+    bad_route = second_hop.duplicate(true)
+    bad_route["revision"] = 4
+    bad_route["residents"][0]["path_progress"]["from"] = "riverbank"
+    if view.apply_public_snapshot(bad_route):
+        _fail("from waypoint did not match authoritative current zone")
+        return
+    bad_route = second_hop.duplicate(true)
+    bad_route["revision"] = 4
+    bad_route["residents"][0]["path_progress"]["to"] = "old_tree"
+    if view.apply_public_snapshot(bad_route):
+        _fail("to waypoint did not match the first remaining node")
+        return
+    bad_route = second_hop.duplicate(true)
+    bad_route["revision"] = 4
+    bad_route["residents"][0]["path_progress"].erase("from")
+    if view.apply_public_snapshot(bad_route):
+        _fail("missing route segment origin accepted")
+        return
+
     var updated: Dictionary = packet.duplicate(true)
     updated["revision"] = 4
     updated["residents"][0]["zone"] = "riverbank"
@@ -162,5 +185,5 @@ func _run() -> void:
         _fail("next server snapshot was not reflected visually")
         return
 
-    print("PUBLIC_VIEWER_OK: token-free, viewer-only, mobile layout, P1 route metadata, server-confirmed waypoint movement")
+    print("PUBLIC_VIEWER_OK: token-free, viewer-only, mobile layout, P1 from/to route validation, server-confirmed waypoint movement")
     quit(0)
