@@ -17,9 +17,9 @@ func _run() -> void:
         printerr("SMOKE_FAIL: no artwork")
         quit(1)
         return
-    var controls = home.get_node_or_null("TouchControls")
-    var day = home.get_node_or_null("TouchControls/MorningButton")
-    var dusk = home.get_node_or_null("TouchControls/DuskButton")
+    var controls: HBoxContainer = home.get_node_or_null("TouchControls") as HBoxContainer
+    var day: Button = home.get_node_or_null("TouchControls/MorningButton") as Button
+    var dusk: Button = home.get_node_or_null("TouchControls/DuskButton") as Button
     if controls == null or day == null or dusk == null:
         printerr("SMOKE_FAIL: missing touch controls")
         quit(1)
