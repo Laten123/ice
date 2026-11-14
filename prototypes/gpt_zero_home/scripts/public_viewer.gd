@@ -229,9 +229,16 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
         return false
     var new_revision: int = last_revision
     if packet.has("revision"):
-        if typeof(packet["revision"]) != TYPE_INT:
+        # Godot JSON numbers may be parsed as floating point even when the
+        # wire JSON spells an integer (e.g. "revision": 1).
+        var raw_revision = packet["revision"]
+        if typeof(raw_revision) != TYPE_INT and typeof(raw_revision) != TYPE_FLOAT:
             return false
-        new_revision = int(packet["revision"])
+        if float(raw_revision) < 0.0 or float(raw_revision) > 2147483647.0:
+            return false
+        if float(int(raw_revision)) != float(raw_revision):
+            return false
+        new_revision = int(raw_revision)
         if last_revision >= 0 and new_revision < last_revision:
             return false
 
