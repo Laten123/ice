@@ -26,6 +26,9 @@ const PALETTE := [
 # Blank means no network connection. Must point ONLY to a separately authorized
 # public-state feed: /observation (X-Resident-Token) is FORBIDDEN here.
 @export var public_feed_url: String = ""
+# Explicitly enabled ONLY for the isolated staging scene. On Web, build the
+# public URL from the page's HTTPS origin; never accept a resident credential.
+@export var use_same_origin_public_feed: bool = false
 @export_range(1.0, 30.0, 0.5) var poll_seconds: float = 2.0
 
 var graph
@@ -56,8 +59,13 @@ func _ready() -> void:
     resized.connect(_refresh_layout)
     get_viewport().size_changed.connect(_refresh_layout)
     _refresh_layout()
-    # No requests unless a PUBLIC HTTPS feed is explicitly configured.
-    if not public_feed_url.is_empty():
+    # Production/default viewer does not connect. Staging Web scene alone
+    # opts into a same-origin, read-only public snapshot endpoint.
+    if use_same_origin_public_feed and OS.has_feature("web"):
+        var origin = JavaScriptBridge.eval("window.location.origin")
+        if typeof(origin) == TYPE_STRING:
+            start_public_feed(str(origin) + "/public/world")
+    elif not public_feed_url.is_empty():
         start_public_feed(public_feed_url)
 
 func _build_visuals() -> void:
