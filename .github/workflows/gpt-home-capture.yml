@@ -54,5 +54,6 @@ jobs:
           git add prototypes/gpt_zero_home/preview-*.png prototypes/gpt_zero_home/tests/capture-console.txt
           if ! git diff --cached --quiet; then
             git commit -m "preview: render AI-first resident and phone layouts from Godot"
+            git pull --rebase origin prototype/ai-first-home
             git push origin HEAD:prototype/ai-first-home
           fi
