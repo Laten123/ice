@@ -102,10 +102,10 @@ func _build_visuals() -> void:
 
     debug_status = Label.new()
     debug_status.name = "StagingEnglishDiagnostics"
-    debug_status.text = "P1 STAGING: INIT"
+    debug_status.text = "P1 DBG26 INIT"
     debug_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    debug_status.add_theme_font_size_override("font_size", 14)
-    debug_status.add_theme_color_override("font_color", Color("#ffffff"))
+    debug_status.add_theme_font_size_override("font_size", 26)
+    debug_status.add_theme_color_override("font_color", Color("#ffe45c"))
     debug_status.add_theme_color_override("font_shadow_color", Color("#12252a"))
     debug_status.add_theme_constant_override("shadow_offset_y", 2)
     debug_status.visible = use_same_origin_public_feed
@@ -233,7 +233,9 @@ func _apply_layout(view: Vector2) -> void:
     hint.size = Vector2(view.x - margin * 2.0, 32.0 * logical_per_pixel)
     debug_status.position = Vector2(margin, 65.0 * logical_per_pixel)
     debug_status.size = Vector2(view.x - margin * 2.0, 38.0 * logical_per_pixel)
-    debug_status.add_theme_font_size_override("font_size", int(round(12.0 * logical_per_pixel)))
+    # The layout override is the final effective font size; setting only the
+    # font size in _build_visuals() gets overwritten whenever layout runs.
+    debug_status.add_theme_font_size_override("font_size", int(round(26.0 * logical_per_pixel)))
     _position_art(view)
 
 func _position_art(view: Vector2) -> void:
@@ -258,7 +260,9 @@ func _gui_input(event: InputEvent) -> void:
 func _debug(code: String) -> void:
     last_error_code = code
     if debug_status != null and use_same_origin_public_feed:
-        debug_status.text = "P1 " + code + " HTTP " + str(last_http_code) + " REV " + str(last_revision) + " N " + str(last_public_count)
+        # Prefix is permanent across polling; editing the initial text alone
+        # would not survive the first _debug() call.
+        debug_status.text = "P1 DBG26 " + code + " H" + str(last_http_code) + " R" + str(last_revision) + " N" + str(last_public_count)
     if use_same_origin_public_feed:
         print("PUBLIC_VIEWER_DIAG: ", code, " HTTP=", last_http_code, " result=", last_http_result, " revision=", last_revision, " count=", last_public_count)
 
