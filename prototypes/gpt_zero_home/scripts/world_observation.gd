@@ -24,7 +24,7 @@ func public_snapshot() -> Dictionary:
         visible_people.append({
             "resident_id": str(resident_id),
             "name": actor.public_name,
-            "zone": graph.nearest_zone(actor.position),
+            "zone": graph.to_api_zone(graph.nearest_zone(actor.position)),
             "activity": actor.state
         })
     return {
@@ -51,7 +51,7 @@ func observation_for_verified_resident(verified_resident_id: String) -> Dictiona
         "world_id": WORLD_ID,
         "self": {
             "resident_id": verified_resident_id,
-            "zone": graph.nearest_zone(actor.position),
+            "zone": graph.to_api_zone(graph.nearest_zone(actor.position)),
             "activity": actor.state
         },
         "world": {
