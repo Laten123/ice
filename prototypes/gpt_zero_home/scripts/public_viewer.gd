@@ -141,6 +141,9 @@ func _build_visuals() -> void:
     transport = HTTPRequest.new()
     transport.name = "PublicSnapshotHTTPRequest"
     transport.timeout = 8.0
+    # Godot Web + HTTPS proxy: compressed public JSON caused RESULT_BODY_DECOMPRESS_FAILED (8).
+    # Ask for uncompressed JSON explicitly and do not attempt automatic decompression.
+    transport.accept_gzip = false
     transport.request_completed.connect(_on_public_response)
     add_child(transport)
     fetch_clock = Timer.new()
@@ -434,13 +437,17 @@ func start_public_feed(url: String) -> bool:
     _fetch_public_snapshot()
     return true
 
+func _public_request_headers() -> PackedStringArray:
+    # No resident/admin tokens, cookies or authorization headers.
+    return PackedStringArray(["Accept-Encoding: identity"])
+
 func _fetch_public_snapshot() -> void:
     if fetching or public_feed_url.is_empty():
         return
     fetching = true
     _debug("GET_START")
     # No cookies, resident tokens, admin keys, Authorization or custom headers.
-    var error: Error = transport.request(public_feed_url, [], HTTPClient.METHOD_GET)
+    var error: Error = transport.request(public_feed_url, _public_request_headers(), HTTPClient.METHOD_GET)
     if error != OK:
         fetching = false
         status.text = "公开世界快照暂不可用"
