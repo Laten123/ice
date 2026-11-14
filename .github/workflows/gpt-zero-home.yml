@@ -42,3 +42,5 @@ jobs:
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/gateway_smoke.gd
       - name: Check scoped world observation and viewer independence
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/observation_smoke.gd
+      - name: Check DeepSeek P1 place-ID compatibility
+        run: godot --headless --path prototypes/gpt_zero_home --script res://tests/p1_contract_smoke.gd
