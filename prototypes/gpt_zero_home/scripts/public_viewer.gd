@@ -193,7 +193,10 @@ func _apply_layout(view: Vector2) -> void:
     buttons.size = Vector2(total_width, button_height)
     if is_portrait:
         buttons.position = Vector2((view.x - total_width) * 0.5, view.y - button_height - 22.0 * logical_per_pixel)
-        var factor: float = maxf(160.0, view.y - 178.0 * logical_per_pixel) / ART_SIZE.y
+        # Keep most of the cottage visible on a narrow phone instead of
+        # zooming to the full viewport height and cropping the entire scene.
+        var available_height: float = maxf(200.0, view.y - 210.0 * logical_per_pixel)
+        var factor: float = minf(view.x / (ART_SIZE.x * 0.78), available_height / ART_SIZE.y)
         art.size = ART_SIZE * factor
         hint.visible = true
         hint.position = Vector2(margin, buttons.position.y - 84.0 * logical_per_pixel)
@@ -376,6 +379,11 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
 
 func _update_status(people: Array[Dictionary]) -> void:
     var output := PackedStringArray()
+    if use_same_origin_public_feed:
+        for person in people:
+            output.append(str(person["resident_id"]) + " / " + str(person["zone"]) + " / " + str(person["activity"]))
+        status.text = "PUBLIC: " + ("none" if output.is_empty() else ", ".join(output))
+        return
     for person in people:
         var activity_name: String = {
             "stay": "停留", "move": "行走", "sit": "坐着",
