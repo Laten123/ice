@@ -34,6 +34,8 @@ jobs:
           fi
       - name: Validate DeepSeek server test launcher
         run: bash -n prototypes/gpt_zero_home/tests/server_verify.sh
+      - name: Check temporary tunnel preview cannot expose resident APIs
+        run: python3 prototypes/gpt_zero_home/tests/preview_public_server_smoke.py
       - name: Check responsive home and touch UI
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/smoke.gd
       - name: Check AI-resident navigation and refusal
