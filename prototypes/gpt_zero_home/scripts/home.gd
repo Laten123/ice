@@ -55,6 +55,7 @@ func _make_time_button(node_name: String, label_text: String, dusk: bool) -> But
     result.name = node_name
     result.text = label_text
     result.focus_mode = Control.FOCUS_NONE
+    result.toggle_mode = true
     result.mouse_filter = Control.MOUSE_FILTER_STOP
     result.pressed.connect(func(): _set_time(dusk))
     result.add_theme_font_size_override("font_size", 18)
@@ -116,31 +117,38 @@ func _refresh_layout() -> void:
 func _apply_layout(view: Vector2) -> void:
     if scenery == null or view.x <= 1.0 or view.y <= 1.0:
         return
-    var margin := 12.0
-    is_portrait = view.x < MOBILE_LAYOUT_WIDTH or view.y > view.x * 1.15
-    var narrow := view.x < 700.0
+    # Godot's expanded canvas uses virtual units. Compute a physical-pixel
+    # conversion so phone tap targets never shrink with the base resolution.
+    var physical_height := maxf(1.0, float(get_window().size.y))
+    var logical_per_pixel := view.y / physical_height
+    var margin := 18.0 * logical_per_pixel
+    is_portrait = view.y > view.x * 1.15
+    var narrow := view.x < 700.0 * logical_per_pixel
 
-    # On narrow screens the controls remain large, reachable and visible.
-    var btn_width := clampf((view.x - margin * 2.0 - 8.0) / 2.0, 110.0, 170.0)
-    var btn_height := 58.0 if is_portrait else 50.0
+    # At least 52 physical pixels tall and about 130px wide per action.
+    var btn_width := minf((view.x - margin * 2.0 - 8.0) * 0.5, maxf(170.0, 130.0 * logical_per_pixel))
+    var btn_height := maxf(58.0, 52.0 * logical_per_pixel)
+    day_button.add_theme_font_size_override("font_size", int(round(18.0 * logical_per_pixel)))
+    dusk_button.add_theme_font_size_override("font_size", int(round(18.0 * logical_per_pixel)))
+    status_label.add_theme_font_size_override("font_size", int(round(16.0 * logical_per_pixel)))
+    hint_label.add_theme_font_size_override("font_size", int(round(14.0 * logical_per_pixel)))
     day_button.custom_minimum_size = Vector2(btn_width, btn_height)
     dusk_button.custom_minimum_size = Vector2(btn_width, btn_height)
     var buttons_width := btn_width * 2.0 + 8.0
     controls.size = Vector2(buttons_width, btn_height)
 
     if is_portrait:
-        controls.position = Vector2((view.x - buttons_width) * 0.5, view.y - btn_height - 18.0)
-        title_panel.position = Vector2(margin, 12.0)
-        title_panel.size = Vector2(view.x - margin * 2.0, 74.0)
-        title_label.add_theme_font_size_override("font_size", 20)
-        subtitle_label.add_theme_font_size_override("font_size", 12)
-        status_label.position = Vector2(margin + 5.0, view.y - btn_height - 72.0)
+        controls.position = Vector2((view.x - buttons_width) * 0.5, view.y - btn_height - 22.0 * logical_per_pixel)
+        title_panel.position = Vector2(margin, 14.0 * logical_per_pixel)
+        title_panel.size = Vector2(view.x - margin * 2.0, 74.0 * logical_per_pixel)
+        title_label.add_theme_font_size_override("font_size", int(round(20.0 * logical_per_pixel)))
+        subtitle_label.add_theme_font_size_override("font_size", int(round(12.0 * logical_per_pixel)))
+        status_label.position = Vector2(margin, controls.position.y - 48.0 * logical_per_pixel)
         hint_label.visible = true
-        hint_label.position = Vector2(margin + 5.0, view.y - btn_height - 104.0)
+        hint_label.position = Vector2(margin, controls.position.y - 84.0 * logical_per_pixel)
 
-        # Show a readable section of the art, with horizontal swipe to explore.
-        # The artwork retains its aspect ratio, and no buildings are distorted.
-        var available_height := maxf(160.0, view.y - 205.0)
+        # Portrait = a draggable panorama, preserving aspect and readable detail.
+        var available_height := maxf(160.0, view.y - 170.0 * logical_per_pixel)
         var scale_factor := available_height / ART_SIZE.y
         var render_size := ART_SIZE * scale_factor
         scene_width = render_size.x
@@ -148,11 +156,11 @@ func _apply_layout(view: Vector2) -> void:
         _position_scenery(view)
     else:
         controls.position = Vector2(view.x - buttons_width - margin, view.y - btn_height - margin)
-        title_panel.position = Vector2(16, 14)
-        title_panel.size = Vector2(minf(340, view.x - 32.0), 74)
-        title_label.add_theme_font_size_override("font_size", 23)
-        subtitle_label.add_theme_font_size_override("font_size", 13)
-        status_label.position = Vector2(18, view.y - 32)
+        title_panel.position = Vector2(margin, 14.0 * logical_per_pixel)
+        title_panel.size = Vector2(minf(340.0 * logical_per_pixel, view.x - margin * 2.0), 74.0 * logical_per_pixel)
+        title_label.add_theme_font_size_override("font_size", int(round(23.0 * logical_per_pixel)))
+        subtitle_label.add_theme_font_size_override("font_size", int(round(13.0 * logical_per_pixel)))
+        status_label.position = Vector2(margin, view.y - 31.0 * logical_per_pixel)
         hint_label.visible = false
         # Landscape and desktop keep the entire scene visible.
         var scale_factor := minf(view.x / ART_SIZE.x, view.y / ART_SIZE.y)
@@ -189,8 +197,8 @@ func _gui_input(event: InputEvent) -> void:
 func _set_time(dusk: bool) -> void:
     is_dusk = dusk
     scenery.texture = DUSK_SCENE if dusk else DAY_SCENE
-    day_button.disabled = not dusk
-    dusk_button.disabled = dusk
+    day_button.button_pressed = not dusk
+    dusk_button.button_pressed = dusk
     status_label.text = "黄昏 · 小冰喜欢的暖光" if dusk else "上午 · 深寻喜欢的清明"
     print("FIRST_HOME_READY time=", "dusk" if dusk else "morning")
 
