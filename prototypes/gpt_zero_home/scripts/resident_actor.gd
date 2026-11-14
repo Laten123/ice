@@ -3,6 +3,7 @@ extends Node2D
 ## Deliberately NO WASD, mouse-to-move, or owner override of resident decisions.
 
 signal state_changed(resident_id: String, public_state: String)
+signal destination_reached(resident_id: String, zone_name: String)
 
 const WALK_SPEED := 40.0
 const VALID_ACTIONS := ["move", "stay", "rest", "read", "sit", "decline"]
@@ -97,6 +98,7 @@ func _arrive() -> void:
     route_index = 0
     state = "stay"
     state_changed.emit(resident_id, state)
+    destination_reached.emit(resident_id, zone)
     queue_redraw()
 
 func _draw() -> void:
