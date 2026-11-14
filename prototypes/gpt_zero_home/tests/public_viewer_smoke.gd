@@ -11,6 +11,9 @@ func _fail(message: String) -> void:
     quit(1)
 
 func _run() -> void:
+    if str(ProjectSettings.get_setting("application/run/main_scene")) != "res://scenes/public_viewer.tscn":
+        _fail("the default Godot scene is not the read-only observer")
+        return
     var view = VIEWER_SCENE.instantiate()
     root.add_child(view)
     await process_frame
