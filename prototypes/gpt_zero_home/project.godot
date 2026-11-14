@@ -2,7 +2,7 @@ config_version=5
 
 [application]
 config/name="幻想乡 · 初代家园（GPT独立样板）"
-run/main_scene="res://scenes/home.tscn"
+run/main_scene="res://scenes/public_viewer.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 
 [display]
