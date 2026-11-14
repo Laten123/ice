@@ -17,9 +17,19 @@ func _run() -> void:
     var view = VIEWER_SCENE.instantiate()
     root.add_child(view)
     await process_frame
-    if view.public_feed_url != "" or view.fetching:
-        _fail("viewer must not contact a server on first launch")
+    if view.public_feed_url != "" or view.fetching or view.use_same_origin_public_feed:
+        _fail("default viewer must not contact a server on first launch")
         return
+    var staging = load("res://scenes/public_viewer_staging.tscn").instantiate()
+    root.add_child(staging)
+    await process_frame
+    if not staging.use_same_origin_public_feed:
+        _fail("explicit staging scene did not enable same-origin snapshot mode")
+        return
+    if staging.fetching or staging.public_feed_url != "":
+        _fail("non-Web staging test tried to contact a real server")
+        return
+    staging.queue_free()
     if view.get_node_or_null("PublicResidentVisuals") == null:
         _fail("missing visual-only resident layer")
         return
