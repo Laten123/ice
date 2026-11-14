@@ -80,6 +80,12 @@ func _run() -> void:
     if view.get_node_or_null("PublicSnapshotHTTPRequest") == null:
         _fail("missing public-only request adapter")
         return
+    if view.transport.accept_gzip:
+        _fail("public snapshot transport must disable automatic gzip decompression")
+        return
+    if view._public_request_headers() != PackedStringArray(["Accept-Encoding: identity"]):
+        _fail("public snapshot requests must explicitly ask for identity encoding")
+        return
     if view.has_method("dispatch_verified") or view.has_method("accept_intent"):
         _fail("viewer has an action or command method")
         return
