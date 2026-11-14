@@ -76,6 +76,7 @@ def main():
             (folder / "index.wasm").write_bytes(b"\0asm")
             (folder / "admin.json").write_text('{"token":"SHOULD_NOT_EXPOSE"}')
             (folder / ".env").write_text("TOKEN=SECRET")
+            (folder / "secret.js").write_text("const RESIDENT_SECRET = 'SHOULD_NOT_EXPOSE';")
             preview = start(make_handler(folder, TEST_ID, f"http://127.0.0.1:{upstream.server_port}"))
             try:
                 base = f"http://127.0.0.1:{preview.server_port}"
@@ -87,7 +88,7 @@ def main():
                 assert status == 200 and body == b"STAGING_VIEWER_ONLY"
                 status, body, _ = request(base + "/index.wasm")
                 assert status == 200 and body == b"\0asm"
-                for path in ["/intent", "/admin/register", "/observation", "/admin.json", "/.env", "/../../../etc/passwd", "/public/world?token=evil"]:
+                for path in ["/intent", "/admin/register", "/observation", "/admin.json", "/secret.js", "/.env", "/../../../etc/passwd", "/public/world?token=evil"]:
                     status, _, _ = request(base + path)
                     assert status == 404, (path, status)
                 for method in ["POST", "PUT", "DELETE", "PATCH"]:
