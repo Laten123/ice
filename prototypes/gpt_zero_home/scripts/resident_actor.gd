@@ -16,7 +16,7 @@ var resident_id: String = ""
 var public_name: String = ""
 var main_color: Color = Color("#789ab7")
 var hair_color: Color = Color("#52617e")
-var graph: RefCounted
+var graph
 var zone: String = "porch"
 var target_zone: String = "porch"
 var state: String = "stay"
@@ -102,7 +102,7 @@ func _arrive() -> void:
 func _draw() -> void:
     # Original procedural placeholder. Final resident sprites must be reauthored.
     var bob: float = sin(walk_phase) * 1.2 if state == "move" else 0.0
-    draw_ellipse(Vector2(0, 1), Vector2(12, 3.5), Color(0.11, 0.20, 0.16, 0.45))
+    draw_colored_polygon(PackedVector2Array([Vector2(-12, 1), Vector2(-9, -2), Vector2(9, -2), Vector2(12, 1), Vector2(9, 4), Vector2(-9, 4)]), Color(0.11, 0.20, 0.16, 0.45))
     var body: Rect2 = Rect2(-10, -22 + bob, 20, 17)
     draw_rect(body, main_color)
     draw_rect(Rect2(-8, -26 + bob, 16, 10), Color("#efd5ba"))
