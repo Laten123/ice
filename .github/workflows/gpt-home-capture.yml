@@ -9,6 +9,9 @@ on:
       - "prototypes/gpt_zero_home/tests/capture.gd"
       - "prototypes/gpt_zero_home/scripts/home.gd"
       - "prototypes/gpt_zero_home/project.godot"
+      - "prototypes/gpt_zero_home/tests/capture_public_viewer.gd"
+      - "prototypes/gpt_zero_home/scripts/public_viewer.gd"
+      - "prototypes/gpt_zero_home/scripts/observer_sprite.gd"
       - "prototypes/gpt_zero_home/scripts/resident_actor.gd"
       - "prototypes/gpt_zero_home/scripts/world_graph.gd"
   workflow_dispatch:
@@ -41,6 +44,14 @@ jobs:
             godot --path prototypes/gpt_zero_home --rendering-driver opengl3 \
             --script res://tests/capture.gd 2>&1 | tee prototypes/gpt_zero_home/tests/capture-console.txt
           ls -lh prototypes/gpt_zero_home/preview-*.png
+      - name: Capture read-only public viewer with fixture state
+        shell: bash
+        run: |
+          set -o pipefail
+          xvfb-run -a -s "-screen 0 1280x960x24" \
+            godot --path prototypes/gpt_zero_home --rendering-driver opengl3 \
+            --script res://tests/capture_public_viewer.gd 2>&1 | tee prototypes/gpt_zero_home/tests/public-viewer-capture-console.txt
+          ls -lh prototypes/gpt_zero_home/preview-public-observer-*.png
       - name: Upload screenshots for inspection
         uses: actions/upload-artifact@v4
         with:
@@ -51,7 +62,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add prototypes/gpt_zero_home/preview-*.png prototypes/gpt_zero_home/tests/capture-console.txt
+          git add prototypes/gpt_zero_home/preview-*.png prototypes/gpt_zero_home/tests/capture-console.txt prototypes/gpt_zero_home/tests/public-viewer-capture-console.txt
           if ! git diff --cached --quiet; then
             git commit -m "preview: render AI-first resident and phone layouts from Godot"
             git pull --rebase origin prototype/ai-first-home
