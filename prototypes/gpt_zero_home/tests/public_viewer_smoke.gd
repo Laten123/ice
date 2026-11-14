@@ -90,8 +90,66 @@ func _run() -> void:
         _fail("duplicate resident IDs accepted")
         return
 
+    # P1 v2 moving packets contain a route and fraction; without a precise
+    # definition of its segment the renderer MUST NOT make up coordinates.
+    var route_packet: Dictionary = packet.duplicate(true)
+    route_packet["revision"] = 2
+    route_packet["residents"][0]["zone"] = "door"
+    route_packet["residents"][0]["activity"] = "move"
+    route_packet["residents"][0]["path_progress"] = {
+        "remaining": ["path", "book_corner", "stone_table"],
+        "progress": 0.0
+    }
+    if not view.apply_public_snapshot(route_packet):
+        _fail("valid P1 v2 path_progress rejected")
+        return
+    if first.position != view.graph.zone_position("door") or first.remaining_zones.size() != 3:
+        _fail("P1 v2 route display failed")
+        return
+    first._process(7.0)
+    if first.position != view.graph.zone_position("door"):
+        _fail("viewer invented motion without a newer authoritative snapshot")
+        return
+
+    var second_hop: Dictionary = route_packet.duplicate(true)
+    second_hop["revision"] = 3
+    second_hop["residents"][0]["zone"] = "path"
+    second_hop["residents"][0]["path_progress"] = {
+        "remaining": ["book_corner", "stone_table"],
+        "progress": 0.25
+    }
+    if not view.apply_public_snapshot(second_hop):
+        _fail("second P1 v2 path update rejected")
+        return
+    if first.position != view.graph.zone_position("path") or first.remaining_zones.size() != 2:
+        _fail("viewer failed to advance exactly to the server-confirmed waypoint")
+        return
+    first._process(20.0)
+    if first.position != view.graph.zone_position("path"):
+        _fail("viewer interpolated toward an unconfirmed waypoint")
+        return
+
+    var bad_route: Dictionary = second_hop.duplicate(true)
+    bad_route["revision"] = 4
+    bad_route["residents"][0]["path_progress"]["remaining"] = ["fallen_log"]
+    if view.apply_public_snapshot(bad_route):
+        _fail("unfinished or forged waypoint accepted")
+        return
+    bad_route = second_hop.duplicate(true)
+    bad_route["revision"] = 4
+    bad_route["residents"][0]["path_progress"]["progress"] = 1.3
+    if view.apply_public_snapshot(bad_route):
+        _fail("out-of-range segment progress accepted")
+        return
+    bad_route = second_hop.duplicate(true)
+    bad_route["revision"] = 4
+    bad_route["residents"][0]["path_progress"]["secret_token"] = "nope"
+    if view.apply_public_snapshot(bad_route):
+        _fail("unapproved route metadata accepted")
+        return
+
     var updated: Dictionary = packet.duplicate(true)
-    updated["revision"] = 2
+    updated["revision"] = 4
     updated["residents"][0]["zone"] = "riverbank"
     updated["residents"][0]["action"] = "moving"
     updated["residents"][0].erase("activity")
@@ -102,5 +160,5 @@ func _run() -> void:
         _fail("next server snapshot was not reflected visually")
         return
 
-    print("PUBLIC_VIEWER_OK: token-free, no commands, phone/desktop layout, canonical P1 snapshots, reject private fields")
+    print("PUBLIC_VIEWER_OK: token-free, viewer-only, mobile layout, P1 route metadata, server-confirmed waypoint movement")
     quit(0)
