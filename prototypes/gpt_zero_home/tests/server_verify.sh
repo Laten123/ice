@@ -24,42 +24,49 @@ rm -f "$TEST_PROJECT"/preview-*.png
 echo "[INFO] Godot: $("$GODOT" --version)"
 echo "[INFO] 临时测试目录：$OUT_DIR"
 echo "[INFO] 仅处理独立样板副本：$TEST_PROJECT"
-echo "[1/6] 项目资源导入 + 脚本解析"
+echo "[1/7] 项目资源导入 + 脚本解析"
 "$GODOT" --headless --path "$TEST_PROJECT" --editor --import --quit 2>&1 | tee "$OUT_DIR/import.log"
 if grep -E "SCRIPT ERROR|Parse Error|Failed loading resource|ERROR:.*[Ss]cript" "$OUT_DIR/import.log"; then
   echo "[FAIL] 导入或脚本解析错误" >&2
   exit 1
 fi
 
-echo "[2/6] 双端布局和上午/黄昏交互检查"
+echo "[2/7] 双端布局和上午/黄昏交互检查"
 "$GODOT" --headless --path "$TEST_PROJECT" --script res://tests/smoke.gd 2>&1 | tee "$OUT_DIR/smoke.log"
 if ! grep -q "SMOKE_OK" "$OUT_DIR/smoke.log"; then
   echo "[FAIL] 未发现 SMOKE_OK 标记" >&2
   exit 1
 fi
 
-echo "[3/6] 居民自有路径、动作和拒绝事件检查"
+echo "[3/7] 居民自有路径、动作和拒绝事件检查"
 "$GODOT" --headless --path "$TEST_PROJECT" --script res://tests/agent_smoke.gd 2>&1 | tee "$OUT_DIR/agent.log"
 if ! grep -q "AGENT_SMOKE_OK" "$OUT_DIR/agent.log"; then
   echo "[FAIL] 未发现 AGENT_SMOKE_OK 标记" >&2
   exit 1
 fi
 
-echo "[4/6] 居民事件网关与回执验证"
+echo "[4/7] 居民事件网关与回执验证"
 "$GODOT" --headless --path "$TEST_PROJECT" --script res://tests/gateway_smoke.gd 2>&1 | tee "$OUT_DIR/gateway.log"
 if ! grep -q "GATEWAY_SMOKE_OK" "$OUT_DIR/gateway.log"; then
   echo "[FAIL] 未发现 GATEWAY_SMOKE_OK 标记" >&2
   exit 1
 fi
 
-echo "[5/6] 最小公开观察结果与隐私边界"
+echo "[5/7] 最小公开观察结果与隐私边界"
 "$GODOT" --headless --path "$TEST_PROJECT" --script res://tests/observation_smoke.gd 2>&1 | tee "$OUT_DIR/observation.log"
 if ! grep -q "OBSERVATION_SMOKE_OK" "$OUT_DIR/observation.log"; then
   echo "[FAIL] 未发现 OBSERVATION_SMOKE_OK 标记" >&2
   exit 1
 fi
 
-echo "[6/6] xvfb 实际渲染截图"
+echo "[6/7] DeepSeek P1 地点及意图契约"
+"$GODOT" --headless --path "$TEST_PROJECT" --script res://tests/p1_contract_smoke.gd 2>&1 | tee "$OUT_DIR/p1_contract.log"
+if ! grep -q "P1_CONTRACT_OK" "$OUT_DIR/p1_contract.log"; then
+  echo "[FAIL] 未发现 P1_CONTRACT_OK 标记" >&2
+  exit 1
+fi
+
+echo "[7/7] xvfb 实际渲染截图"
 if ! command -v xvfb-run >/dev/null 2>&1; then
   echo "[WARN] xvfb-run 不存在：跳过实际截图。编译通过不代表显示与触摸已验收。" | tee "$OUT_DIR/capture.log"
   echo "[INFO] 验证日志：$OUT_DIR"
@@ -85,5 +92,5 @@ fi
 
 echo "[PASS] Godot 无界面脚本与不同视口截图检查完成。"
 echo "[INFO] 截图：$TEST_PROJECT/preview-*.png"
-echo "[INFO] 日志：$OUT_DIR/{import,smoke,agent,gateway,observation,capture}.log"
+echo "[INFO] 日志：$OUT_DIR/{import,smoke,agent,gateway,observation,p1_contract,capture}.log"
 echo "[INFO] 仅保存在全新 /tmp 测试目录；没有部署、打开服务端口或修改生产项目。"
