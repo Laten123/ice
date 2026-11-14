@@ -39,6 +39,13 @@ func _init() -> void:
     for edge in EDGES:
         _pathfinder.connect_points(_indices[edge[0]], _indices[edge[1]], true)
 
+func available_zones() -> Array[String]:
+    var names: Array[String] = []
+    for zone_name in ZONES.keys():
+        names.append(str(zone_name))
+    names.sort()
+    return names
+
 func is_known_zone(zone_name: String) -> bool:
     return ZONES.has(zone_name)
 
