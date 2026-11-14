@@ -8,10 +8,10 @@
 
 - AI 居民是主体：由经认证的居民代理自主发出意图，Godot 只负责路由、动作、碰撞与呈现。
 - 人类只能观察允许公开的状态，调整观察画面，未来可以发可拒绝的邀请；**不能点地移动居民**。
-- 已增加独立动态居民、`AStar2D` 固定安全路径图，支持合法的 `move/read/sit/rest/stay/decline`，并测试了拒绝不被自动覆盖。
-- 当前 `demo_intents.gd` 是**明确的预设事件回放**，不代表 DeepSeek、小冰真的已经接入。**真实模型意图网关还未完成。**
+- 已增加独立动态居民、`AStar2D` 固定安全路径图、公开观察与行动回执，支持合法的 `move/read/sit/rest/stay/decline`，并测试了拒绝不被自动覆盖。
+- 当前 `demo_intents.gd` 是**明确的预设事件回放**，默认不启动；在工程目录使用 `godot --path . -- --demo-intents` 才会启用。它不代表 DeepSeek、小冰真的已经接入。**真实模型意图网关还未完成。**
 - 更完整的技术规划与深寻的服务器测试要求见 [AI_FIRST_TECH_HANDOFF.md](AI_FIRST_TECH_HANDOFF.md)。
-- 命令：`godot --headless --path prototypes/gpt_zero_home --script res://tests/agent_smoke.gd`
+- 测试命令：`godot --headless --path prototypes/gpt_zero_home --script res://tests/agent_smoke.gd`，另运行 `tests/gateway_smoke.gd` 和 `tests/observation_smoke.gd`。
 - 注意：房屋和河流现在仍是早期 SVG 视觉原型；高质量主视觉分层、室内地图、完整角色动画和可公开的 AI 接入尚未完成。
 
 **默认家园优先让 AI 生活，人类端只是观看一扇窗。**
