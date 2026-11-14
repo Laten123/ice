@@ -30,6 +30,7 @@ var player_facing := 0
 var player_frame := 0
 var player_anim_t := 0.0
 var npc: Sprite2D
+var npc_body: CharacterBody2D
 var npc_pos := Vector2.ZERO
 var npc_target := Vector2.ZERO
 var npc_frame := 0
@@ -505,18 +506,28 @@ func _build_player() -> void:
 	sh.position = Vector2(0, 20)
 	sh.scale = Vector2(SCALE, SCALE)
 	player.add_child(sh)
-	add_child(player)
-	# 小冰
+	world.add_child(player)
+	# 小冰：角色节点承担碰撞移动，Sprite2D 只负责显示。
+	npc_body = CharacterBody2D.new()
+	npc_body.position = Vector2(TILE * 22 * SCALE, TILE * 14 * SCALE)
+	npc_body.collision_layer = 1
+	npc_body.collision_mask = 1
+	var npc_collision := CollisionShape2D.new()
+	var npc_shape := RectangleShape2D.new()
+	npc_shape.size = Vector2(12, 14)
+	npc_collision.shape = npc_shape
+	npc_collision.position = Vector2(0, 8)
+	npc_body.add_child(npc_collision)
 	npc = Sprite2D.new()
 	npc.texture = load("res://assets/xiaobing_walk.png")
 	npc.region_enabled = true
 	npc.region_rect = Rect2(0, 0, 24, 24)
 	npc.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	npc.scale = Vector2(2.0, 2.0)
-	npc_pos = Vector2(TILE * 22 * SCALE, TILE * 14 * SCALE)
+	npc_pos = npc_body.position
 	npc_target = npc_pos
-	npc.position = npc_pos
-	world.add_child(npc)
+	npc_body.add_child(npc)
+	world.add_child(npc_body)
 	var nsh := Sprite2D.new()
 	var nshimg := Image.create(16, 6, false, Image.FORMAT_RGBA8)
 	for y in 6:
@@ -624,7 +635,7 @@ func apply_world_state(st: Dictionary) -> void:
 		player.position = Vector2(st["player"]["x"], st["player"]["y"])
 	if st.has("npc"):
 		npc_pos = Vector2(st["npc"]["x"], st["npc"]["y"])
-		npc.position = npc_pos
+		npc_body.position = npc_pos
 
 var dragging := false
 
@@ -695,6 +706,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		player_frame = 0
 	player_spr.region_rect = Rect2(player_frame * 24, 0, 24, 24)
+	_physics_process_npc(delta)
 
 func _process(delta: float) -> void:
 	time += delta
@@ -705,7 +717,6 @@ func _process(delta: float) -> void:
 	if ai_intent_timer >= 120.0:
 		ai_intent_timer = 0.0
 		_request_ai_intent("shenxun")
-	_process_npc(delta)
 	_animate_world(delta)
 	if time - last_poll > 10.0:
 		last_poll = time
@@ -792,23 +803,37 @@ func _poll_ai_messages() -> void:
 		bubble_npc.visible = true
 		bubble_npc.position = Vector2(600, 500)
 
-func _process_npc(delta: float) -> void:
-	if npc == null: return
-	if npc_pos.distance_to(npc_target) < 8:
-		# 小冰在房子附近活动（12-26 列，10-20 行）
-		npc_target = Vector2(randf_range(12, 26), randf_range(10, 20)) * TILE * SCALE
-		# 偶尔停下发呆（30% 概率）
+func _physics_process_npc(delta: float) -> void:
+	if npc_body == null:
+		return
+	npc_pos = npc_body.position
+	if time < npc_idle_until:
+		npc_body.velocity = Vector2.ZERO
+		npc_frame = 0
+		npc.region_rect = Rect2(0, 0, 24, 24)
+		return
+	if npc_pos.distance_to(npc_target) < 10.0:
 		if randf() < 0.3:
 			npc_target = npc_pos
-	var dir := (npc_target - npc_pos).normalized()
-	npc_pos += dir * 35.0 * delta
-	npc.position = npc_pos
-	if abs(dir.x) > abs(dir.y):
-		npc_facing = 1 if dir.x < 0 else 2
+			npc_idle_until = time + randf_range(2.0, 5.0)
+			npc_frame = 0
+			npc.region_rect = Rect2(0, 0, 24, 24)
+			return
+		# Pick a local destination; collisions are resolved by move_and_slide().
+		npc_target = Vector2(randf_range(12.0, 26.0), randf_range(10.0, 20.0)) * TILE * SCALE
+	var direction := (npc_target - npc_pos).normalized()
+	npc_body.velocity = direction * 35.0
+	npc_body.move_and_slide()
+	npc_pos = npc_body.position
+	if direction != Vector2.ZERO:
+		if abs(direction.x) > abs(direction.y):
+			npc_facing = 1 if direction.x < 0 else 2
+		else:
+			npc_facing = 3 if direction.y < 0 else 0
+		npc_anim_t += delta
+		if npc_anim_t >= 0.15:
+			npc_anim_t = 0.0
+			npc_frame = (npc_frame + 1) % 6
 	else:
-		npc_facing = 3 if dir.y < 0 else 0
-	npc_anim_t += delta
-	if npc_anim_t > 0.15:
-		npc_anim_t = 0.0
-		npc_frame = (npc_frame + 1) % 3
-	npc.region_rect = Rect2((npc_frame % 6) * 24, 0, 24, 24)
+		npc_frame = 0
+	npc.region_rect = Rect2(npc_frame * 24, 0, 24, 24)
