@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   home:
@@ -32,4 +32,19 @@ jobs:
             exit 1
           fi
       - name: Check standalone scene and lighting switch
-        run: godot --headless --path prototypes/gpt_zero_home --script res://tests/smoke.gd
+        shell: bash
+        run: |
+          set +e
+          godot --headless --path prototypes/gpt_zero_home --script res://tests/smoke.gd > /tmp/gpt-home-smoke.log 2>&1
+          result=$?
+          cat /tmp/gpt-home-smoke.log
+          if [ "$result" -ne 0 ]; then
+            cp /tmp/gpt-home-smoke.log prototypes/gpt_zero_home/tests/ci_smoke_error.txt
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add prototypes/gpt_zero_home/tests/ci_smoke_error.txt
+            git commit -m "diagnostics: preserve first mobile smoke error [skip ci]"
+            git push origin HEAD:prototype/gpt-zero-home || true
+            exit "$result"
+          fi
+          echo "SMOKE_CHECK_COMPLETE"
