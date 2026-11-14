@@ -5,6 +5,11 @@ func _initialize() -> void:
     call_deferred("_run_capture")
 
 func _save_view(home: Control, desired_size: Vector2i, dusk: bool, filename: String) -> bool:
+    # Script-mode Godot does not automatically resize the SceneTree root
+    # when only the native X11 window changes. Resize the viewport itself
+    # to exercise the responsive UI at the requested pixel dimensions.
+    root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+    root.size = desired_size
     DisplayServer.window_set_size(desired_size)
     home._set_time(dusk)
     # Window resizing is asynchronous. Give the controls and renderer time to reflow.
@@ -21,6 +26,7 @@ func _save_view(home: Control, desired_size: Vector2i, dusk: bool, filename: Str
     print("CAPTURE_VIEW ", filename,
         " requested=", desired_size,
         " window=", DisplayServer.window_get_size(),
+        " root=", root.size,
         " logical_scene=", home.size,
         " image=", image.get_size(),
         " result=", code)
