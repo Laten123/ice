@@ -137,6 +137,14 @@ def make_handler(web_dir, test_id, upstream):
             if "/" in filename or "\\" in filename or filename.startswith("."):
                 self._reply(404, b'{"error":"not_found"}')
                 return
+            # Only a flat Godot export bundle named index.* and a few
+            # unprivileged icon files may be served. Merely having a safe
+            # extension must not expose unrelated local JavaScript or assets.
+            if not (filename.startswith("index.") or filename in (
+                "favicon.ico", "favicon.png", "apple-touch-icon.png", "icon.png"
+            )):
+                self._reply(404, b'{"error":"not_found"}')
+                return
             filepath = web_dir / filename
             mime = STATIC_TYPES.get(filepath.suffix)
             if mime is None or not filepath.is_file() or filepath.is_symlink():
@@ -174,8 +182,13 @@ def main():
     if not (args.test_resident_id.startswith("test-") or args.test_resident_id.startswith("path-test")):
         parser.error("forbid any non-test resident identity")
     web_dir = Path(args.web_dir).resolve() if args.web_dir else None
-    if web_dir is not None and (not web_dir.is_dir() or not (web_dir / "index.html").is_file()):
-        parser.error("--web-dir must be a dedicated directory containing index.html")
+    if web_dir is not None and (
+        not web_dir.is_dir()
+        or not (web_dir / "index.html").is_file()
+        or not any(web_dir.glob("index*.wasm"))
+        or not any(web_dir.glob("index*.pck"))
+    ):
+        parser.error("--web-dir must be a dedicated Godot Web export with index.html, WASM and PCK")
     server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(web_dir, args.test_resident_id, args.upstream))
     print("TEMP PREVIEW: loopback only, no credentials, test resident only", flush=True)
     try:
