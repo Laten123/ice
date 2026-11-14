@@ -21,6 +21,26 @@
 5. **只读观察 UI**：用户只可切换观察光照、滚动竖屏画面；不控制居民、不点击地面派任务。保持桌面/手机 UI 兼容。
 6. **自动检查**：`tests/smoke.gd` 检查跨屏和触摸按钮；`tests/agent_smoke.gd` 检查连通路由、正确到达、拒绝事件、无效动作、安全位置和 UI 不改变居民位置。
 
+## 1.1 观察 → 意图 → 动作 → 回执：第二轮已完成
+
+- `scripts/world_observation.gd`：输出仅含公开世界状态、居民当前位置/动作与可选能力的最小观察，不放模型提示词、私人日记或思维链。能请求居民观察的身份必须由**将来的可信服务端**完成认证，Godot 内尚无网络鉴权。
+- `scripts/intent_gateway.gd`：验证事件 ID、身份一致性、允许的动作和目标，拒绝重复 ID、越权字段、异常目的地。将合法意图交给动态居民。
+- `resident_actor.gd`：到达地点发 `destination_reached`；事件网关分别返回 `accepted`、`completed`、`interrupted`、`rejected` 回执。所有回执仅携带最小公开状态。
+- `demo_intents.gd`：演示事件**默认关闭**，不能假冒真实模型自主行动。想看有限的**预设事件回放**时，在独立 Godot 工程中启动 `godot --path . -- --demo-intents`；回放不循环，最后会停止。关闭回放不影响居民从认证网关接受自己发起的行为。
+- `tests/gateway_smoke.gd`、`tests/observation_smoke.gd`：进一步验证身份匹配、重复事件、非法字段、到达回执、拒绝中断动作、公开观察不会决定居民行动。服务器测试脚本已纳入这些检查。
+
+建议真实模型的最小来回消息：
+
+```text
+可信世界服务器 -> 居民：自己的状态 + 可达地点 + 已授权的公开同伴状态
+居民自己 -> 服务端：event_id + resident_id + action + 可选 target
+服务器 -> Godot：仅转发通过身份/权限/防重放验证的意图
+Godot -> 服务器 -> 居民：accepted / completed / interrupted / rejected
+服务器 -> 人类观察者：经过可见性审查的公开状态（不含私人记忆）
+```
+
+**安全限制：** 本地 `dispatch_verified(event, verified_resident_id)` 的第二个参数是一个**要求上游已认证**的接口契约；任何人只要能直接调用这个方法，便能伪造身份。因此它现在不能直接暴露成未认证 HTTP/WebSocket 接口。重复 ID 缓存也只是内存级演示，正式服务端需持久化/限定有效期并防重放。
+
 ## 2. 推荐真实 AI 接入架构（尚未实现，需要你独立评估）
 
 ```text
@@ -64,7 +84,7 @@ bash prototypes/gpt_zero_home/tests/server_verify.sh
 
 脚本默认寻找 `godot`/`godot4`，如服务器安装路径不同可用 `GODOT_BIN` 指定 Godot 4.6.3 可执行文件。
 
-程序在新的 /tmp 内复制项目后执行：资源导入 → 跨屏 smoke → agent_smoke → 若有 xvfb，再按 960×600、853×384、390×844 等分辨率截图。缺少 xvfb 时必须标注“截图未测”。真实 Android 触摸、Web 导出不是 xvfb 测试的等价替代。
+程序在新的 /tmp 内复制项目后执行：资源导入 → 跨屏 smoke → agent_smoke → gateway_smoke → observation_smoke → 若有 xvfb，再按 960×600、853×384、390×844 等分辨率截图。缺少 xvfb 时必须标注“截图未测”。真实 Android 触摸、Web 导出不是 xvfb 测试的等价替代。
 
 ## 4. 请深寻给出独立评审
 
