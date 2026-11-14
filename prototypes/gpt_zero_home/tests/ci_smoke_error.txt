@@ -1,6 +1,0 @@
-Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
-
-FIRST_HOME_READY time=morning
-FIRST_HOME_READY time=dusk
-FIRST_HOME_READY time=morning
-SMOKE_FAIL: touch controls outside viewport (390.0, 844.0) (237.375, -131.875) (792.0, 685.75)
