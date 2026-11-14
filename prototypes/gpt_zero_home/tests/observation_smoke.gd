@@ -41,7 +41,7 @@ func _run() -> void:
 
     var public_json: String = JSON.stringify(public_data)
     var scoped_json: String = JSON.stringify(shen_data)
-    for disallowed in ["\\"private_memory\\":", "\\"secret\\":", "\\"system_prompt\\":", "\\"chain_of_thought\\":", "\\"api_key\\":", "\\"password\\":"]:
+    for disallowed in ["\"private_memory\":", "\"secret\":", "\"system_prompt\":", "\"chain_of_thought\":", "\"api_key\":", "\"password\":"]:
         if public_json.find(disallowed) != -1 or scoped_json.find(disallowed) != -1:
             _fail("private data field in published world observation: " + disallowed)
             return
