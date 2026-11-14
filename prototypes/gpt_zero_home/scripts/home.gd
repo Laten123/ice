@@ -9,6 +9,7 @@ const WalkGraph = preload("res://scripts/world_graph.gd")
 const ResidentActor = preload("res://scripts/resident_actor.gd")
 const ScriptedIntentReplay = preload("res://scripts/demo_intents.gd")
 const IntentGateway = preload("res://scripts/intent_gateway.gd")
+const WorldObservation = preload("res://scripts/world_observation.gd")
 const MOBILE_LAYOUT_WIDTH := 540.0
 
 var is_dusk := false
@@ -32,6 +33,8 @@ var accepted_events: int = 0
 var gateway
 var demo_sequence: int = 0
 var public_event_log: Array[Dictionary] = []
+var observations
+var resident_status_label: Label
 
 func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
@@ -40,6 +43,7 @@ func _ready() -> void:
     _build_residents()
     _build_ui()
     _set_time(false)
+    _refresh_public_status()
     resized.connect(_refresh_layout)
     get_viewport().size_changed.connect(_refresh_layout)
     _refresh_layout()
@@ -86,6 +90,8 @@ func _build_residents() -> void:
 
     gateway = IntentGateway.new()
     gateway.configure(residents)
+    observations = WorldObservation.new()
+    observations.configure(residents, walk_graph)
     gateway.public_receipt.connect(_on_public_receipt)
 
     # Test-only intent replay. This explicitly is NOT autonomous AI.
@@ -114,9 +120,30 @@ func _on_scripted_intent(uuid: String, intent: Dictionary) -> void:
 
 func _on_resident_state(uuid: String, state_name: String) -> void:
     print("RESIDENT_STATE ", uuid, " ", state_name)
+    _refresh_public_status()
+
+func _refresh_public_status() -> void:
+    if observations == null or resident_status_label == null:
+        return
+    var output := PackedStringArray()
+    for person in observations.public_snapshot()["residents"]:
+        var action: String = str(person["activity"])
+        var readable: String = {
+            "move": "散步中", "stay": "停留", "read": "阅读",
+            "sit": "坐着", "rest": "休息", "decline": "谢绝活动"
+        }.get(action, action)
+        output.append(str(person["name"]) + " · " + readable)
+    resident_status_label.text = "\n".join(output) + "\n（公开的演示状态，不含私人记忆）"
+
+func public_snapshot() -> Dictionary:
+    return observations.public_snapshot()
+
+func observation_for_verified_resident(verified_resident_id: String) -> Dictionary:
+    return observations.observation_for_verified_resident(verified_resident_id)
 
 func _on_public_receipt(data: Dictionary) -> void:
     public_event_log.append(data.duplicate())
+    _refresh_public_status()
     if public_event_log.size() > 40:
         public_event_log.pop_front()
     print("PUBLIC_RECEIPT ", JSON.stringify(data))
@@ -173,6 +200,14 @@ func _build_ui() -> void:
     dusk_button = _make_time_button("DuskButton", "黄昏", true)
     controls.add_child(day_button)
     controls.add_child(dusk_button)
+
+    resident_status_label = Label.new()
+    resident_status_label.name = "PublicResidentStatus"
+    resident_status_label.add_theme_font_size_override("font_size", 13)
+    resident_status_label.add_theme_color_override("font_color", Color("#fff5df"))
+    resident_status_label.add_theme_color_override("font_shadow_color", Color("#1a3330"))
+    resident_status_label.add_theme_constant_override("shadow_offset_y", 2)
+    add_child(resident_status_label)
 
     status_label = Label.new()
     status_label.name = "Status"
@@ -231,6 +266,7 @@ func _apply_layout(view: Vector2) -> void:
         status_label.position = Vector2(margin, controls.position.y - 48.0 * logical_per_pixel)
         hint_label.visible = true
         hint_label.position = Vector2(margin, controls.position.y - 84.0 * logical_per_pixel)
+        resident_status_label.position = Vector2(margin, 104.0 * logical_per_pixel)
 
         # Portrait = a draggable panorama, preserving aspect and readable detail.
         var available_height := maxf(160.0, view.y - 170.0 * logical_per_pixel)
@@ -247,6 +283,7 @@ func _apply_layout(view: Vector2) -> void:
         subtitle_label.add_theme_font_size_override("font_size", int(round(13.0 * logical_per_pixel)))
         status_label.position = Vector2(margin, view.y - 31.0 * logical_per_pixel)
         hint_label.visible = false
+        resident_status_label.position = Vector2(margin, view.y - 106.0 * logical_per_pixel)
         # Landscape and desktop keep the entire scene visible.
         var scale_factor := minf(view.x / ART_SIZE.x, view.y / ART_SIZE.y)
         var render_size := ART_SIZE * scale_factor
@@ -255,6 +292,8 @@ func _apply_layout(view: Vector2) -> void:
         pan_x = 0.0
         _position_scenery(view)
 
+    resident_status_label.size = Vector2(maxf(80.0, view.x - margin * 2.0), 62.0 * logical_per_pixel)
+    resident_status_label.add_theme_font_size_override("font_size", int(round(13.0 * logical_per_pixel)))
     # UI layout is checked against the viewport size in tests on both shapes.
     if narrow:
         title_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
