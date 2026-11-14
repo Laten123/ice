@@ -35,3 +35,5 @@ jobs:
         run: bash -n prototypes/gpt_zero_home/tests/server_verify.sh
       - name: Check responsive home and touch UI
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/smoke.gd
+      - name: Check AI-resident navigation and refusal
+        run: godot --headless --path prototypes/gpt_zero_home --script res://tests/agent_smoke.gd
