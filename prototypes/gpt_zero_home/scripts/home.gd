@@ -96,6 +96,8 @@ func _build_residents() -> void:
 
     # Test-only intent replay. This explicitly is NOT autonomous AI.
     scripted_replay = ScriptedIntentReplay.new()
+    # Test fixtures must never silently imitate live AI. Opt in explicitly.
+    scripted_replay.playback_enabled = OS.get_cmdline_user_args().has("--demo-intents")
     scripted_replay.name = "ScriptedIntentReplay"
     scripted_replay.scripted_intent.connect(_on_scripted_intent)
     add_child(scripted_replay)
