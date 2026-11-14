@@ -15,6 +15,34 @@ const ZONES := {
     "window_view": Vector2(519, 401)
 }
 
+# Stable public place IDs in DeepSeek's P1 HTTP gateway.
+# Internal SVG/scene waypoints may be renamed without changing resident APIs.
+# "fallen_log" is RESERVED until its art, walkable approach and sit pose exist.
+# It must NOT be advertised as a usable location yet.
+const API_TO_INTERNAL := {
+    "door": "porch",
+    "path": "front_path",
+    "garden": "garden",
+    "riverside": "river_path",
+    "old_tree": "tree_path",
+    "book_corner": "book_corner",
+    "stone_table": "tea_table",
+    "riverbank": "riverbank",
+    "window": "window_view"
+}
+
+const INTERNAL_TO_API := {
+    "porch": "door",
+    "front_path": "path",
+    "garden": "garden",
+    "river_path": "riverside",
+    "tree_path": "old_tree",
+    "book_corner": "book_corner",
+    "tea_table": "stone_table",
+    "riverbank": "riverbank",
+    "window_view": "window"
+}
+
 const EDGES := [
     ["porch", "front_path"],
     ["front_path", "garden"],
@@ -39,25 +67,43 @@ func _init() -> void:
     for edge in EDGES:
         _pathfinder.connect_points(_indices[edge[0]], _indices[edge[1]], true)
 
+func to_internal_zone(zone_name: String) -> String:
+    # Internal aliases remain for existing local script fixtures only.
+    # External service should always use API_TO_INTERNAL keys.
+    if API_TO_INTERNAL.has(zone_name):
+        return API_TO_INTERNAL[zone_name]
+    if ZONES.has(zone_name):
+        return zone_name
+    return ""
+
+func to_api_zone(zone_name: String) -> String:
+    var internal_name: String = to_internal_zone(zone_name)
+    if INTERNAL_TO_API.has(internal_name):
+        return INTERNAL_TO_API[internal_name]
+    return ""
+
 func available_zones() -> Array[String]:
     var names: Array[String] = []
-    for zone_name in ZONES.keys():
+    for zone_name in API_TO_INTERNAL.keys():
         names.append(str(zone_name))
     names.sort()
     return names
 
 func is_known_zone(zone_name: String) -> bool:
-    return ZONES.has(zone_name)
+    return not to_internal_zone(zone_name).is_empty()
 
 func zone_position(zone_name: String) -> Vector2:
-    if not is_known_zone(zone_name):
+    var internal_name: String = to_internal_zone(zone_name)
+    if internal_name.is_empty():
         return Vector2.INF
-    return ZONES[zone_name]
+    return ZONES[internal_name]
 
 func route_between(from_zone: String, to_zone: String) -> PackedVector2Array:
-    if not is_known_zone(from_zone) or not is_known_zone(to_zone):
+    var from_internal: String = to_internal_zone(from_zone)
+    var to_internal: String = to_internal_zone(to_zone)
+    if from_internal.is_empty() or to_internal.is_empty():
         return PackedVector2Array()
-    return _pathfinder.get_point_path(_indices[from_zone], _indices[to_zone])
+    return _pathfinder.get_point_path(_indices[from_internal], _indices[to_internal])
 
 func nearest_zone(point: Vector2) -> String:
     var nearest_name: String = "porch"
