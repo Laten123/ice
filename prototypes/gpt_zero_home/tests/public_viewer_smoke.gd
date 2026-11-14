@@ -29,6 +29,37 @@ func _run() -> void:
     if staging.fetching or staging.public_feed_url != "":
         _fail("non-Web staging test tried to contact a real server")
         return
+    if staging.debug_status == null or not staging.debug_status.visible:
+        _fail("English staging diagnostics are not visible")
+        return
+    var server_packet: Dictionary = {
+        "schema_version": 1, "world_id": "fantasia.first_home.prototype",
+        "revision": 11724, "residents": [{
+            "resident_id": "path-test", "name": "路径测试",
+            "zone": "book_corner", "activity": "move",
+            "path_progress": {"from": "book_corner", "to": "stone_table",
+                "remaining": ["stone_table"], "progress": 0.0}
+        }]
+    }
+    if not staging.apply_public_snapshot(server_packet):
+        _fail("DeepSeek real mobile packet shape rejected by staging")
+        return
+    if not staging.actors.has("path-test"):
+        _fail("path-test actor missing despite accepted server snapshot")
+        return
+    var test_actor = staging.actors["path-test"]
+    if test_actor.position != staging.graph.zone_position("book_corner"):
+        _fail("path-test sprite position not mapped to book_corner")
+        return
+    staging._debug("OK")
+    if not staging.debug_status.text.contains("P1 OK") or not staging.status.text.contains("path-test"):
+        _fail("English mobile diagnostic status does not show successful public resident")
+        return
+    server_packet["revision"] = 11725
+    server_packet["residents"] = []
+    if not staging.apply_public_snapshot(server_packet) or staging.actors.has("path-test"):
+        _fail("revoked public resident not removed from staging")
+        return
     staging.queue_free()
     if view.get_node_or_null("PublicResidentVisuals") == null:
         _fail("missing visual-only resident layer")
