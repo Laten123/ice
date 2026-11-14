@@ -2,6 +2,18 @@
 
 这不是旧版的美术升级或重构：它是**在单独的 Godot 4.6.3 工程中从空白开始**编写的三分之四斜视场景。没有引用仓库旧的 `scripts/main.gd`、`assets/`、`tiles/` 或 `backend.py`。它只是和旧项目托管在同一 GitHub 仓库，位于 `prototypes/gpt_zero_home/` 目录下。
 
+## 当前默认入口：只读公开观察器（P1 v2 联调准备）
+
+**运行 `godot --path .` 打开的是 `scenes/public_viewer.tscn`，不是旧版 `home.tscn`。**
+
+- 浏览器中的 Godot **不管理任何居民 token、不调用 `/intent`，没有移动或派发任务的入口**。
+- 当前**未接上深寻 v2 的真实网络公开快照接口**。默认观察器不联网、不伪造居民活动，只显示等待状态。
+- 可通过明确的 **`tests/fixtures/public_world_v2.json` 模拟公开快照**检验画面与手机布局；它不是 AI 自主行为。
+- [P1_V2_PUBLIC_VIEWER_HANDOFF.md](P1_V2_PUBLIC_VIEWER_HANDOFF.md) 是对深寻最新网关的对接说明、公开快照契约与 `decline` 语义待修事项。
+- 原来独立 AI 动作/路径实验还在 `scenes/home.tscn`，只供开发与测试，**不能代替服务端 Python 权威执行器**。
+- 如需在隔离环境看原始预设事件实验，必须显式加载旧场景并带 `--demo-intents`；普通默认启动绝不会自动播放假 AI 行为。
+- 测试新观察器：`godot --headless --path prototypes/gpt_zero_home --script res://tests/public_viewer_smoke.gd`。
+
 ## 2026-11-14：AI 主角路线（`prototype/ai-first-home`）
 
 **本分支已经超出原来纯视觉样板。** 用户纠正了一个重要方向：我们借用 RPG 固定场景、路径、动作、动画技术，但**不是为了让人类玩或操纵居民**。
