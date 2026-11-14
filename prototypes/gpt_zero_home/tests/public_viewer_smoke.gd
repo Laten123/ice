@@ -52,8 +52,18 @@ func _run() -> void:
         _fail("path-test sprite position not mapped to book_corner")
         return
     staging._debug("OK")
-    if not staging.debug_status.text.contains("P1 OK") or not staging.status.text.contains("path-test"):
-        _fail("English mobile diagnostic status does not show successful public resident")
+    if not staging.debug_status.text.contains("P1 DBG26 OK") or not staging.status.text.contains("path-test"):
+        _fail("English mobile diagnostic marker does not survive status updates")
+        return
+    if staging.debug_status.get_theme_color("font_color") != Color("#ffe45c"):
+        _fail("staging diagnostic marker is not visually highlighted")
+        return
+    # A layout call must not undo the requested 26-point device-relative text.
+    staging._apply_layout(Vector2(480, 480))
+    var logical_per_pixel: float = 480.0 / maxf(240.0, float(staging.get_window().size.y))
+    var expected_size: int = int(round(26.0 * logical_per_pixel))
+    if staging.debug_status.get_theme_font_size("font_size") != expected_size:
+        _fail("responsive layout overwrote DBG26 font size")
         return
     server_packet["revision"] = 11725
     server_packet["residents"] = []
