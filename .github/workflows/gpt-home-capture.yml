@@ -1,14 +1,16 @@
-name: GPT home - Capture real Godot screenshots
+name: AI-first home - real Godot screenshots
 
 on:
   push:
     branches:
-      - "prototype/gpt-zero-home"
+      - "prototype/ai-first-home"
     paths:
       - ".github/workflows/gpt-home-capture.yml"
       - "prototypes/gpt_zero_home/tests/capture.gd"
       - "prototypes/gpt_zero_home/scripts/home.gd"
       - "prototypes/gpt_zero_home/project.godot"
+      - "prototypes/gpt_zero_home/scripts/resident_actor.gd"
+      - "prototypes/gpt_zero_home/scripts/world_graph.gd"
   workflow_dispatch:
 
 permissions:
@@ -42,7 +44,7 @@ jobs:
       - name: Upload screenshots for inspection
         uses: actions/upload-artifact@v4
         with:
-          name: first-home-real-godot-screenshots
+          name: ai-first-home-godot-screenshots
           path: prototypes/gpt_zero_home/preview-*.png
       - name: Publish screenshot files to prototype branch only
         shell: bash
@@ -51,6 +53,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add prototypes/gpt_zero_home/preview-*.png prototypes/gpt_zero_home/tests/capture-console.txt
           if ! git diff --cached --quiet; then
-            git commit -m "preview: refresh desktop and phone captures for independent home"
-            git push origin HEAD:prototype/gpt-zero-home
+            git commit -m "preview: render AI-first resident and phone layouts from Godot"
+            git push origin HEAD:prototype/ai-first-home
           fi
