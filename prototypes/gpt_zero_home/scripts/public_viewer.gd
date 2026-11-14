@@ -12,7 +12,9 @@ const ART_SIZE := Vector2(960.0, 600.0)
 const PUBLIC_WORLD_ID := "fantasia.first_home.prototype"
 const VALID_ACTIONS := ["stay", "move", "sit", "read", "rest", "decline"]
 const ALLOWED_PACKET_KEYS := ["schema_version", "world_id", "residents", "revision"]
-const ALLOWED_RESIDENT_KEYS := ["resident_id", "name", "zone", "activity", "pos", "action"]
+const ALLOWED_RESIDENT_KEYS := ["resident_id", "name", "zone", "activity", "pos", "action", "path_progress"]
+const ALLOWED_PATH_KEYS := ["remaining", "progress"]
+const MAX_PUBLIC_WAYPOINTS := 24
 const MAX_RESPONSE_BYTES := 65536
 const MAX_PUBLIC_RESIDENTS := 32
 const PALETTE := [
@@ -244,6 +246,7 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
 
     var parsed: Array[Dictionary] = []
     var seen_ids: Dictionary = {}
+    var valid_places: Array[String] = graph.available_zones()
     for raw in people:
         if typeof(raw) != TYPE_DICTIONARY:
             return false
@@ -264,9 +267,44 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
             return false
         if display_name.contains("\n") or display_name.contains("\r") or seen_ids.has(identity):
             return false
-        if not graph.available_zones().has(scene_zone) or not VALID_ACTIONS.has(state_name):
+        if not valid_places.has(scene_zone) or not VALID_ACTIONS.has(state_name):
             return false
-        parsed.append({"resident_id": identity, "name": display_name, "zone": scene_zone, "activity": state_name})
+
+        var remaining: Array[String] = []
+        var progress: float = 0.0
+        if raw.has("path_progress"):
+            if state_name != "move" or typeof(raw["path_progress"]) != TYPE_DICTIONARY:
+                return false
+            var route_data: Dictionary = raw["path_progress"]
+            for key in route_data.keys():
+                if not ALLOWED_PATH_KEYS.has(str(key)):
+                    return false
+            if not route_data.has("remaining") or typeof(route_data["remaining"]) != TYPE_ARRAY:
+                return false
+            var route_parts: Array = route_data["remaining"]
+            if route_parts.size() > MAX_PUBLIC_WAYPOINTS:
+                return false
+            for part in route_parts:
+                if typeof(part) != TYPE_STRING or not valid_places.has(part):
+                    return false
+                remaining.append(part)
+            if not route_data.has("progress"):
+                return false
+            var raw_progress = route_data["progress"]
+            if typeof(raw_progress) != TYPE_INT and typeof(raw_progress) != TYPE_FLOAT:
+                return false
+            progress = float(raw_progress)
+            # Reject NaN and infinities through bounded comparisons.
+            if not (progress >= 0.0 and progress <= 1.0):
+                return false
+
+        # Important: P1 v3's "progress" has not been defined as a specific
+        # (from, to) edge fraction. Store and display route metadata, but DO
+        # NOT use it to invent fractional positions or skip trusted waypoints.
+        parsed.append({
+            "resident_id": identity, "name": display_name, "zone": scene_zone,
+            "activity": state_name, "remaining": remaining, "progress": progress
+        })
         seen_ids[identity] = true
 
     for old_id in actors.keys():
@@ -282,7 +320,7 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
             avatar.configure(identity, person["name"], PALETTE[palette_index][0], PALETTE[palette_index][1])
             actor_layer.add_child(avatar)
             actors[identity] = avatar
-        actors[identity].show_public_state(person["name"], graph.zone_position(person["zone"]), person["activity"])
+        actors[identity].show_public_state(person["name"], graph.zone_position(person["zone"]), person["activity"], person["remaining"], person["progress"])
     have_public_snapshot = true
     last_revision = new_revision
     _update_status(parsed)
@@ -295,7 +333,10 @@ func _update_status(people: Array[Dictionary]) -> void:
             "stay": "停留", "move": "行走", "sit": "坐着",
             "read": "阅读", "rest": "休息", "decline": "谢绝活动"
         }.get(person["activity"], person["activity"])
-        output.append(str(person["name"]) + " · " + activity_name)
+        var suffix := ""
+        if person["activity"] == "move" and person["remaining"].size() > 0:
+            suffix = " · 剩余路点 " + str(person["remaining"].size())
+        output.append(str(person["name"]) + " · " + activity_name + suffix)
     if output.is_empty():
         status.text = "这里暂时没有公开活动"
     else:
@@ -304,9 +345,11 @@ func _update_status(people: Array[Dictionary]) -> void:
 func start_public_feed(url: String) -> bool:
     # The resident-authenticated /observation endpoint MUST NOT be used here.
     # Only a separately created PUBLIC HTTPS snapshot endpoint is suitable.
-    if not url.begins_with("https://") or url.contains("@") or url.contains("#"):
+    # Only the specifically designed token-free public endpoint is allowed.
+    # Do not point a browser at 127.0.0.1:8200 (it would mean the PHONE).
+    if not url.begins_with("https://") or url.contains("@") or url.contains("#") or url.contains("?"):
         return false
-    if url.contains("/observation") or url.contains("/admin/") or url.contains("/intent"):
+    if not url.ends_with("/public/world"):
         return false
     public_feed_url = url
     fetch_clock.wait_time = maxf(1.0, poll_seconds)
