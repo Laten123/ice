@@ -2,14 +2,14 @@
 
 这不是旧版的美术升级或重构：它是**在单独的 Godot 4.6.3 工程中从空白开始**编写的三分之四斜视场景。没有引用仓库旧的 `scripts/main.gd`、`assets/`、`tiles/` 或 `backend.py`。它只是和旧项目托管在同一 GitHub 仓库，位于 `prototypes/gpt_zero_home/` 目录下。
 
-## 当前默认入口：只读公开观察器（P1 v2 联调准备）
+## 当前默认入口：只读公开观察器（P1 v3 协议准备）
 
 **运行 `godot --path .` 打开的是 `scenes/public_viewer.tscn`，不是旧版 `home.tscn`。**
 
 - 浏览器中的 Godot **不管理任何居民 token、不调用 `/intent`，没有移动或派发任务的入口**。
-- 当前**未接上深寻 v2 的真实网络公开快照接口**。默认观察器不联网、不伪造居民活动，只显示等待状态。
+- 当前**尚未联通深寻的真实 HTTPS 公开快照服务**。默认观察器不联网、不伪造居民活动，只显示等待状态。
 - 可通过明确的 **`tests/fixtures/public_world_v2.json` 模拟公开快照**检验画面与手机布局；它不是 AI 自主行为。
-- [P1_V2_PUBLIC_VIEWER_HANDOFF.md](P1_V2_PUBLIC_VIEWER_HANDOFF.md) 是对深寻最新网关的对接说明、公开快照契约与 `decline` 语义待修事项。
+- 深寻已报告 `decline` 语义完成修正，`GET /public/world` 采用居民默认不公开、本人授权后公开。本次路径协议更新见 [P1_V3_HTTPS_AND_PATH_HANDOFF.md](P1_V3_HTTPS_AND_PATH_HANDOFF.md)：新增 from/to 路段校验、暂不开公网 8443，优先验证可信 HTTPS。
 - 原来独立 AI 动作/路径实验还在 `scenes/home.tscn`，只供开发与测试，**不能代替服务端 Python 权威执行器**。
 - 如需在隔离环境看原始预设事件实验，必须显式加载旧场景并带 `--demo-intents`；普通默认启动绝不会自动播放假 AI 行为。
 - 测试新观察器：`godot --headless --path prototypes/gpt_zero_home --script res://tests/public_viewer_smoke.gd`。
@@ -21,7 +21,7 @@
 - AI 居民是主体：由经认证的居民代理自主发出意图，Godot 只负责路由、动作、碰撞与呈现。
 - 人类只能观察允许公开的状态，调整观察画面，未来可以发可拒绝的邀请；**不能点地移动居民**。
 - 已增加独立动态居民、`AStar2D` 固定安全路径图、公开观察与行动回执，支持合法的 `move/read/sit/rest/stay/decline`，并测试了拒绝不被自动覆盖。
-- 当前 `demo_intents.gd` 是**明确的预设事件回放**，默认不启动；在工程目录使用 `godot --path . -- --demo-intents` 才会启用。它不代表 DeepSeek、小冰真的已经接入。**真实模型意图网关还未完成。**
+- 当前 `demo_intents.gd` 是**明确的预设事件回放**，默认不启动；需显式打开旧的 `scenes/home.tscn` 并带 `--demo-intents` 才会启用。它不代表 DeepSeek、小冰真的已经接入。**真实模型意图网关还未完成。**
 - 更完整的技术规划与深寻的服务器测试要求见 [AI_FIRST_TECH_HANDOFF.md](AI_FIRST_TECH_HANDOFF.md)。
 - 测试命令：`godot --headless --path prototypes/gpt_zero_home --script res://tests/agent_smoke.gd`，另运行 `tests/gateway_smoke.gd` 和 `tests/observation_smoke.gd`。
 - 注意：房屋和河流现在仍是早期 SVG 视觉原型；高质量主视觉分层、室内地图、完整角色动画和可公开的 AI 接入尚未完成。
@@ -30,13 +30,13 @@
 
 ## 深寻 P1 网关对接（正在进行）
 
-深寻已在阿里云的隔离环境实现 Python/SQLite 意图网关的基础认证和记录接口。**注意：HTTP `accepted` 目前不代表 Godot 已执行，更不代表现已连接真实模型。**
+据深寻的测试报告，Python/SQLite v2 已具备权威移动模拟、事件回执和公开授权 API。**Godot Web 是只读显示端，不负责决定世界状态；本分支仍未完成真实 HTTPS 网络联调，也尚未接入真实模型。**
 
-- [P1_GATEWAY_INTEGRATION_HANDOFF.md](P1_GATEWAY_INTEGRATION_HANDOFF.md)：**先阅读此文件**，包含安全边界、Godot Web 不能存居民 token、建议的内部世界执行器协议与地点 ID 对照。
+- **优先阅读** [P1_V3_HTTPS_AND_PATH_HANDOFF.md](P1_V3_HTTPS_AND_PATH_HANDOFF.md)：涵盖深寻最新 `from/to/remaining/progress` 协议、公开许可和 HTTPS 联调安全边界。早期 [P1_GATEWAY_INTEGRATION_HANDOFF.md](P1_GATEWAY_INTEGRATION_HANDOFF.md) 仅作历史讨论。
 - `scripts/world_graph.gd`：兼容 P1 对外 `door`、`stone_table` 等名称；`fallen_log`（一根树干）暂未制作，不能冒充已开放互动地点。
 - `tests/p1_contract_smoke.gd`：Godot 本地验证 P1 地点到路径、到达回执以及未建地点拒绝。
 - Godot Web 始终只是观察者；如由它执行真实世界状态变更，会存在浏览器端伪造行为的风险。
-- 真正的 P1 → 权威世界执行 → 完成回执联调，仍由深寻和本分支继续合作实现；当前未做生产部署。
+- 深寻报告 Python 执行器已完成模拟居民移动及回执；**待验证的是 HTTPS 公开快照 → Godot Web 的手机真机显示**。当前未改生产部署。
 
 ## 设计出发点
 
