@@ -119,14 +119,18 @@ func _apply_layout(view: Vector2) -> void:
         return
     # Godot's expanded canvas uses virtual units. Compute a physical-pixel
     # conversion so phone tap targets never shrink with the base resolution.
-    var physical_height := maxf(1.0, float(get_window().size.y))
+    var physical_height := float(get_window().size.y)
+    # Headless Godot exposes a tiny dummy window. Use logical test dimensions
+    # rather than interpreting that dummy size as a phone's real pixel count.
+    if physical_height < 240.0:
+        physical_height = view.y
     var logical_per_pixel := view.y / physical_height
     var margin := 18.0 * logical_per_pixel
     is_portrait = view.y > view.x * 1.15
     var narrow := view.x < 700.0 * logical_per_pixel
 
     # At least 52 physical pixels tall and about 130px wide per action.
-    var btn_width := minf((view.x - margin * 2.0 - 8.0) * 0.5, maxf(170.0, 130.0 * logical_per_pixel))
+    var btn_width := minf((view.x - margin * 2.0 - 8.0) * 0.5, clampf(130.0 * logical_per_pixel, 120.0, 210.0))
     var btn_height := maxf(58.0, 52.0 * logical_per_pixel)
     day_button.add_theme_font_size_override("font_size", int(round(18.0 * logical_per_pixel)))
     dusk_button.add_theme_font_size_override("font_size", int(round(18.0 * logical_per_pixel)))
