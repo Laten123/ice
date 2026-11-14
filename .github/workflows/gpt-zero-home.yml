@@ -38,3 +38,5 @@ jobs:
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/smoke.gd
       - name: Check AI-resident navigation and refusal
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/agent_smoke.gd
+      - name: Check trusted event boundary, receipts and replay protection
+        run: godot --headless --path prototypes/gpt_zero_home --script res://tests/gateway_smoke.gd
