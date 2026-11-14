@@ -6,6 +6,9 @@ on:
       - "prototype/gpt-zero-home"
     paths:
       - ".github/workflows/gpt-home-capture.yml"
+      - "prototypes/gpt_zero_home/tests/capture.gd"
+      - "prototypes/gpt_zero_home/scripts/home.gd"
+      - "prototypes/gpt_zero_home/project.godot"
   workflow_dispatch:
 
 permissions:
