@@ -44,10 +44,7 @@ func observation_for_verified_resident(verified_resident_id: String) -> Dictiona
         if info["resident_id"] != verified_resident_id:
             other_residents.append(info)
 
-    var locations: Array[String] = []
-    for zone_name in graph.ZONES.keys():
-        locations.append(str(zone_name))
-    locations.sort()
+    var locations: Array[String] = graph.available_zones()
 
     return {
         "schema_version": SCHEMA_VERSION,
