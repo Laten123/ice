@@ -18,6 +18,8 @@ var camera: Camera2D
 var cam_follow := false
 var ai_intent_timer := 0.0
 var ai_busy := false
+var player_idle_until := 0.0
+var npc_idle_until := 0.0
 var npc_intent := ""
 var player_intent := ""
 var tree_test_mode := ""   # 树验证模式：collision / walk / double
@@ -126,30 +128,28 @@ func _request_ai_intent(who: String) -> void:
 	if ai_busy:
 		return
 	ai_busy = true
-	print("[AI] ", Time.get_time_string_from_system(), " 请求意图 who=", who)
 	var http := HTTPRequest.new()
 	add_child(http)
-	http.request_completed.connect(func(result, code, headers, body):
+	http.request_completed.connect(func(result, code, _headers, body):
 		ai_busy = false
+		http.queue_free()
 		if result != HTTPRequest.RESULT_SUCCESS or code != 200:
-			print("[AI] 请求失败 result=", result, " code=", code)
-			http.queue_free()
+			push_warning("[AI] Request failed: result=%s code=%s" % [result, code])
 			return
-		var text: String = body.get_string_from_utf8()
-		var data = JSON.parse_string(text)
-		if data == null or not data is Dictionary:
-			return
-		if not data.get("ok", false):
+		var data = JSON.parse_string(body.get_string_from_utf8())
+		if not (data is Dictionary) or not data.get("ok", false):
 			return
 		var intent := String(data.get("intent", ""))
-		if intent == "":
-			return
-		apply_ai_intent(who, intent)
-		http.queue_free()
+		if not intent.is_empty():
+			apply_ai_intent(who, intent)
 	)
-	var state := "深寻正在河边散步" if who == "shenxun" else "小冰在房子附近"
-	http.request("https://47.97.177.2:8080/api/ai/intent",
+	var state := "深寻正在初始土地散步" if who == "shenxun" else "小冰在房子附近"
+	var err := http.request("https://47.97.177.2:8080/api/ai/intent",
 		["Content-Type: text/plain"], HTTPClient.METHOD_POST, state)
+	if err != OK:
+		ai_busy = false
+		http.queue_free()
+		push_warning("[AI] Could not send request: %s" % err)
 
 ## 把手动意图映射为世界目标点
 func apply_ai_intent(who: String, intent: String) -> void:
@@ -170,12 +170,21 @@ func apply_ai_intent(who: String, intent: String) -> void:
 	elif "散步" in intent or "走走" in intent or "路" in intent:
 		target = Vector2(randf_range(6, 30), randf_range(10, 20)) * TILE * SCALE
 	elif "发呆" in intent or "休息" in intent:
-		target = Vector2.ZERO  # 原地
+		# Rest is an action, not a failure to select a destination.
+		if who == "shenxun":
+			player_target = Vector2.ZERO
+			player_idle_until = time + 15.0
+		else:
+			npc_target = npc_pos
+			npc_idle_until = time + 15.0
+		return
 	if target != Vector2.ZERO:
 		if who == "shenxun":
 			player_target = target
+			player_idle_until = time
 		else:
 			npc_target = target
+			npc_idle_until = time
 
 func _load_assets() -> void:
 	for i in 3:
@@ -279,8 +288,6 @@ func _build_path() -> void:
 		var pt: Texture2D = null
 		if ResourceLoader.exists("res://tiles/tile-" + names[i] + ".png"):
 			pt = load("res://tiles/tile-" + names[i] + ".png")
-		elif ResourceLoader.exists("res://tiles/tile-" + names[i] + ".png"):
-			pt = load("res://tiles/tile-" + names[i] + ".png")
 		if pt:
 			var im := pt.get_image()
 			im.convert(Image.FORMAT_RGBA8)
@@ -330,6 +337,7 @@ func _build_tree_layered(pos: Vector2) -> void:
 	# 树干（参与 Y-Sort，基准=树根）
 	var trunk := Sprite2D.new()
 	trunk.texture = oak
+	trunk.scale = Vector2(SCALE, SCALE)
 	trunk.region_enabled = true
 	trunk.region_rect = Rect2(0, 40, 32, 8)
 	trunk.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -340,7 +348,7 @@ func _build_tree_layered(pos: Vector2) -> void:
 	body.position = pos * TILE * Vector2(SCALE, SCALE) + Vector2(0, 2)
 	var col := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
-	rect.size = Vector2(10, 6)
+	rect.size = Vector2(20, 12)
 	col.shape = rect
 	body.add_child(col)
 	world.add_child(body)
@@ -401,7 +409,6 @@ func _build_decor() -> void:
 		decor.add_child(s)
 		trees.append(s)
 		# 树碰撞
-		trees.append(s)
 		var tbody := StaticBody2D.new()
 		tbody.position = s.position * Vector2(SCALE, SCALE)
 		var tcol := CollisionShape2D.new()
@@ -457,10 +464,11 @@ func _build_house(tile_pos: Vector2) -> void:
 	house.add_child(spr)
 	# 房子碰撞（StaticBody2D）
 	var body := StaticBody2D.new()
-	body.position = base + Vector2(48, 48)
+	# House sprite is scaled by SCALE; collider must use world coordinates.
+	body.position = base * SCALE + Vector2(0, 45)
 	var bshape := CollisionShape2D.new()
 	var brect := RectangleShape2D.new()
-	brect.size = Vector2(96, 96)
+	brect.size = Vector2(100, 45)
 	bshape.shape = brect
 	body.add_child(bshape)
 	add_child(body)
@@ -471,7 +479,9 @@ func _build_player() -> void:
 	player.position = Vector2(TILE * 18 * SCALE, TILE * 14 * SCALE)
 	player_target = player.position + Vector2(60, 0)
 	player_spr = Sprite2D.new()
-	player_spr.texture = load("res://assets/shenxun_stand.png")
+	player_spr.texture = load("res://assets/shenxun_walk.png")
+	player_spr.region_enabled = true
+	player_spr.region_rect = Rect2(0, 0, 24, 24)
 	player_spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	player_spr.scale = Vector2(2.0, 2.0)
 	player.add_child(player_spr)
@@ -498,7 +508,9 @@ func _build_player() -> void:
 	add_child(player)
 	# 小冰
 	npc = Sprite2D.new()
-	npc.texture = load("res://assets/xiaobing_stand.png")
+	npc.texture = load("res://assets/xiaobing_walk.png")
+	npc.region_enabled = true
+	npc.region_rect = Rect2(0, 0, 24, 24)
 	npc.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	npc.scale = Vector2(2.0, 2.0)
 	npc_pos = Vector2(TILE * 22 * SCALE, TILE * 14 * SCALE)
@@ -637,83 +649,73 @@ func _input(event: InputEvent) -> void:
 	var max_y := MAP_H * TILE * SCALE
 	camera.position = camera.position.clamp(Vector2(0, 0), Vector2(max_x, max_y))
 
-func _process(delta: float) -> void:
-	time += delta
-	if player == null: return
-	# 树验证模式：自动移动
-	if tree_test_mode != "":
-		var target := Vector2(18, 14) * TILE * SCALE
-		if tree_test_mode == "double":
-			target = Vector2(17, 14) * TILE * SCALE
-		if player.position.distance_to(target) > 10:
-			var tdir := (target - player.position).normalized()
-			player.velocity = tdir * 400.0
-			player.move_and_slide()
-			if tree_test_mode == "collision":
-				print("[TEST] pos=", player.position)
-		else:
-			player.velocity = Vector2.ZERO
+# Physics movement is separate from rendering and network polling.
+func _physics_process(delta: float) -> void:
+	if player == null:
 		return
+	if tree_test_mode != "":
+		var test_target := Vector2(18, 14) * TILE * SCALE
+		if tree_test_mode == "double":
+			test_target = Vector2(17, 14) * TILE * SCALE
+		var test_dir := (test_target - player.position).normalized()
+		player.velocity = test_dir * 400.0 if player.position.distance_to(test_target) > 10.0 else Vector2.ZERO
+		player.move_and_slide()
+		return
+
 	var dir := Vector2.ZERO
-	if not player_auto:
+	if player_auto:
+		if player_target != Vector2.ZERO and player.position.distance_to(player_target) < 14.0:
+			player_target = Vector2.ZERO
+			player_idle_until = time + randf_range(2.0, 5.0)
+		if player_target == Vector2.ZERO and time >= player_idle_until:
+			player_target = Vector2(
+				randf_range(150.0, MAP_W * TILE * SCALE - 150.0),
+				randf_range(150.0, MAP_H * TILE * SCALE - 150.0)
+			)
+		if player_target != Vector2.ZERO:
+			dir = (player_target - player.position).normalized()
+	else:
 		if Input.is_action_pressed("ui_right"): dir.x += 1
 		if Input.is_action_pressed("ui_left"): dir.x -= 1
 		if Input.is_action_pressed("ui_down"): dir.y += 1
 		if Input.is_action_pressed("ui_up"): dir.y -= 1
-	player.velocity = dir.normalized() * 300.0
+		dir = dir.normalized()
+
+	player.velocity = dir * (45.0 if player_auto else 300.0)
 	player.move_and_slide()
-	# AI 到达检测
-	if player_auto and player_target != Vector2.ZERO and player.position.distance_to(player_target) < 14:
-		print("[AI] ", Time.get_time_string_from_system(), " 深寻到达目标 ", player_target)
-		player_target = Vector2.ZERO
-	# AI 意图驱动（每 120 秒请求一次，异步）
-	ai_intent_timer += delta
-	if int(ai_intent_timer) % 5 == 0 and int(ai_intent_timer) > 0:
-		print("[DEBUG] timer=", ai_intent_timer)
-	if ai_intent_timer > 999999.0:
-		ai_intent_timer = 0.0
-		_request_ai_intent("shenxun")
-	# AI 自主：深寻自己找目标点走
-	if player_auto:
-		if player.position.distance_to(player_target) < 12:
-			player_target = Vector2(randf_range(150, MAP_W * TILE * SCALE - 150), randf_range(150, MAP_H * TILE * SCALE - 150))
-		var tdir := (player_target - player.position).normalized()
-		player.position += tdir * 45.0 * delta
-		if tdir != Vector2.ZERO:
-			if abs(tdir.x) > abs(tdir.y):
-				player_facing = 1 if tdir.x < 0 else 2
-			else:
-				player_facing = 3 if tdir.y < 0 else 0
-			player_anim_t += delta
-			if player_anim_t > 0.12:
-				player_anim_t = 0.0
-				player_frame = (player_frame + 1) % 3
 	if dir != Vector2.ZERO:
 		if abs(dir.x) > abs(dir.y):
 			player_facing = 1 if dir.x < 0 else 2
 		else:
 			player_facing = 3 if dir.y < 0 else 0
 		player_anim_t += delta
-		if player_anim_t > 0.12:
+		if player_anim_t >= 0.12:
 			player_anim_t = 0.0
-			player_frame = (player_frame + 1) % 3
+			player_frame = (player_frame + 1) % 6
 	else:
 		player_frame = 0
-	player_spr.region_rect = Rect2((player_frame % 6) * 24, 0, 48, 48)
+	player_spr.region_rect = Rect2(player_frame * 24, 0, 24, 24)
+
+func _process(delta: float) -> void:
+	time += delta
+	if player == null or tree_test_mode != "":
+		return
+	# One AI call per 120 seconds; requests remain asynchronous.
+	ai_intent_timer += delta
+	if ai_intent_timer >= 120.0:
+		ai_intent_timer = 0.0
+		_request_ai_intent("shenxun")
 	_process_npc(delta)
-	# 相机由用户拖拽控制（不在 _process 里强制）
 	_animate_world(delta)
-	# 每 3 秒轮询 AI 消息 → 气泡
 	if time - last_poll > 10.0:
 		last_poll = time
 		_poll_ai_messages()
-	# 走近小冰 → 提示
 	if label != null:
 		var dist := player.position.distance_to(npc_pos)
-		if dist < 120:
+		if dist < 120.0:
 			label.text = "小冰：你来啦～（她在等你）"
 		else:
-			label.text = "幻想乡 · AI 自主生活（旁观模式）" 
+			label.text = "幻想乡 · AI 自主生活（旁观模式）"
 
 var trees: Array = []
 var lights: Array = []
