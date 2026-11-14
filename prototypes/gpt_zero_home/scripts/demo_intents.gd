@@ -17,13 +17,13 @@ const SCENARIO := [
     {"id": XIAOBING, "intent": {"action": "decline"}}
 ]
 
-var playback_enabled := true
+var playback_enabled := false
 var scene_cursor := 0
 var timer: Timer
 var stopped_by_residents: Dictionary = {}
 
 func _ready() -> void:
-    # The demo is opt-in at the editor via playback_enabled; it must NEVER
+    # The demo is opt-in via --demo-intents; it must NEVER
     # be confused with autonomous activity or used for production AI residents.
     if not playback_enabled:
         return
