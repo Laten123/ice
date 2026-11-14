@@ -41,4 +41,15 @@ func _run_capture() -> void:
     all_passed = await _save_view(home, Vector2i(960, 600), true, "preview-dusk.png") and all_passed
     all_passed = await _save_view(home, Vector2i(853, 384), false, "preview-phone-landscape.png") and all_passed
     all_passed = await _save_view(home, Vector2i(390, 844), true, "preview-phone-portrait.png") and all_passed
+
+    # Simulate a resident-origin event to verify independent actor rendering.
+    # A scripted adapter is NOT an actual AI model connection.
+    var shen = home.residents["00000000-0000-4000-8000-000000000001"]
+    if not shen.accept_intent({"action": "move", "target": "tea_table"}):
+        printerr("CAPTURE_FAIL: unable to route resident")
+        quit(1)
+        return
+    for i in range(50):
+        shen._process(0.1)
+    all_passed = await _save_view(home, Vector2i(960, 600), false, "preview-residents-demo.png") and all_passed
     quit(0 if all_passed else 1)
