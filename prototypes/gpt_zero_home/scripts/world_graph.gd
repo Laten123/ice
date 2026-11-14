@@ -43,16 +43,20 @@ const INTERNAL_TO_API := {
     "window_view": "window"
 }
 
-const EDGES := [
-    ["porch", "front_path"],
-    ["front_path", "garden"],
-    ["front_path", "river_path"],
-    ["river_path", "tree_path"],
-    ["tree_path", "book_corner"],
-    ["book_corner", "tea_table"],
-    ["tea_table", "riverbank"],
-    ["river_path", "window_view"],
-    ["window_view", "porch"]
+# Authoritative Python P1 weighted adjacency, as reported by DeepSeek.
+# Costs are server travel weights; they are NOT screen-distance promises.
+# The viewer NEVER asks this graph to decide a resident's movements.
+const BACKEND_EDGES := [
+    ["door", "path", 80],
+    ["path", "garden", 120],
+    ["garden", "window", 60],
+    ["path", "old_tree", 140],
+    ["path", "book_corner", 160],
+    ["old_tree", "book_corner", 90],
+    ["book_corner", "stone_table", 40],
+    ["stone_table", "riverside", 60],
+    ["stone_table", "riverbank", 80],
+    ["riverside", "riverbank", 100]
 ]
 
 var _pathfinder: AStar2D = AStar2D.new()
@@ -64,8 +68,10 @@ func _init() -> void:
         _indices[zone_name] = index
         _pathfinder.add_point(index, ZONES[zone_name])
         index += 1
-    for edge in EDGES:
-        _pathfinder.connect_points(_indices[edge[0]], _indices[edge[1]], true)
+    for edge in BACKEND_EDGES:
+        var left: String = API_TO_INTERNAL[edge[0]]
+        var right: String = API_TO_INTERNAL[edge[1]]
+        _pathfinder.connect_points(_indices[left], _indices[right], true)
 
 func to_internal_zone(zone_name: String) -> String:
     # Internal aliases remain for existing local script fixtures only.
@@ -97,6 +103,64 @@ func zone_position(zone_name: String) -> Vector2:
     if internal_name.is_empty():
         return Vector2.INF
     return ZONES[internal_name]
+
+func backend_edge_weight(from_zone: String, to_zone: String) -> int:
+    # For protocol regression checks only. Returns -1 if no server edge.
+    var first: String = to_api_zone(from_zone)
+    var second: String = to_api_zone(to_zone)
+    for edge in BACKEND_EDGES:
+        if (edge[0] == first and edge[1] == second) or (edge[1] == first and edge[0] == second):
+            return int(edge[2])
+    return -1
+
+func backend_weighted_route(from_zone: String, to_zone: String) -> Array[String]:
+    # Diagnostic reference only. The Python server stays authoritative.
+    var first: String = to_api_zone(from_zone)
+    var last: String = to_api_zone(to_zone)
+    var result: Array[String] = []
+    if first.is_empty() or last.is_empty():
+        return result
+    var frontier: Array[String] = [first]
+    var best: Dictionary = {first: 0}
+    var previous: Dictionary = {}
+    var visited: Dictionary = {}
+    while not frontier.is_empty():
+        var current: String = frontier[0]
+        var current_cost: int = int(best[current])
+        for option in frontier:
+            if int(best[option]) < current_cost:
+                current = option
+                current_cost = int(best[option])
+        frontier.erase(current)
+        if current == last:
+            break
+        if visited.has(current):
+            continue
+        visited[current] = true
+        for edge in BACKEND_EDGES:
+            var neighbor: String = ""
+            if edge[0] == current:
+                neighbor = str(edge[1])
+            elif edge[1] == current:
+                neighbor = str(edge[0])
+            if neighbor.is_empty() or visited.has(neighbor):
+                continue
+            var proposal: int = current_cost + int(edge[2])
+            if not best.has(neighbor) or proposal < int(best[neighbor]):
+                best[neighbor] = proposal
+                previous[neighbor] = current
+                if not frontier.has(neighbor):
+                    frontier.append(neighbor)
+    if not best.has(last):
+        return result
+    var cursor: String = last
+    result.push_front(cursor)
+    while cursor != first:
+        if not previous.has(cursor):
+            return []
+        cursor = previous[cursor]
+        result.push_front(cursor)
+    return result
 
 func route_between(from_zone: String, to_zone: String) -> PackedVector2Array:
     var from_internal: String = to_internal_zone(from_zone)
