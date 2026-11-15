@@ -31,7 +31,7 @@ STATIC_TYPES = {
 PUBLIC_KEYS = {"schema_version", "world_id", "revision", "residents"}
 RESIDENT_KEYS = {"resident_id", "name", "zone", "activity", "path_progress", "scene_id"}
 SCENE_ZONES = {
-    "exterior": {"door", "path", "garden", "window", "old_tree", "book_corner", "stone_table", "riverside", "riverbank"},
+    "exterior": {"door", "path", "garden", "window", "old_tree", "book_corner", "stone_table", "riverside", "riverbank", "stump"},
     "interior": {"house_entry", "window_corner", "writing_desk", "bookcase", "rest_corner"},
 }
 ROUTE_KEYS = {"from", "to", "remaining", "progress"}
