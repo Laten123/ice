@@ -2,6 +2,7 @@ extends SceneTree
 ## Native pixel-ground smoke test for the first home.
 ## Deliberately uses no token, gateway, player input, or synthetic activity.
 const Viewer = preload("res://scenes/public_viewer.tscn")
+const OfflineHome = preload("res://scenes/home.tscn")
 const Ground = preload("res://scripts/pixel_ground.gd")
 
 func _initialize() -> void:
@@ -65,6 +66,24 @@ func _run() -> void:
     if view.terrain.position != view.art.position or view.terrain.size != view.art.size:
         _fail("landscape layout drifted from original interactive anchors")
         return
+
+    # Previous offline sandbox loads the same ground-underlay after
+    # removing old SVG-only surfaces; its simulated intent system is unchanged.
+    var offline = OfflineHome.instantiate()
+    root.add_child(offline)
+    await process_frame
+    if offline.terrain == null or offline.terrain.texture_filter != CanvasItem.TEXTURE_FILTER_NEAREST:
+        _fail("offline resident-test home lost its pixel terrain")
+        return
+    offline._apply_layout(Vector2(853, 384))
+    if offline.terrain.position != offline.scenery.position or offline.terrain.size != offline.scenery.size:
+        _fail("offline resident-test art and terrain are misaligned")
+        return
+    offline._set_time(true)
+    if offline.terrain.texture != offline.terrain_dusk:
+        _fail("offline resident-test dusk ground did not switch")
+        return
+    offline.queue_free()
 
     print("PIXEL_GROUND_OK: native 480x300 pixels, river/grass/path geometry, dusk, read-only, responsive")
     quit(0)
