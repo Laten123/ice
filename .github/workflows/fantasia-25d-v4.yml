@@ -1,0 +1,49 @@
+name: Fantasia 2.5D V4 ambient prototype
+on:
+  push:
+    branches:
+      - "prototype/ai-first-home"
+    paths:
+      - "prototypes/gpt_zero_home/25d_interactive/v4_patch/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reassemble 2.5D V4 with original image bytes preserved
+        run: |
+          python3 prototypes/gpt_zero_home/25d_interactive/v4_patch/tools/apply_v4_patch.py \
+            prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_interactive.zip \
+            prototypes/gpt_zero_home/25d_interactive/v4_patch \
+            prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_v4_ambient.zip
+      - name: Check browser effects and read-only invariants
+        run: |
+          TMP="$(mktemp -d)"
+          unzip -q prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_v4_ambient.zip -d "$TMP"
+          node "$TMP/fantasia_first_home_25d/tests/ambient_browser_smoke.mjs"
+          python3 "$TMP/fantasia_first_home_25d/tests/source_audit.py"
+          bash -n "$TMP/fantasia_first_home_25d/tools/export_25d_web.sh"
+      - name: Publish verified artifact to prototype branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_v4_ambient.zip
+          if git diff --cached --quiet; then
+            echo "[V4] Nothing to commit"
+          else
+            git commit -m "assets(25d): publish environmental motion V4 archive"
+            git push origin "HEAD:prototype/ai-first-home"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fantasia-first-home-v4-ambient-zip
+          path: prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_v4_ambient.zip
+          retention-days: 30
