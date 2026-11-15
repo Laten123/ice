@@ -26,6 +26,7 @@ STATIC_TYPES = {
     ".css": "text/css; charset=utf-8",
     ".ico": "image/x-icon",
     ".webmanifest": "application/manifest+json",
+    ".txt": "text/plain; charset=utf-8",
 }
 PUBLIC_KEYS = {"schema_version", "world_id", "revision", "residents"}
 RESIDENT_KEYS = {"resident_id", "name", "zone", "activity", "path_progress"}
@@ -141,7 +142,8 @@ def make_handler(web_dir, test_id, upstream):
             # unprivileged icon files may be served. Merely having a safe
             # extension must not expose unrelated local JavaScript or assets.
             if not (filename.startswith("index.") or filename in (
-                "favicon.ico", "favicon.png", "apple-touch-icon.png", "icon.png"
+                "favicon.ico", "favicon.png", "apple-touch-icon.png", "icon.png",
+                "font-license.txt"
             )):
                 self._reply(404, b'{"error":"not_found"}')
                 return
