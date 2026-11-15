@@ -114,16 +114,16 @@ func _build_visuals() -> void:
     actor_layer = Node2D.new()
     actor_layer.name = "PublicResidentVisuals"
     add_child(actor_layer)
-    # Art-only landmark: exists only when the modular asset pack is installed.
-    # Do not add a server zone or a client-side interaction for the stump.
-    var stump_texture_path := "res://art/objects/stump_plain_32x32.png"
+    # The observer draws a matching SVG stump. Its location/activity comes ONLY
+    # from the Python-authorized public snapshot; this art cannot issue intents.
+    var stump_texture_path := "res://art/objects/stump_scene.svg"
     if ResourceLoader.exists(stump_texture_path):
         stump_visual = Sprite2D.new()
-        stump_visual.name = "GardenStumpVisualOnly"
+        stump_visual.name = "GardenStumpArt"
         stump_visual.texture = load(stump_texture_path) as Texture2D
-        stump_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-        stump_visual.position = Vector2(453.0, 515.0)
-        stump_visual.scale = Vector2(1.7, 1.7)
+        stump_visual.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+        stump_visual.position = HomeSpaces.EXTERIOR_V2_POSITIONS["stump"]
+        stump_visual.scale = Vector2(0.74, 0.74)
         actor_layer.add_child(stump_visual)
 
     var header := PanelContainer.new()
@@ -210,10 +210,15 @@ func _apply_optional_cjk_font() -> void:
         return
     var font_resource = ResourceLoader.load(path)
     if font_resource is Font:
-        for widget in [title_label, status, hint, day_button, dusk_button]:
+        for widget in _cjk_font_targets():
             widget.add_theme_font_override("font", font_resource)
         if use_same_origin_public_feed:
             _debug("PIXEL_FONT_READY" if path == OPTIONAL_PIXEL_CJK_FONT else "CJK_FONT_READY")
+
+# All dynamically created buttons must receive the same real CJK font.
+# Missing room_button here caused the phone's 看室内 / 看院子 tofu boxes.
+func _cjk_font_targets() -> Array[Control]:
+    return [title_label, status, hint, day_button, dusk_button, room_button]
 
 func _panel_style() -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
@@ -300,7 +305,7 @@ func _apply_layout(view: Vector2) -> void:
         hint.visible = true
         room_button.position = Vector2((view.x - room_width) * 0.5, buttons.position.y - button_height - 10.0 * logical_per_pixel)
         hint.position = Vector2(margin, room_button.position.y - 47.0 * logical_per_pixel)
-        status.position = Vector2(margin, 104.0 * logical_per_pixel)
+        status.position = Vector2(margin, 123.0 * logical_per_pixel)
     else:
         buttons.position = Vector2(view.x - total_width - margin, view.y - button_height - margin)
         var factor: float = minf(view.x / ART_SIZE.x, view.y / ART_SIZE.y)
@@ -316,7 +321,8 @@ func _apply_layout(view: Vector2) -> void:
     status.add_theme_font_size_override("font_size", clampi(int(round(14.0 * logical_per_pixel)), 12, 19))
     status.size = Vector2(view.x - margin * 2.0, 70.0 * logical_per_pixel)
     hint.size = Vector2(view.x - margin * 2.0, 32.0 * logical_per_pixel)
-    debug_status.position = Vector2(margin, 65.0 * logical_per_pixel)
+    # Keep the DBG26 diagnostic below, not across, the wooden title plank.
+    debug_status.position = Vector2(margin, 76.0 * logical_per_pixel)
     debug_status.size = Vector2(view.x - margin * 2.0, 38.0 * logical_per_pixel)
     # The layout override is the final effective font size; setting only the
     # font size in _build_visuals() gets overwritten whenever layout runs.
@@ -392,6 +398,10 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
     var parsed: Array[Dictionary] = []
     var seen_ids: Dictionary = {}
     var exterior_zones: Array[String] = graph.available_zones()
+    # V2 service confirmed "stump" as a place. Only mirror the published
+    # location, never invent an unaudited edge in the older nine-node graph.
+    for zone_name in HomeSpaces.EXTERIOR_V2_POSITIONS.keys():
+        exterior_zones.append(str(zone_name))
     for raw in people:
         if typeof(raw) != TYPE_DICTIONARY:
             return false
@@ -488,7 +498,13 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
             avatar.configure(identity, person["name"], PALETTE[palette_index][0], PALETTE[palette_index][1])
             actor_layer.add_child(avatar)
             actors[identity] = avatar
-        var zone_position: Vector2 = graph.zone_position(person["zone"]) if person["scene_id"] == "exterior" else HomeSpaces.indoor_position(person["zone"])
+        var zone_position: Vector2
+        if person["scene_id"] == HomeSpaces.INTERIOR:
+            zone_position = HomeSpaces.indoor_position(person["zone"])
+        elif HomeSpaces.EXTERIOR_V2_POSITIONS.has(person["zone"]):
+            zone_position = HomeSpaces.EXTERIOR_V2_POSITIONS[person["zone"]]
+        else:
+            zone_position = graph.zone_position(person["zone"])
         actors[identity].show_public_state(person["name"], zone_position, person["activity"], person["remaining"], person["progress"])
         actors[identity].visible = person["scene_id"] == observed_scene
     public_people = parsed.duplicate(true)
