@@ -11,6 +11,7 @@ const FantasiaSkin = preload("res://scripts/fantasia_ui_skin.gd")
 const HomeSpaces = preload("res://scripts/home_spaces.gd")
 const HOUSE_ROOM = preload("res://scenes/house_interior.tscn")
 const PixelGround = preload("res://scripts/pixel_ground.gd")
+const PixelExteriorV3 = preload("res://scripts/pixel_exterior_v3.gd")
 
 const ART_SIZE := Vector2(960.0, 600.0)
 const PUBLIC_WORLD_ID := "fantasia.first_home.prototype"
@@ -44,6 +45,9 @@ const PALETTE := [
 
 var graph
 var art: TextureRect
+var pixel_exterior: TextureRect
+var pixel_exterior_day: Texture2D
+var pixel_exterior_dusk: Texture2D
 var terrain: TextureRect
 var terrain_day: Texture2D
 var terrain_dusk: Texture2D
@@ -122,6 +126,19 @@ func _build_visuals() -> void:
     art.stretch_mode = TextureRect.STRETCH_SCALE
     art.mouse_filter = Control.MOUSE_FILTER_IGNORE
     add_child(art)
+
+    # Full original 480x300 palette-indexed pixel art. The legacy SVG stays
+    # underneath as a safe fallback while independent collisions remain intact.
+    pixel_exterior_day = PixelExteriorV3.create_texture(false)
+    pixel_exterior_dusk = PixelExteriorV3.create_texture(true)
+    pixel_exterior = TextureRect.new()
+    pixel_exterior.name = "CompactPixelExteriorV3"
+    pixel_exterior.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+    pixel_exterior.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+    pixel_exterior.stretch_mode = TextureRect.STRETCH_SCALE
+    pixel_exterior.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    pixel_exterior.texture = pixel_exterior_day
+    add_child(pixel_exterior)
 
     interior_view = HOUSE_ROOM.instantiate() as Node2D
     interior_view.name = "ObserverHouseInterior"
@@ -261,6 +278,7 @@ func _set_time(dusk: bool) -> void:
     is_dusk = dusk
     art.texture = DUSK_SCENE if dusk else DAY_SCENE
     terrain.texture = terrain_dusk if dusk else terrain_day
+    pixel_exterior.texture = pixel_exterior_dusk if dusk else pixel_exterior_day
     if interior_view != null:
         interior_view.set_dusk(dusk)
     day_button.button_pressed = not dusk
@@ -276,6 +294,7 @@ func show_observed_scene(scene_id: String) -> bool:
     observed_scene = scene_id
     art.visible = scene_id == "exterior"
     terrain.visible = scene_id == "exterior"
+    pixel_exterior.visible = scene_id == "exterior"
     if interior_view != null:
         interior_view.visible = scene_id == "interior"
     if stump_visual != null:
@@ -354,6 +373,8 @@ func _position_art(view: Vector2) -> void:
     art.position = Vector2((view.x - art.size.x) * 0.5 + pan_x, (view.y - art.size.y) * 0.5)
     terrain.position = art.position
     terrain.size = art.size
+    pixel_exterior.position = art.position
+    pixel_exterior.size = art.size
     actor_layer.position = art.position
     actor_layer.scale = art.size / ART_SIZE
     if interior_view != null:
