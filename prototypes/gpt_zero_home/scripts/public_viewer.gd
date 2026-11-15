@@ -22,6 +22,9 @@ const MAX_PUBLIC_RESIDENTS := 32
 # The default Godot Web fallback font cannot be assumed to contain CJK glyphs.
 # Original, unmodified Google Fonts OFL variable font downloaded by isolated Web export.
 const OPTIONAL_CJK_FONT := "res://art/fonts/NotoSansSC-VF.ttf"
+# Prefer licensed pixel CJK font if supplied. Keep Noto as the fallback for
+# dynamic resident names until the font pack is tested on a real phone.
+const OPTIONAL_PIXEL_CJK_FONT := "res://art/fonts/FusionPixel12.woff2"
 const PALETTE := [
     [Color("#74859a"), Color("#53607b")],
     [Color("#d6c1d2"), Color("#aecbd1")],
@@ -80,6 +83,15 @@ func _ready() -> void:
         start_public_feed(public_feed_url)
 
 func _build_visuals() -> void:
+    # Replace dead-grey margins with a quiet forest-tone matte.
+    var background := ColorRect.new()
+    background.name = "ForestBackdrop"
+    background.anchor_right = 1.0
+    background.anchor_bottom = 1.0
+    background.color = Color("#344a40")
+    background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    add_child(background)
+
     art = TextureRect.new()
     art.name = "PublicSceneArtwork"
     art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -109,7 +121,7 @@ func _build_visuals() -> void:
     FantasiaSkin.skin_title(header)
     add_child(header)
     title_label = Label.new()
-    title_label.text = "幻想乡 · 初代家园｜观察"
+    title_label.text = "幻想乡 · 初代家园"
     title_label.add_theme_font_size_override("font_size", 20)
     title_label.add_theme_color_override("font_color", Color("#fff5df"))
     header.add_child(title_label)
@@ -147,8 +159,8 @@ func _build_visuals() -> void:
     buttons.name = "ViewerLightingOnly"
     buttons.add_theme_constant_override("separation", 8)
     add_child(buttons)
-    day_button = _time_button("MorningPreview", "上午（预览）", false)
-    dusk_button = _time_button("DuskPreview", "黄昏（预览）", true)
+    day_button = _time_button("MorningPreview", "上午", false)
+    dusk_button = _time_button("DuskPreview", "黄昏", true)
     buttons.add_child(day_button)
     buttons.add_child(dusk_button)
     FantasiaSkin.install(day_button, dusk_button)
@@ -169,16 +181,19 @@ func _build_visuals() -> void:
     add_child(fetch_clock)
 
 func _apply_optional_cjk_font() -> void:
-    if not ResourceLoader.exists(OPTIONAL_CJK_FONT):
+    var path: String = OPTIONAL_CJK_FONT
+    if ResourceLoader.exists(OPTIONAL_PIXEL_CJK_FONT):
+        path = OPTIONAL_PIXEL_CJK_FONT
+    if not ResourceLoader.exists(path):
         if use_same_origin_public_feed:
             _debug("CJK_FONT_MISSING")
         return
-    var font_resource = ResourceLoader.load(OPTIONAL_CJK_FONT)
+    var font_resource = ResourceLoader.load(path)
     if font_resource is Font:
         for widget in [title_label, status, hint, day_button, dusk_button]:
             widget.add_theme_font_override("font", font_resource)
         if use_same_origin_public_feed:
-            _debug("CJK_FONT_READY")
+            _debug("PIXEL_FONT_READY" if path == OPTIONAL_PIXEL_CJK_FONT else "CJK_FONT_READY")
 
 func _panel_style() -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
@@ -222,7 +237,7 @@ func _apply_layout(view: Vector2) -> void:
     var button_height: float = maxf(56.0, 52.0 * logical_per_pixel)
     for b in [day_button, dusk_button]:
         b.custom_minimum_size = Vector2(button_width, button_height)
-        b.add_theme_font_size_override("font_size", int(round(15.0 * logical_per_pixel)))
+        b.add_theme_font_size_override("font_size", clampi(int(round(19.0 * logical_per_pixel)), 16, 26))
     var total_width := button_width * 2.0 + 8.0
     buttons.size = Vector2(total_width, button_height)
     if is_portrait:
@@ -245,8 +260,8 @@ func _apply_layout(view: Vector2) -> void:
     var title_box: Control = get_node("ViewerTitle")
     title_box.position = Vector2(margin, 12.0 * logical_per_pixel)
     title_box.size = Vector2(minf(view.x - margin * 2.0, 360.0 * logical_per_pixel), 54.0 * logical_per_pixel)
-    title_label.add_theme_font_size_override("font_size", int(round(20.0 * logical_per_pixel)))
-    status.add_theme_font_size_override("font_size", int(round(13.0 * logical_per_pixel)))
+    title_label.add_theme_font_size_override("font_size", clampi(int(round(18.0 * logical_per_pixel)), 16, 25))
+    status.add_theme_font_size_override("font_size", clampi(int(round(14.0 * logical_per_pixel)), 12, 19))
     status.size = Vector2(view.x - margin * 2.0, 70.0 * logical_per_pixel)
     hint.size = Vector2(view.x - margin * 2.0, 32.0 * logical_per_pixel)
     debug_status.position = Vector2(margin, 65.0 * logical_per_pixel)
