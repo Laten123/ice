@@ -12,6 +12,7 @@ const HomeSpaces = preload("res://scripts/home_spaces.gd")
 const HOUSE_ROOM = preload("res://scenes/house_interior.tscn")
 const PixelGround = preload("res://scripts/pixel_ground.gd")
 const PixelExteriorV3 = preload("res://scripts/pixel_exterior_v3.gd")
+const HomeScope = preload("res://scripts/home_scope.gd")
 
 const ART_SIZE := Vector2(960.0, 600.0)
 const PUBLIC_WORLD_ID := "fantasia.first_home.prototype"
@@ -42,6 +43,9 @@ const PALETTE := [
 # public URL from the page's HTTPS origin; never accept a resident credential.
 @export var use_same_origin_public_feed: bool = false
 @export_range(1.0, 30.0, 0.5) var poll_seconds: float = 2.0
+# "demo" may display future NONINTERACTIVE scenery only. Neither profile
+# grants new free land or broadens public/authoritative locations.
+@export_enum("formal", "demo") var presentation_mode: String = "formal"
 
 var graph
 var art: TextureRect
@@ -82,6 +86,8 @@ func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
     clip_contents = true
     graph = WalkGraph.new()
+    if not HomeScope.valid_profile(presentation_mode):
+        presentation_mode = HomeScope.FORMAL
     _build_visuals()
     _apply_optional_cjk_font()
     _set_time(false)
@@ -473,7 +479,7 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
             return false
         if display_name.contains("\n") or display_name.contains("\r") or seen_ids.has(identity):
             return false
-        if not valid_places.has(scene_zone) or not VALID_ACTIONS.has(state_name):
+        if not valid_places.has(scene_zone) or not HomeScope.is_existing_location(person_scene, scene_zone) or not VALID_ACTIONS.has(state_name):
             return false
 
         var remaining: Array[String] = []
