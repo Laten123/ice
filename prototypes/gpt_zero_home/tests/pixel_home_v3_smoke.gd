@@ -25,7 +25,16 @@ func _run() -> void:
         _fail("the first home gained unintended land")
         return
     if HomeScope.can_create_unowned_extra_lot("formal") or HomeScope.can_create_unowned_extra_lot("demo"):
-        _fail("client can mint a free unowned plot")
+        _fail("the read-only client can mint an unaudited island")
+        return
+    if not HomeScope.world_may_offer_other_free_islands():
+        _fail("free islands were accidentally prohibited by starter-home rules")
+        return
+    if HomeScope.WORLD_LAYOUT != "disconnected_islands" or HomeScope.INTER_ISLAND_TRAVEL != "instant":
+        _fail("island topology or instant travel policy has changed")
+        return
+    if HomeScope.islands_are_connected_by_land() or HomeScope.observer_can_instant_travel_to_another_island():
+        _fail("the observer invented a continuous map or resident teleport command")
         return
     if HomeScope.can_show_noninteractive_demo_surroundings("formal"):
         _fail("formal version has demo scenery enabled")
@@ -34,7 +43,7 @@ func _run() -> void:
         _fail("formal zone list was expanded unexpectedly")
         return
     if HomeScope.is_existing_location("exterior", "outer_meadow"):
-        _fail("an extra free parcel leaked into home scope")
+        _fail("a different island's zone leaked into the starter-home viewer")
         return
     if HomeScope.is_existing_location("interior", "guest_private_room"):
         _fail("an undeclared private room leaked to public observer")
@@ -115,7 +124,7 @@ func _run() -> void:
     forged["revision"] = 302
     forged["residents"][0]["zone"] = "outer_meadow"
     if view.apply_public_snapshot(forged):
-        _fail("the viewer accepted an extra demo/paid land point as free")
+        _fail("the viewer accepted a separate island's zone in the first-home snapshot")
         return
 
     var demo = DEMO.instantiate()
@@ -128,11 +137,11 @@ func _run() -> void:
         _fail("noninteractive scenery cannot be shown in demo")
         return
     if HomeScope.can_create_unowned_extra_lot(demo.presentation_mode):
-        _fail("demo profile granted a free plot")
+        _fail("demo profile manufactured an unauthorized island")
         return
     if demo.apply_public_snapshot(forged):
         _fail("demo view expanded the public activity topology")
         return
 
-    print("PIXEL_HOME_V3_OK: compact formal plot, pixel indoor/outdoor, stump, all 5 anchors, night, demo isolation")
+    print("PIXEL_HOME_V3_OK: compact starter home, other free islands permitted by policy, instant island travel reserved for server, demo isolation")
     quit(0)
