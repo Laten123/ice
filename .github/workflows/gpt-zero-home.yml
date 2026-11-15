@@ -25,6 +25,8 @@ jobs:
           unzip -q /tmp/godot.zip -d /tmp
           sudo install -m 0755 /tmp/Godot_v4.6.3-stable_linux.x86_64 /usr/local/bin/godot
           godot --version
+      - name: Verify and unpack reusable 16px pixel PNG atlas
+        run: python3 prototypes/gpt_zero_home/tests/unpack_pixel_tile_atlas.py
       - name: Import the entirely independent project
         run: |
           set -o pipefail
