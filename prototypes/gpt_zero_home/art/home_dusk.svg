@@ -9,10 +9,11 @@
  <clipPath id="river"><path d="M0 207 C86 217 123 276 136 330 C150 399 172 425 220 457 C275 495 300 533 347 600 H0Z"/></clipPath>
  <clipPath id="roofline"><path d="M400 235 L523 92 L705 219 L681 242 L530 137 L446 260Z"/></clipPath>
 </defs>
-<rect x="0" y="0" width="960" height="600" fill="url(#sky)"/>
+<!-- Native pixel terrain is drawn underneath the remaining scene details. -->
+<rect x="0" y="0" width="960" height="210" fill="url(#sky)"/>
 <polygon points="0,174 120,94 204,148 298,82 433,161 535,109 647,174 792,106 960,167 960,255 0,252" fill="#697e83"/>
 <polygon points="0,204 166,129 270,186 373,132 489,196 621,159 742,190 880,150 960,194 960,296 0,296" fill="#4b7770"/>
-<rect x="0" y="210" width="960" height="390" fill="url(#grass)"/>
+<!-- Grass material now comes from pixel_ground.gd. -->
 <rect x="-17.389076119288802" y="192.96109604788944" width="10" height="72" fill="#53674e"/>
 <circle cx="12.12598092108965" cy="208.01997835049406" r="34.67512069037184" fill="#42674c"/>
 <circle cx="-40.76138186454773" cy="206.78186517907307" r="32.544456880073994" fill="#315848"/>
@@ -213,9 +214,9 @@
 <rect x="68" y="484" width="12" height="4" fill="#59845f"/>
 <rect x="560" y="560" width="4" height="4" fill="#83a979"/>
 <rect x="808" y="532" width="12" height="4" fill="#a2b884"/>
-<path d="M340 600 C281 521 257 489 214 458 C176 430 149 387 141 327 C134 273 102 230 0 207 L0 600Z" fill="url(#water)" stroke-linejoin="round" stroke-linecap="round"/>
-<path d="M0 207 C86 217 123 276 136 330 C150 399 172 425 220 457 C275 495 300 533 347 600" fill="none" stroke="#9ca77d" stroke-width="22" stroke-linejoin="round" stroke-linecap="round"/>
-<path d="M0 207 C86 217 123 276 136 330 C150 399 172 425 220 457 C275 495 300 533 347 600" fill="none" stroke="#547c71" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+<!-- Native pixel water with angular banks replaces this smooth water surface. -->
+<!-- legacy smooth bank stroke replaced by pixel raster -->
+<!-- legacy smooth bank stroke replaced by pixel raster -->
 <g clip-path="url(#river)">
 <rect x="80" y="472" width="7" height="4" fill="#e8c59f"/>
 <rect x="136" y="408" width="15" height="4" fill="#426f89"/>
@@ -926,8 +927,8 @@
 <rect x="936" y="438" width="2" height="5" fill="#8caf77"/>
 <rect x="904" y="500" width="2" height="4" fill="#4e7956"/>
 <rect x="908" y="498" width="2" height="5" fill="#8caf77"/>
-<path d="M600 379 C595 423 665 431 652 477 C644 516 712 552 724 608" fill="none" stroke="#8b785e" stroke-width="75" stroke-linejoin="round" stroke-linecap="round"/>
-<path d="M600 379 C595 423 665 431 652 477 C644 516 712 552 724 608" fill="none" stroke="#c6a17a" stroke-width="62" stroke-linejoin="round" stroke-linecap="round"/>
+<!-- legacy smooth trail stroke replaced by pixel raster -->
+<!-- legacy smooth trail stroke replaced by pixel raster -->
 <polygon points="671.5524177979408,579.5497610874008 681.9016347459714,578.5497610874008 683.9016347459714,582.738670691615 669.5524177979408,582.738670691615" fill="#ecd8ac"/>
 <polygon points="677.3171865149147,560.6431937934831 694.9385807184249,559.6431937934831 696.9385807184249,566.0688005727716 675.3171865149147,566.0688005727716" fill="#e8d0a8"/>
 <polygon points="660.0035911273902,511.1392444076482 675.1430570007527,510.1392444076482 677.1430570007527,516.2169716490898 658.0035911273902,516.2169716490898" fill="#e8d0a8"/>
