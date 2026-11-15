@@ -6,7 +6,7 @@ extends RefCounted
 const BASE := "res://art/ui/"
 
 static func has_skin() -> bool:
-    return (\n        ResourceLoader.exists(BASE + "button_day_normal.png")\n        and ResourceLoader.exists(BASE + "button_dusk_normal.png")\n    )
+    return ResourceLoader.exists(BASE + "button_day_normal.png") and ResourceLoader.exists(BASE + "button_dusk_normal.png")
 
 static func _box(path: String) -> StyleBoxTexture:
     var style := StyleBoxTexture.new()
