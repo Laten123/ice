@@ -19,7 +19,8 @@ const MAX_RESPONSE_BYTES := 65536
 const MAX_PUBLIC_RESIDENTS := 32
 # Add an OFL-licensed Chinese font resource in the isolated project before Web export.
 # The default Godot Web fallback font cannot be assumed to contain CJK glyphs.
-const OPTIONAL_CJK_FONT := "res://art/fonts/NotoSansSC-Regular.ttf"
+# Original, unmodified Google Fonts OFL variable font downloaded by isolated Web export.
+const OPTIONAL_CJK_FONT := "res://art/fonts/NotoSansSC-VF.ttf"
 const PALETTE := [
     [Color("#74859a"), Color("#53607b")],
     [Color("#d6c1d2"), Color("#aecbd1")],
