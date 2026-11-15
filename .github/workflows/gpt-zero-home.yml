@@ -27,6 +27,16 @@ jobs:
           godot --version
       - name: Verify and unpack reusable 16px pixel PNG atlas
         run: python3 prototypes/gpt_zero_home/tests/unpack_pixel_tile_atlas.py
+      - name: Verify compact pixel V3 scene sources and export test previews
+        run: |
+          python3 prototypes/gpt_zero_home/tools/export_pixel_art_v3.py --check
+          python3 prototypes/gpt_zero_home/tools/export_pixel_art_v3.py
+      - name: Attach V3 pixel-art previews for visual approval
+        uses: actions/upload-artifact@v4
+        with:
+          name: fantasia-first-home-v3-pixel-previews
+          path: prototypes/gpt_zero_home/art/generated-v3/*.png
+          retention-days: 7
       - name: Import the entirely independent project
         run: |
           set -o pipefail
