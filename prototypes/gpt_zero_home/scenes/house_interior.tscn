@@ -1,0 +1,86 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/house_interior.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://art/house_interior_day.svg" id="2_floor"]
+[ext_resource type="Texture2D" path="res://art/house_interior_props.svg" id="3_props"]
+
+[sub_resource type="RectangleShape2D" id="1_top"]
+size = Vector2(800, 16)
+
+[sub_resource type="RectangleShape2D" id="2_side"]
+size = Vector2(18, 450)
+
+[sub_resource type="RectangleShape2D" id="3_bottom"]
+size = Vector2(350, 16)
+
+[sub_resource type="RectangleShape2D" id="4_bed"]
+size = Vector2(239, 177)
+
+[sub_resource type="RectangleShape2D" id="5_desk"]
+size = Vector2(215, 95)
+
+[node name="HouseInterior" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="RoomBase" type="Sprite2D" parent="."]
+texture_filter = 1
+centered = false
+texture = ExtResource("2_floor")
+
+[node name="Furniture" type="Sprite2D" parent="."]
+texture_filter = 1
+centered = false
+texture = ExtResource("3_props")
+
+[node name="Waypoints" type="Node2D" parent="."]
+
+[node name="HouseEntry" type="Marker2D" parent="Waypoints"]
+position = Vector2(483, 500)
+
+[node name="WindowCorner" type="Marker2D" parent="Waypoints"]
+position = Vector2(254, 291)
+
+[node name="WritingDesk" type="Marker2D" parent="Waypoints"]
+position = Vector2(650, 480)
+
+[node name="Bookcase" type="Marker2D" parent="Waypoints"]
+position = Vector2(704, 273)
+
+[node name="RestCorner" type="Marker2D" parent="Waypoints"]
+position = Vector2(397, 415)
+
+[node name="Collision" type="Node2D" parent="."]
+
+[node name="Walls" type="StaticBody2D" parent="Collision"]
+collision_layer = 1
+
+[node name="BackWall" type="CollisionShape2D" parent="Collision/Walls"]
+position = Vector2(480, 82)
+shape = SubResource("1_top")
+
+[node name="LeftWall" type="CollisionShape2D" parent="Collision/Walls"]
+position = Vector2(76, 303)
+shape = SubResource("2_side")
+
+[node name="RightWall" type="CollisionShape2D" parent="Collision/Walls"]
+position = Vector2(883, 303)
+shape = SubResource("2_side")
+
+[node name="LowerLeftWall" type="CollisionShape2D" parent="Collision/Walls"]
+position = Vector2(258, 530)
+shape = SubResource("3_bottom")
+
+[node name="LowerRightWall" type="CollisionShape2D" parent="Collision/Walls"]
+position = Vector2(703, 530)
+shape = SubResource("3_bottom")
+
+[node name="FurnitureObstacles" type="StaticBody2D" parent="Collision"]
+collision_layer = 1
+
+[node name="BedCollider" type="CollisionShape2D" parent="Collision/FurnitureObstacles"]
+position = Vector2(239, 410)
+shape = SubResource("4_bed")
+
+[node name="DeskCollider" type="CollisionShape2D" parent="Collision/FurnitureObstacles"]
+position = Vector2(680, 382)
+shape = SubResource("5_desk")
