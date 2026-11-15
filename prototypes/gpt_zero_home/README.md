@@ -2,6 +2,12 @@
 
 这不是旧版的美术升级或重构：它是**在单独的 Godot 4.6.3 工程中从空白开始**编写的三分之四斜视场景。没有引用仓库旧的 `scripts/main.gd`、`assets/`、`tiles/` 或 `backend.py`。它只是和旧项目托管在同一 GitHub 仓库，位于 `prototypes/gpt_zero_home/` 目录下。
 
+## 2026-11-15：手机中文字体进入隔离联调阶段
+
+**当前任务**：消除 Android Web 上的中文方块，其次依据实机横竖屏截图调整构图，再逐步升级小木屋、树、河流与居民角色的美术质量。当前 `path-test` 已由深寻报告在真机上可见，但真实 DeepSeek/小冰模型尚未接入，不能直接对外宣称已发布。
+
+开发分支已为**临时 Web 导出**添加 Google Fonts OFL 授权 Noto Sans SC 的下载和打包流程；代码和 CI 已准备，**仍需深寻重新导出、在手机上确认中文字体真正显示**。字体体积较大，正式发布前需减少体积并固定依赖版本。完整交接：[TODAY_CJK_MOBILE_HANDOFF.md](TODAY_CJK_MOBILE_HANDOFF.md)。
+
 ## 2026-11-14 真机观察：第二阶段已由深寻报告成功 🌙
 
 **来自深寻与拿铁的手机实测报告**：Android 手机在 VPN 全局模式下，通过独立预览服务 `127.0.0.1:8211` + Cloudflare Quick Tunnel，成功加载 Godot Web 家园场景，并看到公开测试居民 `path-test` 出现在石桌旁。Python 世界公开快照到 Web 观察器的同步已通过；**不是声称真实 DeepSeek 或小冰代理现已入园**，也不是永久部署。
