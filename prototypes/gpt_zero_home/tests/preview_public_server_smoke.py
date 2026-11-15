@@ -52,6 +52,27 @@ def main():
     test_public = json.loads(plain)
     assert len(test_public["residents"]) == 1
     assert test_public["residents"][0]["resident_id"] == TEST_ID
+    # Indoor public coordinates are opt-in and must agree with scene_id.
+    indoor_payload = json.loads(json.dumps(PAYLOAD))
+    indoor_payload["residents"][0].update({
+        "scene_id": "interior", "zone": "house_entry", "activity": "move",
+        "path_progress": {"from": "house_entry", "to": "window_corner",
+                          "remaining": ["window_corner"], "progress": 0.0}
+    })
+    indoor = json.loads(sanitized_public_snapshot(json.dumps(indoor_payload).encode(), TEST_ID))
+    assert indoor["residents"][0]["scene_id"] == "interior"
+    assert indoor["residents"][0]["zone"] == "house_entry"
+    for invalid_scene, invalid_zone in [
+        ("interior", "riverbank"), ("exterior", "window_corner"), ("private_bedroom", "bed")
+    ]:
+        bad_scene = json.loads(json.dumps(indoor_payload))
+        bad_scene["residents"][0]["scene_id"] = invalid_scene
+        bad_scene["residents"][0]["zone"] = invalid_zone
+        try:
+            sanitized_public_snapshot(json.dumps(bad_scene).encode(), TEST_ID)
+            raise AssertionError("invalid scene leaked into public view")
+        except ValueError:
+            pass
     evil = dict(PAYLOAD)
     evil["token"] = "DO-NOT-EVER-LEAK"
     try:
