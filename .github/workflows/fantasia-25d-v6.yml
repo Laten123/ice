@@ -1,0 +1,78 @@
+name: Fantasia 2.5D V6 environment detail and clean lantern rig
+
+on:
+  push:
+    branches:
+      - "prototype/ai-first-home"
+    paths:
+      - "prototypes/gpt_zero_home/25d_interactive/v6_patch/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package-and-check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore V5 and package V6 without changing approved artwork
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 prototypes/gpt_zero_home/25d_interactive/v6_patch/tools/apply_v6_patch.py \
+            prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_v5_dynamic.zip \
+            prototypes/gpt_zero_home/25d_interactive/v6_patch \
+            prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_v6_dynamic.zip
+          mkdir -p /tmp/fantasia-v6-test
+          unzip -q prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_v6_dynamic.zip -d /tmp/fantasia-v6-test
+      - name: Node and Python regression (visual-only scene, artwork and authority)
+        run: |
+          set -euo pipefail
+          cd /tmp/fantasia-v6-test/fantasia_first_home_25d
+          python3 tests/source_audit.py
+          node tests/ambient_browser_smoke.mjs
+          node tests/environment_v5_smoke.mjs
+          node tests/environment_v6_smoke.mjs
+          bash -n tools/export_25d_web.sh
+      - name: Install official Godot 4.6.3 headless
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 --output /tmp/godot-v6.zip \
+            https://github.com/godotengine/godot/releases/download/4.6.3-stable/Godot_v4.6.3-stable_linux.x86_64.zip
+          unzip -q /tmp/godot-v6.zip -d /tmp
+          sudo install -m 0755 /tmp/Godot_v4.6.3-stable_linux.x86_64 /usr/local/bin/godot
+          godot --version
+      - name: Godot imports, shaders and actual scene tests V1-V6
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/fantasia-v6-test/fantasia_first_home_25d
+          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/v6-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error|Failed loading resource|ERROR:.*script' /tmp/v6-import.log; then
+            echo '[FAIL] Godot import/parse errors'; exit 1
+          fi
+          for test in first_home_25d_smoke.gd ambient_godot_smoke.gd environment_v5_smoke.gd environment_v6_smoke.gd; do
+            godot --headless --path . --script "res://tests/$test"
+          done
+      - name: Commit verified complete V6 ZIP to the prototype branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_v6_dynamic.zip
+          if git diff --cached --quiet; then
+            echo '[V6] No change to ZIP'
+          else
+            git commit -m "assets(25d): publish V6 full environment and pendulum lantern ZIP"
+            git push origin "HEAD:prototype/ai-first-home"
+          fi
+      - name: Upload independent V6 archive artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fantasia-first-home-v6-environment
+          path: prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_v6_dynamic.zip
+          retention-days: 30
