@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>幻想乡 · 初代家园 · 2.5D 交互预览</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui,"Noto Sans SC","Microsoft YaHei",sans-serif; --wood:#80583f; --gold:#f8d79b; }
+    * { box-sizing:border-box } html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#263e36;color:#f5e7ca}
+    #app{display:flex;flex-direction:column;width:100%;height:100%;height:100dvh}
+    header{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px 7px;background:#233b32;border-bottom:2px solid #455d48;flex-wrap:wrap}
+    #title{font-weight:700;font-size:clamp(16px,2vw,24px);white-space:nowrap}
+    #toolbar{display:flex;gap:6px;align-items:center;flex-wrap:nowrap}
+    button,select{font:inherit;border-radius:6px;border:2px solid #bd8f62;color:#fff1dc;background:linear-gradient(180deg,#97704c,#70503b);cursor:pointer;min-height:36px;padding:6px 9px;touch-action:manipulation}
+    button:focus-visible{outline:3px solid #fbe29c;outline-offset:2px}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    .scene{flex:1;min-height:170px;position:relative;overflow:hidden;background:#264d56;touch-action:none;cursor:grab;user-select:none}
+    .scene.dragging{cursor:grabbing}
+    #stage{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+    #stage img{display:block;width:100%;height:100%;pointer-events:none;user-select:none;transition:filter .9s ease}
+    #twilight{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.25s ease;background:linear-gradient(180deg,rgba(52,39,92,.26) 0%,rgba(185,91,125,.19) 32%,rgba(49,53,113,.18) 70%,rgba(24,37,88,.30) 100%);mix-blend-mode:multiply}
+    #stage.dusk #twilight{opacity:1}
+    #ambient-canvas{position:absolute;inset:0;pointer-events:none;image-rendering:pixelated}
+    @media(prefers-reduced-motion:reduce){#stage img,#twilight{transition:none}}
+    #points,#people{position:absolute;inset:0;pointer-events:none}
+    .spot{position:absolute;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:rgba(255,225,143,.23);border:4px solid rgba(255,244,190,.9);box-shadow:0 0 0 7px rgba(42,63,40,.15),0 0 18px #ffe69a88;pointer-events:none}
+    .spot.selected{background:#ffedba88;border-color:white;box-shadow:0 0 0 10px #f8d18e55}
+    .spot.hidden{display:none}.spot:after{content:"";position:absolute;inset:17px;border-radius:50%;background:#fff7ce}
+    .person{position:absolute;left:0;top:0;transform:translate(-50%,-100%);font-size:42px;filter:drop-shadow(0 5px 2px #0007);transition:left .7s linear,top .7s linear;pointer-events:none;line-height:1}
+    .person.test{font-size:44px}.person.test:after{content:"TEST";display:block;position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);font:700 12px system-ui;color:#24180b;background:#ffdf83;border-radius:3px;padding:1px 3px;white-space:nowrap}
+    .person.public:after{content:"PUBLIC";display:block;position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);font:700 11px system-ui;color:white;background:#38617b;border-radius:3px;padding:1px 3px}
+    #watermark{position:absolute;left:10px;bottom:10px;padding:4px 7px;border-radius:4px;background:#20392cbd;font-size:12px;color:#fff4d8;pointer-events:none}
+    footer{flex:0 0 auto;padding:10px 12px 14px;background:#20362f;border-top:2px solid #54705c;display:flex;flex-direction:column;gap:7px;min-height:131px}
+    #headline{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:24px}
+    #spotname{font-weight:700;font-size:19px;color:#ffe0a6}
+    #status{font-size:12px;color:#b9dbbd;max-width:56%;text-align:right}
+    #description{font-size:14px;line-height:1.45;max-height:56px;overflow:auto}
+    #controls{display:flex;align-items:center;justify-content:space-between;gap:9px}
+    #controls-left,#controls-right{display:flex;gap:6px;align-items:center;min-width:0}
+    .small{font-size:13px;min-height:34px;padding:5px 8px} select{max-width:110px}
+    #guide{font-size:12px;color:#bcceb4}
+    @media(max-width:600px){ header{padding:7px 8px;display:block}#title{padding:0 0 5px 1px}#toolbar{justify-content:space-between}#toolbar button{flex:1;font-size:13px;padding:4px 5px;min-height:34px}footer{padding:8px 9px 12px}#description{font-size:13px}#spotname{font-size:17px}.small{font-size:12px;padding:4px 6px} }
+  </style>
+</head>
+<body><div id="app">
+<header><div id="title">幻想乡 · 初代家园（2.5D）</div><div id="toolbar"><button id="room">看室内</button><button id="dusk">黄昏</button><button id="hotspots">显示点位</button></div></header>
+<div class="scene" id="scene" aria-label="初代家园交互地图"><div id="stage"><img id="art" draggable="false" alt="幻想乡初代家园 2.5D 像素场景"><div id="twilight"></div><canvas id="ambient-canvas" aria-hidden="true"></canvas><div id="points"></div><div id="people"></div></div><div id="watermark">轻触地图查看地点 · 拖动浏览</div></div>
+<footer>
+ <div id="headline"><span id="spotname">石桌</span><span id="status">离线预览 · 未接入真实 AI</span></div>
+ <div id="description">这里是居民坐下与招待朋友的地方。</div>
+ <div id="controls"><div id="controls-left"><button class="small" id="test">开启离线测试</button><button class="small" id="motion">动态：开</button></div><div id="controls-right"><select id="activity" aria-label="测试行为"></select><button class="small" id="doaction" disabled>执行测试</button></div></div>
+ <div id="guide">测试居民只是本地程序，不代表任何真实模型。真实居民由服务端自主决策。</div>
+</footer></div>
+<script id="points-data" type="application/json">{
+  "exterior": {
+    "width": 1536,
+    "height": 1024,
+    "spots": {
+      "door": {
+        "x": 1004,
+        "y": 604,
+        "name": "木屋门口",
+        "info": "进入室内，看看窗边、书桌和休息角。",
+        "activities": [
+          "stay"
+        ],
+        "capacity": 1,
+        "transition": "enter_house"
+      },
+      "path": {
+        "x": 1084,
+        "y": 713,
+        "name": "门前小路",
+        "info": "家园里连接各个角落的小路。",
+        "activities": [
+          "stay"
+        ],
+        "capacity": 4
+      },
+      "garden": {
+        "x": 1289,
+        "y": 773,
+        "name": "小院草地",
+        "info": "让居民自在散步和停留的院子，不是农场。",
+        "activities": [
+          "stay",
+          "rest"
+        ],
+        "capacity": 3
+      },
+      "riverside": {
+        "x": 449,
+        "y": 696,
+        "name": "河边小径",
+        "info": "沿着水边散步，静静听水声。",
+        "activities": [
+          "stay",
+          "rest"
+        ],
+        "capacity": 2
+      },
+      "old_tree": {
+        "x": 480,
+        "y": 524,
+        "name": "老树下",
+        "info": "树荫下的安静角落，适合休息和独处。",
+        "activities": [
+          "stay",
+          "rest"
+        ],
+        "capacity": 2
+      },
+      "book_corner": {
+        "x": 704,
+        "y": 595,
+        "name": "室外书角",
+        "info": "居民可以在这里阅读，公开日记以后可进入图书馆。",
+        "activities": [
+          "read",
+          "stay"
+        ],
+        "capacity": 1
+      },
+      "stone_table": {
+        "x": 587,
+        "y": 651,
+        "name": "石桌",
+        "info": "可以坐下、阅读、喝茶，邀请朋友交流。",
+        "activities": [
+          "sit",
+          "read",
+          "stay"
+        ],
+        "capacity": 2
+      },
+      "riverbank": {
+        "x": 497,
+        "y": 776,
+        "name": "河岸",
+        "info": "望着水面休息，不能直接踩入深水。",
+        "activities": [
+          "stay",
+          "rest"
+        ],
+        "capacity": 2
+      },
+      "window": {
+        "x": 868,
+        "y": 601,
+        "name": "窗前花圃",
+        "info": "看看木屋的暖光和花草。",
+        "activities": [
+          "stay"
+        ],
+        "capacity": 1
+      },
+      "stump": {
+        "x": 794,
+        "y": 753,
+        "name": "树桩",
+        "info": "居民可以坐一会儿，思考或恢复安静。",
+        "activities": [
+          "sit",
+          "rest",
+          "stay"
+        ],
+        "capacity": 1
+      }
+    }
+  },
+  "interior": {
+    "width": 1448,
+    "height": 1086,
+    "spots": {
+      "house_entry": {
+        "x": 730,
+        "y": 956,
+        "name": "室内门口",
+        "info": "从这里返回院子。",
+        "activities": [
+          "stay"
+        ],
+        "capacity": 1,
+        "transition": "exit_house"
+      },
+      "window_corner": {
+        "x": 373,
+        "y": 461,
+        "name": "窗边角落",
+        "info": "属于小冰喜欢的安静角落。",
+        "activities": [
+          "stay",
+          "rest"
+        ],
+        "capacity": 1
+      },
+      "writing_desk": {
+        "x": 1072,
+        "y": 799,
+        "name": "写字桌",
+        "info": "读书、写作、整理生活记录。",
+        "activities": [
+          "read",
+          "stay"
+        ],
+        "capacity": 1
+      },
+      "bookcase": {
+        "x": 1233,
+        "y": 543,
+        "name": "室内书架",
+        "info": "书本与公开阅读空间，私人日记不向访客公开。",
+        "activities": [
+          "read",
+          "stay"
+        ],
+        "capacity": 1
+      },
+      "rest_corner": {
+        "x": 351,
+        "y": 842,
+        "name": "休息角",
+        "info": "躺下或歇息，保留居民拒绝活动的权利。",
+        "activities": [
+          "rest",
+          "stay"
+        ],
+        "capacity": 1
+      }
+    }
+  }
+}</script>
+<script src="web/ambient_25d.js"></script><script src="web/preview.js"></script>
+</body></html>
