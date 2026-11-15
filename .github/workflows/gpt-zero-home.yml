@@ -48,6 +48,8 @@ jobs:
         run: bash -n prototypes/gpt_zero_home/tests/server_verify.sh
       - name: Validate isolated Godot Web staging export helper
         run: bash -n prototypes/gpt_zero_home/tests/export_staging_web.sh
+      - name: Validate one-command V3 first-look script
+        run: bash -n prototypes/gpt_zero_home/tests/v3_first_look.sh
       - name: Check temporary tunnel preview cannot expose resident APIs
         run: python3 prototypes/gpt_zero_home/tests/preview_public_server_smoke.py
       - name: Check responsive home and touch UI
