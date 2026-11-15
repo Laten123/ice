@@ -1,0 +1,42 @@
+name: Publish Fantasia 2.5D Godot prototype archive
+
+on:
+  push:
+    branches:
+      - "prototype/ai-first-home"
+    paths:
+      - "prototypes/gpt_zero_home/25d_interactive/parts/**"
+      - "prototypes/gpt_zero_home/25d_interactive/assemble_zip.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish-archive:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reassemble the original archive without changing image quality
+        run: python3 prototypes/gpt_zero_home/25d_interactive/assemble_zip.py
+      - name: Commit verified ZIP to the prototype branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_interactive.zip
+          if git diff --cached --quiet; then
+            echo "[ZIP] Already committed; nothing to change"
+          else
+            git commit -m "assets(25d): publish original verified Godot interactive ZIP"
+            git push origin "HEAD:prototype/ai-first-home"
+          fi
+      - name: Keep a directly retrievable CI artifact as backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: fantasia-first-home-25d-original-zip
+          path: prototypes/gpt_zero_home/25d_interactive/fantasia_first_home_25d_interactive.zip
+          if-no-files-found: error
+          retention-days: 30
