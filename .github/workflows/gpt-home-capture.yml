@@ -10,6 +10,10 @@ on:
       - "prototypes/gpt_zero_home/scripts/home.gd"
       - "prototypes/gpt_zero_home/project.godot"
       - "prototypes/gpt_zero_home/tests/capture_public_viewer.gd"
+      - "prototypes/gpt_zero_home/scenes/house_interior.tscn"
+      - "prototypes/gpt_zero_home/scripts/house_interior.gd"
+      - "prototypes/gpt_zero_home/scripts/home_spaces.gd"
+      - "prototypes/gpt_zero_home/art/house_interior_*.svg"
       - "prototypes/gpt_zero_home/scripts/public_viewer.gd"
       - "prototypes/gpt_zero_home/scripts/observer_sprite.gd"
       - "prototypes/gpt_zero_home/scripts/resident_actor.gd"
@@ -51,7 +55,7 @@ jobs:
           xvfb-run -a -s "-screen 0 1280x960x24" \
             godot --path prototypes/gpt_zero_home --rendering-driver opengl3 \
             --script res://tests/capture_public_viewer.gd 2>&1 | tee prototypes/gpt_zero_home/tests/public-viewer-capture-console.txt
-          ls -lh prototypes/gpt_zero_home/preview-public-observer-*.png
+          ls -lh prototypes/gpt_zero_home/preview-public-observer-*.png prototypes/gpt_zero_home/preview-house-interior-*.png
       - name: Upload screenshots for inspection
         uses: actions/upload-artifact@v4
         with:
