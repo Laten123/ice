@@ -52,5 +52,5 @@ jobs:
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/public_viewer_smoke.gd
       - name: Validate indoor home anchors, room camera and consent-revocation semantics
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/home_room_smoke.gd
-      - name: Validate installed wooden UI and owner's actual stump PNG
+      - name: Validate installed wooden UI and palette-matched stump SVG
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/art_pack_smoke.gd
