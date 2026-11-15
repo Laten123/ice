@@ -13,33 +13,43 @@ static func _hash(x: int, y: int, salt: int = 0) -> int:
     v = (v ^ (v >> 13)) * 1274126177
     return absi(v ^ (v >> 16))
 
+static func _line(y: int, y0: int, y1: int, x0: float, x1: float) -> float:
+    return lerpf(x0, x1, clampf(float(y - y0) / float(y1 - y0), 0.0, 1.0))
+
 static func _bank_x(y: int) -> float:
-    # Preserve the old C-shaped shoreline, in HALF scene coordinates.
-    var anchors := [
-        Vector2(105, 0), Vector2(118, 38), Vector2(140, 62),
-        Vector2(165, 68), Vector2(193, 85), Vector2(225, 110),
-        Vector2(253, 133), Vector2(276, 151), Vector2(300, 174)
-    ]
-    for i in range(anchors.size() - 1):
-        if float(y) <= anchors[i + 1].x:
-            var a: Vector2 = anchors[i]
-            var b: Vector2 = anchors[i + 1]
-            return lerpf(a.y, b.y, clampf((float(y) - a.x) / (b.x - a.x), 0.0, 1.0))
-    return 174.0
+    # Preserve the original C-shaped shoreline, in HALF scene coordinates.
+    # No per-pixel allocations: this is evaluated ~200k times per export.
+    if y < 118:
+        return _line(y, 105, 118, 0.0, 38.0)
+    if y < 140:
+        return _line(y, 118, 140, 38.0, 62.0)
+    if y < 165:
+        return _line(y, 140, 165, 62.0, 68.0)
+    if y < 193:
+        return _line(y, 165, 193, 68.0, 85.0)
+    if y < 225:
+        return _line(y, 193, 225, 85.0, 110.0)
+    if y < 253:
+        return _line(y, 225, 253, 110.0, 133.0)
+    if y < 276:
+        return _line(y, 253, 276, 133.0, 151.0)
+    return _line(y, 276, 300, 151.0, 174.0)
 
 static func _road_x(y: int) -> float:
-    # Keep the original door-to-yard path geometry, in HALF scene coordinates.
-    var anchors := [
-        Vector2(189, 300), Vector2(206, 303), Vector2(225, 315),
-        Vector2(239, 326), Vector2(251, 326), Vector2(268, 345),
-        Vector2(284, 353), Vector2(300, 362)
-    ]
-    for i in range(anchors.size() - 1):
-        if float(y) <= anchors[i + 1].x:
-            var a: Vector2 = anchors[i]
-            var b: Vector2 = anchors[i + 1]
-            return lerpf(a.y, b.y, clampf((float(y) - a.x) / (b.x - a.x), 0.0, 1.0))
-    return 362.0
+    # Keep the original door-to-yard path, in HALF scene coordinates.
+    if y < 206:
+        return _line(y, 189, 206, 300.0, 303.0)
+    if y < 225:
+        return _line(y, 206, 225, 303.0, 315.0)
+    if y < 239:
+        return _line(y, 225, 239, 315.0, 326.0)
+    if y < 251:
+        return 326.0
+    if y < 268:
+        return _line(y, 251, 268, 326.0, 345.0)
+    if y < 284:
+        return _line(y, 268, 284, 345.0, 353.0)
+    return _line(y, 284, 300, 353.0, 362.0)
 
 static func _surface(x: int, y: int) -> int:
     # 0 deep water / 1 foam / 2 stony bank / 3 grass / 4 road edging / 5 road
