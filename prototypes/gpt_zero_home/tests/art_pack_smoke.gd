@@ -32,15 +32,15 @@ func _run() -> void:
     if not title.get_theme_stylebox("panel") is StyleBoxTexture:
         _fail("Wooden title plaque missing")
         return
-    if not ResourceLoader.exists("res://art/objects/stump_plain_32x32.png"):
-        _fail("Owner's required tree stump PNG missing")
+    if not ResourceLoader.exists("res://art/objects/stump_scene.svg"):
+        _fail("V2.1 scene-matched stump artwork missing")
         return
     if ResourceLoader.exists("res://art/characters/cirno.png"):
         _fail("Unlicensed existing-media character asset must not ship")
         return
-    var obj = load("res://art/objects/stump_plain_32x32.png") as Texture2D
-    if obj == null or obj.get_width() != 32 or obj.get_height() != 32:
-        _fail("The tree stump must be a 32x32 native sprite")
+    var obj = load("res://art/objects/stump_scene.svg") as Texture2D
+    if obj == null or obj.get_width() != 80 or obj.get_height() != 64:
+        _fail("V2.1 stump SVG failed import at the authored size")
         return
-    print("FANTASIA_ART_GODOT_OK: wooden buttons + title + owner's 32x32 stump are importable")
+    print("FANTASIA_ART_GODOT_OK: wooden buttons + title + palette-matched stump SVG are importable")
     quit(0)
