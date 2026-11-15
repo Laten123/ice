@@ -29,7 +29,11 @@ STATIC_TYPES = {
     ".txt": "text/plain; charset=utf-8",
 }
 PUBLIC_KEYS = {"schema_version", "world_id", "revision", "residents"}
-RESIDENT_KEYS = {"resident_id", "name", "zone", "activity", "path_progress"}
+RESIDENT_KEYS = {"resident_id", "name", "zone", "activity", "path_progress", "scene_id"}
+SCENE_ZONES = {
+    "exterior": {"door", "path", "garden", "window", "old_tree", "book_corner", "stone_table", "riverside", "riverbank"},
+    "interior": {"house_entry", "window_corner", "writing_desk", "bookcase", "rest_corner"},
+}
 ROUTE_KEYS = {"from", "to", "remaining", "progress"}
 
 def sanitized_public_snapshot(body, test_id):
@@ -54,6 +58,11 @@ def sanitized_public_snapshot(body, test_id):
         for key in ("resident_id", "name", "zone", "activity"):
             if not isinstance(person.get(key), str):
                 raise ValueError("missing public field")
+        scene = person.get("scene_id", "exterior")
+        if not isinstance(scene, str) or scene not in SCENE_ZONES:
+            raise ValueError("invalid public scene")
+        if person["zone"] not in SCENE_ZONES[scene]:
+            raise ValueError("resident zone mismatches the public scene")
         route = person.get("path_progress")
         if route is not None:
             if not isinstance(route, dict) or set(route) - ROUTE_KEYS or set(route) != ROUTE_KEYS:
@@ -62,8 +71,12 @@ def sanitized_public_snapshot(body, test_id):
                 raise ValueError("invalid route endpoints")
             if not isinstance(route["remaining"], list) or len(route["remaining"]) > 24:
                 raise ValueError("invalid route path")
-            if any(not isinstance(node, str) for node in route["remaining"]):
+            if any(not isinstance(node, str) or node not in SCENE_ZONES[scene] for node in route["remaining"]):
                 raise ValueError("invalid waypoint")
+            if route["from"] != person["zone"] or route["to"] not in SCENE_ZONES[scene]:
+                raise ValueError("cross-room or inconsistent route")
+            if not route["remaining"] or route["remaining"][0] != route["to"]:
+                raise ValueError("next route step does not match the current edge")
             progress = route["progress"]
             if isinstance(progress, bool) or not isinstance(progress, (float, int)) or not 0 <= progress <= 1:
                 raise ValueError("invalid progress")
