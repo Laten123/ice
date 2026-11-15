@@ -10,10 +10,14 @@ const ResidentActor = preload("res://scripts/resident_actor.gd")
 const ScriptedIntentReplay = preload("res://scripts/demo_intents.gd")
 const IntentGateway = preload("res://scripts/intent_gateway.gd")
 const WorldObservation = preload("res://scripts/world_observation.gd")
+const PixelGround = preload("res://scripts/pixel_ground.gd")
 const MOBILE_LAYOUT_WIDTH := 540.0
 
 var is_dusk := false
 var scenery: TextureRect
+var terrain: TextureRect
+var terrain_day: Texture2D
+var terrain_dusk: Texture2D
 var day_button: Button
 var dusk_button: Button
 var status_label: Label
@@ -49,6 +53,18 @@ func _ready() -> void:
     _refresh_layout()
 
 func _build_scenery() -> void:
+    # The old resident-action sandbox shares the same exterior textures;
+    # it needs the SAME ground underlay after the SVG base was made clear.
+    terrain_day = PixelGround.create_texture(false)
+    terrain_dusk = PixelGround.create_texture(true)
+    terrain = TextureRect.new()
+    terrain.name = "PixelTerrainV1"
+    terrain.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+    terrain.stretch_mode = TextureRect.STRETCH_SCALE
+    terrain.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+    terrain.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    terrain.texture = terrain_day
+    add_child(terrain)
     scenery = TextureRect.new()
     scenery.name = "OriginalSceneArtwork"
     scenery.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
@@ -307,6 +323,8 @@ func _position_scenery(view: Vector2) -> void:
         (view.x - scenery.size.x) * 0.5 + pan_x,
         (view.y - scenery.size.y) * 0.5
     )
+    terrain.position = scenery.position
+    terrain.size = scenery.size
     if resident_layer != null:
         resident_layer.position = scenery.position
         resident_layer.scale = scenery.size / ART_SIZE
@@ -326,6 +344,7 @@ func _gui_input(event: InputEvent) -> void:
 func _set_time(dusk: bool) -> void:
     is_dusk = dusk
     scenery.texture = DUSK_SCENE if dusk else DAY_SCENE
+    terrain.texture = terrain_dusk if dusk else terrain_day
     day_button.button_pressed = not dusk
     dusk_button.button_pressed = dusk
     # Viewer lighting is a view-only setting. It cannot trigger any resident action.
