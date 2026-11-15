@@ -38,6 +38,22 @@ static func skin_button(button: Button, family: String) -> void:
     button.add_theme_color_override("font_outline_color", Color("#452b28"))
     button.add_theme_constant_override("outline_size", 2)
 
+static func skin_title(header: PanelContainer) -> void:
+    var title_texture := BASE + "title_floral.png"
+    if not ResourceLoader.exists(title_texture):
+        return
+    var skin := StyleBoxTexture.new()
+    skin.texture = load(title_texture) as Texture2D
+    skin.texture_margin_left = 45.0
+    skin.texture_margin_right = 45.0
+    skin.texture_margin_top = 23.0
+    skin.texture_margin_bottom = 23.0
+    skin.content_margin_left = 14.0
+    skin.content_margin_right = 14.0
+    skin.content_margin_top = 10.0
+    skin.content_margin_bottom = 10.0
+    header.add_theme_stylebox_override("panel", skin)
+
 static func install(day_button: Button, dusk_button: Button) -> void:
     skin_button(day_button, "day")
     skin_button(dusk_button, "dusk")
