@@ -27,9 +27,10 @@ mkdir -p "$PROJECT" "$OUTPUT"
 cp -a "$SOURCE_PROJECT/." "$PROJECT/"
 # A formal export physically excludes demo-only presentation files.
 if [[ "$PROFILE" == "formal" ]]; then
-  rm -f -- "$PROJECT/scenes/public_viewer_demo.tscn"
+  rm -f -- "$PROJECT/scenes/public_viewer_demo.tscn" "$PROJECT/scenes/public_viewer_staging.tscn"
   rm -rf -- "$PROJECT/art/demo-surroundings"
   test ! -e "$PROJECT/scenes/public_viewer_demo.tscn"
+  test ! -e "$PROJECT/scenes/public_viewer_staging.tscn"
   test ! -e "$PROJECT/art/demo-surroundings"
   echo "[FORMAL] One compact plot; demo scenes and outer art stripped"
 else
