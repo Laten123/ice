@@ -90,41 +90,53 @@ static func create_texture(dusk: bool = false) -> ImageTexture:
     var img := Image.create(PIXEL_SIZE.x, PIXEL_SIZE.y, false, Image.FORMAT_RGBA8)
     img.fill(Color(0, 0, 0, 0))
 
-    var grass := [Color("#77a966"), Color("#80ae69"), Color("#85b36e"), Color("#6a9a5d"), Color("#91b879")]
-    var road := [Color("#c9a477"), Color("#d8b487"), Color("#e0bd91"), Color("#bc976d")]
-    var water := [Color("#286078"), Color("#2e6d83"), Color("#397b8d"), Color("#22576e")]
-    var foam := [Color("#67a3a4"), Color("#94bdb0"), Color("#75aaac")]
-    var bank := [Color("#b4a888"), Color("#d4c09b"), Color("#8d9278"), Color("#90a27b")]
-    var road_edge := [Color("#997c58"), Color("#a98c65"), Color("#b29469")]
+    # Calm 16px tiles with small, localized accents; avoid procedural static.
+    var grass := [Color("#7ea96b"), Color("#79a565"), Color("#8bb477"), Color("#6e9c5d")]
+    var road := [Color("#d4ae80"), Color("#deb98d"), Color("#bd976d")]
+    var water := [Color("#2b637b"), Color("#2d697e"), Color("#36778a")]
+    var foam := [Color("#72a9a4"), Color("#95bcb1")]
+    var bank := [Color("#b9ae90"), Color("#d2bd96"), Color("#929983")]
+    var road_edge := [Color("#a48d66"), Color("#b29b75")]
 
     # The sky and remote trees stay in the legacy SVG until their own phase.
     for y in range(TOP_LAND_Y, PIXEL_SIZE.y):
         for x in range(PIXEL_SIZE.x):
             var region: int = _surface(x, y)
-            var hash_value: int = _hash(x / 4, y / 4, 11)
+            var tile_hash: int = _hash(x / 16, y / 16, 19)
+            var patch_hash: int = _hash(x / 6, y / 6, 11)
             var c: Color
             match region:
                 0:
-                    var band: int = (y / 7 + hash_value % 3) % water.size()
-                    c = water[band]
+                    c = water[(y / 12 + tile_hash % 2) % water.size()]
+                    if patch_hash % 31 == 1:
+                        c = water[2]
                 1:
-                    c = foam[hash_value % foam.size()]
+                    c = foam[0] if patch_hash % 7 != 0 else foam[1]
                 2:
-                    c = bank[hash_value % bank.size()]
+                    c = bank[0] if patch_hash % 9 != 0 else bank[1]
                 4:
-                    c = road_edge[hash_value % road_edge.size()]
+                    c = road_edge[0] if patch_hash % 9 != 0 else road_edge[1]
                 5:
-                    c = road[(hash_value + x / 10) % road.size()]
+                    c = road[0]
+                    if patch_hash % 17 == 1:
+                        c = road[1]
+                    elif patch_hash % 19 == 2:
+                        c = road[2]
                 _:
-                    var tile_hash: int = _hash(x / 16, y / 16, 19)
-                    c = grass[(tile_hash + hash_value % 3) % grass.size()]
+                    c = grass[0]
+                    if tile_hash % 11 == 0:
+                        c = grass[1]
+                    if patch_hash % 31 == 1:
+                        c = grass[2]
+                    elif patch_hash % 37 == 2:
+                        c = grass[3]
             img.set_pixel(x, y, c)
 
     # Intentionally sparse, hand-sized clusters instead of stochastic noise.
     for gy in range(7, 19):
         for gx in range(30):
             var h: int = _hash(gx, gy, 73)
-            if h % 5 == 0:
+            if h % 3 != 0:
                 continue
             var cx: int = gx * 16 + 2 + h % 11
             var cy: int = gy * 16 + 2 + (h / 31) % 9
@@ -141,7 +153,7 @@ static func create_texture(dusk: bool = false) -> ImageTexture:
     for gy in range(11, 38):
         for gx in range(19):
             var h: int = _hash(gx, gy, 109)
-            if h % 3 == 0:
+            if h % 4 != 0:
                 continue
             var xx: int = gx * 11 + h % 8
             var yy: int = gy * 8 + (h / 17) % 5
