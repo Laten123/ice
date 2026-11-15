@@ -7,6 +7,7 @@ const DAY_SCENE: Texture2D = preload("res://art/home_day.svg")
 const DUSK_SCENE: Texture2D = preload("res://art/home_dusk.svg")
 const WalkGraph = preload("res://scripts/world_graph.gd")
 const ObserverSprite = preload("res://scripts/observer_sprite.gd")
+const FantasiaSkin = preload("res://scripts/fantasia_ui_skin.gd")
 
 const ART_SIZE := Vector2(960.0, 600.0)
 const PUBLIC_WORLD_ID := "fantasia.first_home.prototype"
@@ -89,11 +90,23 @@ func _build_visuals() -> void:
     actor_layer = Node2D.new()
     actor_layer.name = "PublicResidentVisuals"
     add_child(actor_layer)
+    # Art-only landmark: exists only when the modular asset pack is installed.
+    # Do not add a server zone or a client-side interaction for the stump.
+    var stump_texture_path := "res://art/objects/stump_plain_32x32.png"
+    if ResourceLoader.exists(stump_texture_path):
+        var stump_visual := Sprite2D.new()
+        stump_visual.name = "GardenStumpVisualOnly"
+        stump_visual.texture = load(stump_texture_path) as Texture2D
+        stump_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+        stump_visual.position = Vector2(453.0, 515.0)
+        stump_visual.scale = Vector2(1.7, 1.7)
+        actor_layer.add_child(stump_visual)
 
     var header := PanelContainer.new()
     header.name = "ViewerTitle"
     header.mouse_filter = Control.MOUSE_FILTER_IGNORE
     header.add_theme_stylebox_override("panel", _panel_style())
+    FantasiaSkin.skin_title(header)
     add_child(header)
     title_label = Label.new()
     title_label.text = "幻想乡 · 初代家园｜观察"
@@ -138,6 +151,7 @@ func _build_visuals() -> void:
     dusk_button = _time_button("DuskPreview", "黄昏（预览）", true)
     buttons.add_child(day_button)
     buttons.add_child(dusk_button)
+    FantasiaSkin.install(day_button, dusk_button)
 
     transport = HTTPRequest.new()
     transport.name = "PublicSnapshotHTTPRequest"
