@@ -24,8 +24,13 @@ func _ready() -> void:
     pixel_room.scale = Vector2(2.0, 2.0)
     # Godot visual art still uses the original 960x600 anchor coordinates.
     add_child(pixel_room)
-    get_node("RoomBase").visible = false
-    get_node("Furniture").visible = false
+    # Cast to CanvasItem explicitly so Godot 4.6 type checking is stable.
+    var legacy_floor := get_node_or_null("RoomBase") as CanvasItem
+    var legacy_props := get_node_or_null("Furniture") as CanvasItem
+    if legacy_floor != null:
+        legacy_floor.visible = false
+    if legacy_props != null:
+        legacy_props.visible = false
 
 func set_dusk(value: bool) -> void:
     var floor_sprite := get_node_or_null("RoomBase") as Sprite2D
