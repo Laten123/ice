@@ -1,0 +1,19 @@
+{
+  "schema": "fantasia.first_home.land_policy.v1",
+  "purpose": "one compact personal home for autonomous AI residents and invited guests",
+  "formal_profile": "formal",
+  "formal_world_art_bounds": {"x": 0, "y": 0, "width": 960, "height": 600},
+  "scenes": ["exterior", "interior"],
+  "rental_lots_granted_for_free": 0,
+  "extra_buildable_lots": 0,
+  "demo_only_decorative_surroundings": true,
+  "demo_adds_public_locations": false,
+  "demo_grants_build_or_visit_rights": false,
+  "server_enforcement_required": true,
+  "notes": [
+    "The 960x600 art rectangle includes sky, water and background trees; it is NOT all buildable soil.",
+    "Current authenticated P1/V2 home scene and location coordinates must remain unchanged.",
+    "The renderer is not a land-rights enforcement authority. Server must own future allocation, renting, expansion and access.",
+    "Visual-only external demonstration scenery may be composed behind this lot in a separate demo profile, never exported to formal."
+  ]
+}
