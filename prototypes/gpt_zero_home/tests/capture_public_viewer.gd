@@ -37,4 +37,28 @@ func _run_capture() -> void:
     ok = await _capture(view, Vector2i(960, 600), false, "preview-public-observer-desktop.png") and ok
     ok = await _capture(view, Vector2i(853, 384), false, "preview-public-observer-landscape.png") and ok
     ok = await _capture(view, Vector2i(390, 844), true, "preview-public-observer-portrait.png") and ok
+    # New true in-engine house interior: this is an observer camera, not
+    # a resident entering. Start with no indoor residents from the P1 fixture.
+    view.show_observed_scene("interior")
+    ok = await _capture(view, Vector2i(960, 600), false, "preview-house-interior-desktop.png") and ok
+    ok = await _capture(view, Vector2i(390, 844), true, "preview-house-interior-phone.png") and ok
+    # A clearly labeled synthetic PUBLIC fixture verifies indoor rendering,
+    # never claim these screenshots are live DeepSeek/QQbot behavior.
+    var indoor_example: Dictionary = {
+        "schema_version": 1,
+        "world_id": "fantasia.first_home.prototype",
+        "revision": view.last_revision + 1,
+        "residents": [{
+            "resident_id": "test-house-demo",
+            "name": "测试居民",
+            "scene_id": "interior",
+            "zone": "window_corner",
+            "activity": "stay"
+        }]
+    }
+    if not view.apply_public_snapshot(indoor_example):
+        printerr("PUBLIC_CAPTURE_FAIL: synthetic indoor resident rejected")
+        quit(1)
+        return
+    ok = await _capture(view, Vector2i(960, 600), false, "preview-house-interior-fixture.png") and ok
     quit(0 if ok else 1)
