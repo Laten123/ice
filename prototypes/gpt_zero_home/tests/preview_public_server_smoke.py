@@ -52,6 +52,22 @@ def main():
     test_public = json.loads(plain)
     assert len(test_public["residents"]) == 1
     assert test_public["residents"][0]["resident_id"] == TEST_ID
+    # The V2 service reports the new public stump location, but only after
+    # resident consent and the usual temporary test-resident filtering.
+    stump_payload = json.loads(json.dumps(PAYLOAD))
+    stump_payload["residents"][0]["zone"] = "stump"
+    stump_payload["residents"][0]["activity"] = "sit"
+    stump_payload["residents"][0].pop("path_progress", None)
+    stump = json.loads(sanitized_public_snapshot(json.dumps(stump_payload).encode(), TEST_ID))
+    assert stump["residents"][0]["zone"] == "stump"
+    assert stump["residents"][0]["activity"] == "sit"
+    # The older unfinished fallen_log ID must still be rejected.
+    stump_payload["residents"][0]["zone"] = "fallen_log"
+    try:
+        sanitized_public_snapshot(json.dumps(stump_payload).encode(), TEST_ID)
+        raise AssertionError("unbuilt fallen_log leaked into public preview")
+    except ValueError:
+        pass
     # Indoor public coordinates are opt-in and must agree with scene_id.
     indoor_payload = json.loads(json.dumps(PAYLOAD))
     indoor_payload["residents"][0].update({
