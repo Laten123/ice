@@ -24,6 +24,15 @@ func _run() -> void:
     if view.day_button.text != "上午" or view.dusk_button.text != "黄昏":
         _fail("mobile time buttons were not shortened for readability")
         return
+    if view.room_button.text != "看室内" or not view._cjk_font_targets().has(view.room_button):
+        _fail("room observer button was omitted from the CJK font targets")
+        return
+    if view.stump_visual == null or view.stump_visual.texture == null:
+        _fail("new scene-matching stump SVG was not imported")
+        return
+    if view.stump_visual.texture.resource_path != "res://art/objects/stump_scene.svg":
+        _fail("the old enlarged stump PNG is still in use")
+        return
     var day_skin = view.day_button.get_theme_stylebox("normal")
     var title_skin = view.get_node("ViewerTitle").get_theme_stylebox("panel")
     if not day_skin is StyleBoxTexture or not title_skin is StyleBoxTexture:
@@ -90,6 +99,20 @@ func _run() -> void:
     server_packet["residents"] = []
     if not staging.apply_public_snapshot(server_packet) or staging.actors.has("path-test"):
         _fail("revoked public resident not removed from staging")
+        return
+    # V2 server-added stump must display without making up backend routes.
+    var stump_packet: Dictionary = {
+        "schema_version": 1, "world_id": "fantasia.first_home.prototype",
+        "revision": 11726, "residents": [{
+            "resident_id": "path-test", "name": "测试居民",
+            "scene_id": "exterior", "zone": "stump", "activity": "sit"
+        }]
+    }
+    if not staging.apply_public_snapshot(stump_packet):
+        _fail("V2 authenticated stump's PUBLIC position was rejected")
+        return
+    if staging.actors["path-test"].position != Vector2(453.0, 515.0):
+        _fail("V2 stump public position differs from the drawn seat")
         return
     staging.queue_free()
     if view.get_node_or_null("PublicResidentVisuals") == null:
