@@ -9,6 +9,7 @@
 - `art/home_day.svg`、`art/home_dusk.svg`：删除旧草地背景、平滑水体、岸线和土路大色带，保留房屋、老树、船、石桌、书角、花草、天空和山林等尚未重画物件。
 - `tests/pixel_ground_smoke.gd`：引擎检查水岸/土路空间、最近邻、纹理尺寸、两种灯光、房屋视角和手机视口同步；`tests/pixel_ground_source_smoke.py`：检查 SVG 有效 XML，以及旧不透明地表确实让位给像素层；两项已纳入开发分支的 GitHub Actions。
 - 第一版地表噪点太密，已在本批内收敛为安静色块、稀疏草簇与横向水纹。
+- 可复用 **16×16 PNG 瓦片图集**：`art/tiles/first_home_terrain_16.png.base64` 存储原始 PNG 字节的文本安全编码，`tests/unpack_pixel_tile_atlas.py` 校验 SHA256 后还原为 `art/tiles/first_home_terrain_16.png`；包含 12 个草地、土路、水体、岸石及点缀瓦片。隔离 Web 导出和 CI 导入前会自动解码。注意：当前地表节点仍由 `pixel_ground.gd` 生成；图集用于下一批 TileMapLayer 替换，不冒充已经接上 AtlasTexture。
 
 ## 仍待做（不能冒充完成）
 
