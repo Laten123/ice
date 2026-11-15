@@ -20,3 +20,6 @@ WARNING: All audio drivers failed, falling back to the dummy driver.
 PUBLIC_CAPTURE preview-public-observer-desktop.png viewport=(960, 600) image=(960, 600) result=0
 PUBLIC_CAPTURE preview-public-observer-landscape.png viewport=(853, 384) image=(853, 384) result=0
 PUBLIC_CAPTURE preview-public-observer-portrait.png viewport=(390, 844) image=(390, 844) result=0
+PUBLIC_CAPTURE preview-house-interior-desktop.png viewport=(960, 600) image=(960, 600) result=0
+PUBLIC_CAPTURE preview-house-interior-phone.png viewport=(390, 844) image=(390, 844) result=0
+PUBLIC_CAPTURE preview-house-interior-fixture.png viewport=(960, 600) image=(960, 600) result=0
