@@ -21,6 +21,48 @@ OUTPUT="$ROOT/web"
 mkdir -p "$PROJECT" "$OUTPUT"
 cp -a "$SOURCE_PROJECT/." "$PROJECT/"
 
+# Include an OFL-licensed, unmodified Simplified Chinese font in the
+# TEMPORARY export only. Do not put font binaries or secrets in the repo.
+# To avoid downloading when offline, set FANTASIA_CJK_FONT_LOCAL to the official
+# .ttf file and FANTASIA_CJK_LICENSE_LOCAL to its original OFL.txt.
+FONT_DIR="$PROJECT/art/fonts"
+mkdir -p "$FONT_DIR"
+FONT_FILE="$FONT_DIR/NotoSansSC-VF.ttf"
+LICENSE_FILE="$FONT_DIR/OFL.txt"
+if [[ "${FANTASIA_SKIP_CJK:-0}" != "1" ]]; then
+  if [[ -n "${FANTASIA_CJK_FONT_LOCAL:-}" ]]; then
+    : "${FANTASIA_CJK_LICENSE_LOCAL:?Specify the matching OFL license with FANTASIA_CJK_LICENSE_LOCAL}"
+    cp -- "$FANTASIA_CJK_FONT_LOCAL" "$FONT_FILE"
+    cp -- "$FANTASIA_CJK_LICENSE_LOCAL" "$LICENSE_FILE"
+  else
+    if ! command -v curl >/dev/null; then
+      echo "[FAIL] curl is required to download the official OFL CJK font; alternatively provide FANTASIA_CJK_FONT_LOCAL." >&2
+      exit 2
+    fi
+    echo "[FONT] Downloading official Noto Sans SC and OFL license into /tmp staging copy only"
+    curl -fLSs --retry 2 --connect-timeout 10 --max-time 150 \\
+      'https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf' -o "$FONT_FILE"
+    curl -fLSs --retry 2 --connect-timeout 10 --max-time 30 \\
+      'https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/OFL.txt' -o "$LICENSE_FILE"
+  fi
+  python3 - "$FONT_FILE" "$LICENSE_FILE" <<'PYFONT'
+from pathlib import Path
+import sys
+font = Path(sys.argv[1])
+license_file = Path(sys.argv[2])
+if not font.is_file() or not 1_000_000 <= font.stat().st_size <= 40_000_000:
+    raise SystemExit("[FAIL] Noto Sans SC source font missing or implausible size")
+if font.open("rb").read(4) not in (b"\\x00\\x01\\x00\\x00", b"OTTO", b"true"):
+    raise SystemExit("[FAIL] downloaded font does not look like TTF/OTF")
+text = license_file.read_text(encoding="utf-8")
+if "SIL OPEN FONT LICENSE" not in text or "Copyright" not in text:
+    raise SystemExit("[FAIL] official font license is missing")
+print("[FONT] Verified official font and full OFL license")
+PYFONT
+else
+  echo "[FONT] Skipping CJK embed: Chinese may render as tofu boxes"
+fi
+
 python3 - "$PROJECT/project.godot" <<'PY'
 from pathlib import Path
 import sys
@@ -71,6 +113,10 @@ if ! "$GODOT" --headless --path "$PROJECT" --export-release Web "$OUTPUT/index.h
   echo "[FAIL] Web export failed. Install matching Godot 4.6.3 Web export templates, then rerun." >&2
   echo "[INFO] Production files were not changed; temp copy: $ROOT" >&2
   exit 1
+fi
+# Distribute the full OFL terms together with the font embedded in index.pck.
+if [[ -f "$LICENSE_FILE" ]]; then
+  cp -- "$LICENSE_FILE" "$OUTPUT/font-license.txt"
 fi
 echo "[3/3] Inspect flat export package"
 for ext in html js wasm pck; do
