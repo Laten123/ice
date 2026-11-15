@@ -39,6 +39,12 @@ fi
 # Decode the original 16x16 tile atlas in the TEMP copy only. The public
 # viewer uses the pixel raster pass; the atlas is reusable for later TileMap.
 python3 "$PROJECT/tests/unpack_pixel_tile_atlas.py"
+# In the formal package, also exclude test scripts which preload demo-only
+# scenes. Keeping such scripts could break the editor import after stripping
+# demo content and unnecessarily ship developer-only testing code.
+if [[ "$PROFILE" == "formal" ]]; then
+  rm -rf -- "$PROJECT/tests"
+fi
 
 # Include an OFL-licensed, unmodified Simplified Chinese font in the
 # TEMPORARY export only. Do not put font binaries or secrets in the repo.
