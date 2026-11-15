@@ -8,10 +8,10 @@ const INTERIOR := "interior"
 
 const INTERIOR_POSITIONS := {
     "house_entry": Vector2(483.0, 500.0),
-    "window_corner": Vector2(250.0, 270.0),
-    "writing_desk": Vector2(645.0, 367.0),
-    "bookcase": Vector2(753.0, 265.0),
-    "rest_corner": Vector2(275.0, 399.0)
+    "window_corner": Vector2(254.0, 291.0),
+    "writing_desk": Vector2(650.0, 480.0),
+    "bookcase": Vector2(704.0, 273.0),
+    "rest_corner": Vector2(397.0, 415.0)
 }
 
 # Functional intentions to implement/verify in the Python world, NOT clickable
