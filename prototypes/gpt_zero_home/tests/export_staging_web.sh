@@ -40,9 +40,9 @@ if [[ "${FANTASIA_SKIP_CJK:-0}" != "1" ]]; then
       exit 2
     fi
     echo "[FONT] Downloading official Noto Sans SC and OFL license into /tmp staging copy only"
-    curl -fLSs --retry 2 --connect-timeout 10 --max-time 150 \\
+    curl -fLSs --retry 2 --connect-timeout 10 --max-time 150 \
       'https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf' -o "$FONT_FILE"
-    curl -fLSs --retry 2 --connect-timeout 10 --max-time 30 \\
+    curl -fLSs --retry 2 --connect-timeout 10 --max-time 30 \
       'https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/OFL.txt' -o "$LICENSE_FILE"
   fi
   python3 - "$FONT_FILE" "$LICENSE_FILE" <<'PYFONT'
@@ -52,7 +52,7 @@ font = Path(sys.argv[1])
 license_file = Path(sys.argv[2])
 if not font.is_file() or not 1_000_000 <= font.stat().st_size <= 40_000_000:
     raise SystemExit("[FAIL] Noto Sans SC source font missing or implausible size")
-if font.open("rb").read(4) not in (b"\\x00\\x01\\x00\\x00", b"OTTO", b"true"):
+if font.open("rb").read(4) not in (b"\x00\x01\x00\x00", b"OTTO", b"true"):
     raise SystemExit("[FAIL] downloaded font does not look like TTF/OTF")
 text = license_file.read_text(encoding="utf-8")
 if "SIL OPEN FONT LICENSE" not in text or "Copyright" not in text:
