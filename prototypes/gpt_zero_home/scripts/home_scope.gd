@@ -1,16 +1,24 @@
 extends RefCounted
-## Compact First Home parcel policy for the READ-ONLY observer and test contract.
-## Python server MUST independently enforce lot ownership/build/visit rights.
-## Never treat a decorative preview as new free playable land.
+## Compact STARTER HOME rendering policy for the READ-ONLY observer.
+## Fantasia is an archipelago of DISCONNECTED islands, not a continuous map.
+## Other independently allocated islands MAY be free or have other terms.
+## Python server alone enforces island access, land grants, visit/transfer rights.
+## Demo artwork is never a free, newly allocated island.
 
 const FORMAL := "formal"
 const SHOWCASE := "demo"
 const LOT_ART_BOUNDS := Rect2(0.0, 0.0, 960.0, 600.0)
+# These names are policy descriptors, NOT implemented transit endpoints.
+const WORLD_LAYOUT := "disconnected_islands"
+const INTER_ISLAND_TRAVEL := "instant"
+const STARTER_HOME_SCOPE := "first_home_only"
 const EXTERIOR := "exterior"
 const INTERIOR := "interior"
 
-# Inhabitants can only live and host guests within the ONE existing home parcel.
-# These are existing P1/V2 locations, not a broader public world.
+# This module restricts the CURRENT starter-home observer only, NOT the future
+# number of islands in Fantasia. Public free islands and separate private islands
+# may be introduced with distinct island IDs and server-authorized grants.
+# These are the existing P1/V2 locations of this one starter home.
 const FORMAL_EXTERIOR_ZONES := [
     "door", "path", "garden", "riverside", "old_tree",
     "book_corner", "stone_table", "riverbank", "window", "stump"
@@ -37,7 +45,20 @@ static func can_show_noninteractive_demo_surroundings(profile: String) -> bool:
     # It NEVER adds land, build rights, inventory, residents or API locations.
     return profile == SHOWCASE
 
+static func world_may_offer_other_free_islands() -> bool:
+    # Free public or separately assigned islands ARE allowed by world policy.
+    # This does not turn the current home island into a larger free parcel.
+    return true
+
+static func islands_are_connected_by_land() -> bool:
+    # No shared overworld grid or walkable bridge between plots.
+    return false
+
+static func observer_can_instant_travel_to_another_island() -> bool:
+    # A human's read-only viewer never sends a resident's travel intent.
+    return false
+
 static func can_create_unowned_extra_lot(_profile: String) -> bool:
-    # NEVER client-authorize a free lot. Paid/assigned lots are a future
-    # authenticated server transaction and cannot be conjured by demo mode.
+    # No observer or demo can manufacture land, whether free or paid.
+    # Future free islands are allocated by the authenticated world service.
     return false
