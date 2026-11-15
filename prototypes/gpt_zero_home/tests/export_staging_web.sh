@@ -15,11 +15,26 @@ if [[ -z "$GODOT" ]]; then
   exit 2
 fi
 
-ROOT="$(mktemp -d /tmp/fantasia-staging-web.XXXXXXXX)"
+PROFILE="${FANTASIA_BUILD_PROFILE:-demo}"
+case "$PROFILE" in
+  formal|demo) ;;
+  *) echo "[FAIL] FANTASIA_BUILD_PROFILE must be formal or demo" >&2; exit 2 ;;
+esac
+ROOT="$(mktemp -d /tmp/fantasia-${PROFILE}-web.XXXXXXXX)"
 PROJECT="$ROOT/project"
 OUTPUT="$ROOT/web"
 mkdir -p "$PROJECT" "$OUTPUT"
 cp -a "$SOURCE_PROJECT/." "$PROJECT/"
+# A formal export physically excludes demo-only presentation files.
+if [[ "$PROFILE" == "formal" ]]; then
+  rm -f -- "$PROJECT/scenes/public_viewer_demo.tscn"
+  rm -rf -- "$PROJECT/art/demo-surroundings"
+  test ! -e "$PROJECT/scenes/public_viewer_demo.tscn"
+  test ! -e "$PROJECT/art/demo-surroundings"
+  echo "[FORMAL] One compact plot; demo scenes and outer art stripped"
+else
+  echo "[DEMO] Showcase visuals permitted; no extra resident/API locations"
+fi
 # Decode the original 16x16 tile atlas in the TEMP copy only. The public
 # viewer uses the pixel raster pass; the atlas is reusable for later TileMap.
 python3 "$PROJECT/tests/unpack_pixel_tile_atlas.py"
@@ -66,6 +81,7 @@ else
   echo "[FONT] Skipping CJK embed: Chinese may render as tofu boxes"
 fi
 
+if [[ "$PROFILE" == "demo" ]]; then
 python3 - "$PROJECT/project.godot" <<'PY'
 from pathlib import Path
 import sys
@@ -77,6 +93,12 @@ if raw.count(old) != 1:
     raise SystemExit("[FAIL] unexpected main scene setting; not modifying project")
 p.write_text(raw.replace(old, new), encoding="utf-8")
 PY
+else
+  grep -q 'run/main_scene="res://scenes/public_viewer.tscn"' "$PROJECT/project.godot" || {
+    echo "[FAIL] formal default observer changed" >&2
+    exit 1
+  }
+fi
 
 # This preset is intentionally generated in /tmp only.
 # No secrets, service URLs, tokens or production settings.
@@ -132,7 +154,12 @@ if [[ ! -s "$OUTPUT/index.html" ]]; then
   echo "[FAIL] index.html missing" >&2
   exit 1
 fi
-echo "[PASS] Single-threaded Web staging export is ready"
+echo "[PASS] Single-threaded Web $PROFILE export is ready"
 echo "[WEB_DIR] $OUTPUT"
-echo "[PREVIEW] python3 tests/preview_public_server.py --test-resident-id path-test --web-dir '$OUTPUT'"
-echo "[INFO] Use Quick Tunnel to 127.0.0.1:8211 ONLY, never 8200"
+if [[ "$PROFILE" == "demo" ]]; then
+  echo "[PREVIEW] python3 tests/preview_public_server.py --test-resident-id path-test --web-dir '$OUTPUT'"
+  echo "[INFO] Use Quick Tunnel to 127.0.0.1:8211 ONLY, never 8200"
+else
+  echo "[FORMAL] Local artifact only; no demo land and no resident credentials"
+  echo "[INFO] Server-side lot ownership and rental checks must precede deployment"
+fi
