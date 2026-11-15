@@ -50,6 +50,8 @@ jobs:
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/p1_contract_smoke.gd
       - name: Validate strictly read-only Godot public observer
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/public_viewer_smoke.gd
+      - name: Check pixel material source and XML layer ordering
+        run: python3 prototypes/gpt_zero_home/tests/pixel_ground_source_smoke.py
       - name: Verify native pixel grass river and path in both viewports
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/pixel_ground_smoke.gd
       - name: Validate indoor home anchors, room camera and consent-revocation semantics
