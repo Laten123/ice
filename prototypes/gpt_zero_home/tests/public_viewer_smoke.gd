@@ -28,10 +28,10 @@ func _run() -> void:
         _fail("room observer button was omitted from the CJK font targets")
         return
     if view.stump_visual == null or view.stump_visual.texture == null:
-        _fail("new scene-matching stump SVG was not imported")
+        _fail("original pixel stump texture was not imported")
         return
-    if view.stump_visual.texture.resource_path != "res://art/objects/stump_scene.svg":
-        _fail("the old enlarged stump PNG is still in use")
+    if view.stump_visual.texture.resource_path != "res://art/objects/stump_plain_32x32.png":
+        _fail("the original pixel stump was unexpectedly replaced")
         return
     var day_skin = view.day_button.get_theme_stylebox("normal")
     var title_skin = view.get_node("ViewerTitle").get_theme_stylebox("panel")
