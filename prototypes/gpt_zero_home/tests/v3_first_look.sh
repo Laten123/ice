@@ -28,7 +28,11 @@ python3 "$PROJECT/tools/export_pixel_art_v3.py" --check
 python3 "$PROJECT/tools/export_pixel_art_v3.py" --output-dir "$WORK/png-preview"
 python3 "$PROJECT/tests/unpack_pixel_tile_atlas.py"
 
-"$GODOT" --headless --path "$PROJECT" --editor --import --quit
+"$GODOT" --headless --path "$PROJECT" --editor --import --quit 2>&1 | tee "$WORK/godot-import.log"
+if grep -E "SCRIPT ERROR|Parse Error|Failed loading resource|ERROR:.*script" "$WORK/godot-import.log"; then
+  echo "[FAIL] Godot script/resource import error detected" >&2
+  exit 1
+fi
 for case_name in \
     pixel_home_v3_smoke.gd \
     public_viewer_smoke.gd \
