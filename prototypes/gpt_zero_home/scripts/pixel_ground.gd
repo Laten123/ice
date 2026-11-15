@@ -9,9 +9,10 @@ const SCALE := 2
 const TOP_LAND_Y := 105
 
 static func _hash(x: int, y: int, salt: int = 0) -> int:
-    var v: int = x * 73856093 ^ y * 19349663 ^ salt * 83492791
-    v = (v ^ (v >> 13)) * 1274126177
-    return absi(v ^ (v >> 16))
+    # Keep all math in int64 range and the result nonnegative for array lookup.
+    var v: int = x * 92821 + y * 68917 + salt * 17291
+    v = (v ^ (v >> 11)) * 1103515245
+    return (v ^ (v >> 16)) & 0x7fffffff
 
 static func _line(y: int, y0: int, y1: int, x0: float, x1: float) -> float:
     return lerpf(x0, x1, clampf(float(y - y0) / float(y1 - y0), 0.0, 1.0))
@@ -153,7 +154,7 @@ static func create_texture(dusk: bool = false) -> ImageTexture:
 
     # Path pebbles are cropped to the road and are not decorative fake waypoints.
     for gy in range(24, 39):
-        for gx in range(37, 47):
+        for gx in range(28, 40):
             var h: int = _hash(gx, gy, 139)
             var xx: int = gx * 10 + h % 7
             var yy: int = gy * 8 + (h / 13) % 5
