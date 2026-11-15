@@ -8,12 +8,14 @@ const DUSK_SCENE: Texture2D = preload("res://art/home_dusk.svg")
 const WalkGraph = preload("res://scripts/world_graph.gd")
 const ObserverSprite = preload("res://scripts/observer_sprite.gd")
 const FantasiaSkin = preload("res://scripts/fantasia_ui_skin.gd")
+const HomeSpaces = preload("res://scripts/home_spaces.gd")
+const HOUSE_ROOM = preload("res://scenes/house_interior.tscn")
 
 const ART_SIZE := Vector2(960.0, 600.0)
 const PUBLIC_WORLD_ID := "fantasia.first_home.prototype"
 const VALID_ACTIONS := ["stay", "move", "sit", "read", "rest", "decline"]
 const ALLOWED_PACKET_KEYS := ["schema_version", "world_id", "residents", "revision"]
-const ALLOWED_RESIDENT_KEYS := ["resident_id", "name", "zone", "activity", "pos", "action", "path_progress"]
+const ALLOWED_RESIDENT_KEYS := ["resident_id", "name", "zone", "activity", "pos", "action", "path_progress", "scene_id"]
 const ALLOWED_PATH_KEYS := ["from", "to", "remaining", "progress"]
 const MAX_PUBLIC_WAYPOINTS := 24
 const MAX_RESPONSE_BYTES := 65536
@@ -42,13 +44,18 @@ const PALETTE := [
 var graph
 var art: TextureRect
 var actor_layer: Node2D
+var interior_view: Node2D
+var stump_visual: Sprite2D
 var actors: Dictionary = {}
+var public_people: Array[Dictionary] = []
+var observed_scene: String = "exterior"
 var status: Label
 var title_label: Label
 var hint: Label
 var buttons: HBoxContainer
 var day_button: Button
 var dusk_button: Button
+var room_button: Button
 var transport: HTTPRequest
 var fetch_clock: Timer
 var is_dusk := false
@@ -99,6 +106,11 @@ func _build_visuals() -> void:
     art.mouse_filter = Control.MOUSE_FILTER_IGNORE
     add_child(art)
 
+    interior_view = HOUSE_ROOM.instantiate() as Node2D
+    interior_view.name = "ObserverHouseInterior"
+    interior_view.visible = false
+    add_child(interior_view)
+
     actor_layer = Node2D.new()
     actor_layer.name = "PublicResidentVisuals"
     add_child(actor_layer)
@@ -106,7 +118,7 @@ func _build_visuals() -> void:
     # Do not add a server zone or a client-side interaction for the stump.
     var stump_texture_path := "res://art/objects/stump_plain_32x32.png"
     if ResourceLoader.exists(stump_texture_path):
-        var stump_visual := Sprite2D.new()
+        stump_visual = Sprite2D.new()
         stump_visual.name = "GardenStumpVisualOnly"
         stump_visual.texture = load(stump_texture_path) as Texture2D
         stump_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -165,6 +177,14 @@ func _build_visuals() -> void:
     buttons.add_child(dusk_button)
     FantasiaSkin.install(day_button, dusk_button)
 
+    room_button = Button.new()
+    room_button.name = "LookInsideOnly"
+    room_button.text = "看室内"
+    room_button.focus_mode = Control.FOCUS_NONE
+    room_button.pressed.connect(_toggle_observed_room)
+    add_child(room_button)
+    FantasiaSkin.skin_button(room_button, "room")
+
     transport = HTTPRequest.new()
     transport.name = "PublicSnapshotHTTPRequest"
     transport.timeout = 8.0
@@ -218,8 +238,34 @@ func _time_button(button_name: String, label_text: String, dusk: bool) -> Button
 func _set_time(dusk: bool) -> void:
     is_dusk = dusk
     art.texture = DUSK_SCENE if dusk else DAY_SCENE
+    if interior_view != null:
+        interior_view.set_dusk(dusk)
     day_button.button_pressed = not dusk
     dusk_button.button_pressed = dusk
+
+func _toggle_observed_room() -> void:
+    # Only changes what the HUMAN OBSERVER can see. No /intent is sent.
+    show_observed_scene("exterior" if observed_scene == "interior" else "interior")
+
+func show_observed_scene(scene_id: String) -> bool:
+    if not HomeSpaces.valid_scene(scene_id):
+        return false
+    observed_scene = scene_id
+    art.visible = scene_id == "exterior"
+    if interior_view != null:
+        interior_view.visible = scene_id == "interior"
+    if stump_visual != null:
+        stump_visual.visible = scene_id == "exterior"
+    if room_button != null:
+        room_button.text = "看院子" if scene_id == "interior" else "看室内"
+    if title_label != null:
+        title_label.text = "幻想乡 · 木屋内部" if scene_id == "interior" else "幻想乡 · 初代家园"
+    for person in public_people:
+        var identity: String = str(person["resident_id"])
+        if actors.has(identity):
+            actors[identity].visible = person["scene_id"] == scene_id
+    _update_status(public_people)
+    return true
 
 func _refresh_layout() -> void:
     _apply_layout(size)
@@ -240,6 +286,10 @@ func _apply_layout(view: Vector2) -> void:
         b.add_theme_font_size_override("font_size", clampi(int(round(19.0 * logical_per_pixel)), 16, 26))
     var total_width := button_width * 2.0 + 8.0
     buttons.size = Vector2(total_width, button_height)
+    var room_width: float = minf(155.0 * logical_per_pixel, view.x - margin * 2.0)
+    room_button.custom_minimum_size = Vector2(room_width, button_height)
+    room_button.size = Vector2(room_width, button_height)
+    room_button.add_theme_font_size_override("font_size", clampi(int(round(18.0 * logical_per_pixel)), 16, 25))
     if is_portrait:
         buttons.position = Vector2((view.x - total_width) * 0.5, view.y - button_height - 22.0 * logical_per_pixel)
         # Keep most of the cottage visible on a narrow phone instead of
@@ -248,13 +298,15 @@ func _apply_layout(view: Vector2) -> void:
         var factor: float = minf(view.x / (ART_SIZE.x * 0.78), available_height / ART_SIZE.y)
         art.size = ART_SIZE * factor
         hint.visible = true
-        hint.position = Vector2(margin, buttons.position.y - 84.0 * logical_per_pixel)
+        room_button.position = Vector2((view.x - room_width) * 0.5, buttons.position.y - button_height - 10.0 * logical_per_pixel)
+        hint.position = Vector2(margin, room_button.position.y - 47.0 * logical_per_pixel)
         status.position = Vector2(margin, 104.0 * logical_per_pixel)
     else:
         buttons.position = Vector2(view.x - total_width - margin, view.y - button_height - margin)
         var factor: float = minf(view.x / ART_SIZE.x, view.y / ART_SIZE.y)
         art.size = ART_SIZE * factor
         hint.visible = false
+        room_button.position = Vector2(view.x - room_width - margin, 16.0 * logical_per_pixel)
         status.position = Vector2(margin, view.y - 92.0 * logical_per_pixel)
         pan_x = 0.0
     var title_box: Control = get_node("ViewerTitle")
@@ -277,6 +329,9 @@ func _position_art(view: Vector2) -> void:
     art.position = Vector2((view.x - art.size.x) * 0.5 + pan_x, (view.y - art.size.y) * 0.5)
     actor_layer.position = art.position
     actor_layer.scale = art.size / ART_SIZE
+    if interior_view != null:
+        interior_view.position = art.position
+        interior_view.scale = art.size / ART_SIZE
 
 func _gui_input(event: InputEvent) -> void:
     if not is_portrait:
@@ -336,7 +391,7 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
 
     var parsed: Array[Dictionary] = []
     var seen_ids: Dictionary = {}
-    var valid_places: Array[String] = graph.available_zones()
+    var exterior_zones: Array[String] = graph.available_zones()
     for raw in people:
         if typeof(raw) != TYPE_DICTIONARY:
             return false
@@ -352,6 +407,15 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
         var identity: String = id_raw
         var display_name: String = name_raw
         var scene_zone: String = zone_raw
+        var raw_scene = raw.get("scene_id", HomeSpaces.EXTERIOR)
+        if typeof(raw_scene) != TYPE_STRING or not HomeSpaces.valid_scene(raw_scene):
+            return false
+        var person_scene: String = raw_scene
+        var valid_places: Array[String] = []
+        if person_scene == HomeSpaces.EXTERIOR:
+            valid_places = exterior_zones
+        else:
+            valid_places.assign(HomeSpaces.INTERIOR_POSITIONS.keys())
         var state_name: String = _safe_activity(action_raw)
         if identity.is_empty() or identity.length() > 96 or display_name.is_empty() or display_name.length() > 32:
             return false
@@ -406,7 +470,8 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
         # don't simulate the path or interpolate across house/river artwork.
         parsed.append({
             "resident_id": identity, "name": display_name, "zone": scene_zone,
-            "activity": state_name, "remaining": remaining, "progress": progress
+            "scene_id": person_scene, "activity": state_name,
+            "remaining": remaining, "progress": progress
         })
         seen_ids[identity] = true
 
@@ -423,7 +488,10 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
             avatar.configure(identity, person["name"], PALETTE[palette_index][0], PALETTE[palette_index][1])
             actor_layer.add_child(avatar)
             actors[identity] = avatar
-        actors[identity].show_public_state(person["name"], graph.zone_position(person["zone"]), person["activity"], person["remaining"], person["progress"])
+        var zone_position: Vector2 = graph.zone_position(person["zone"]) if person["scene_id"] == "exterior" else HomeSpaces.indoor_position(person["zone"])
+        actors[identity].show_public_state(person["name"], zone_position, person["activity"], person["remaining"], person["progress"])
+        actors[identity].visible = person["scene_id"] == observed_scene
+    public_people = parsed.duplicate(true)
     have_public_snapshot = true
     last_revision = new_revision
     last_public_count = parsed.size()
@@ -432,12 +500,16 @@ func apply_public_snapshot(packet: Dictionary) -> bool:
 
 func _update_status(people: Array[Dictionary]) -> void:
     var output := PackedStringArray()
+    var visible_people: Array[Dictionary] = []
+    for person in people:
+        if person["scene_id"] == observed_scene:
+            visible_people.append(person)
     if use_same_origin_public_feed:
-        for person in people:
+        for person in visible_people:
             output.append(str(person["resident_id"]) + " / " + str(person["zone"]) + " / " + str(person["activity"]))
         status.text = "PUBLIC: " + ("none" if output.is_empty() else ", ".join(output))
         return
-    for person in people:
+    for person in visible_people:
         var activity_name: String = {
             "stay": "停留", "move": "行走", "sit": "坐着",
             "read": "阅读", "rest": "休息", "decline": "谢绝活动"
