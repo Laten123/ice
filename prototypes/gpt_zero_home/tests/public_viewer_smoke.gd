@@ -20,6 +20,24 @@ func _run() -> void:
     if view.public_feed_url != "" or view.fetching or view.use_same_origin_public_feed:
         _fail("default viewer must not contact a server on first launch")
         return
+    # Art direction V2: quiet, generated pixel-wood panels, no ornate PNG UI.
+    if view.day_button.text != "上午" or view.dusk_button.text != "黄昏":
+        _fail("mobile time buttons were not shortened for readability")
+        return
+    var day_skin = view.day_button.get_theme_stylebox("normal")
+    var title_skin = view.get_node("ViewerTitle").get_theme_stylebox("panel")
+    if not day_skin is StyleBoxTexture or not title_skin is StyleBoxTexture:
+        _fail("plain-wood skin not applied to buttons and title")
+        return
+    if not day_skin.texture is ImageTexture or day_skin.texture.get_size() != Vector2(112, 42):
+        _fail("button is not using the tiny generated plain-wood texture")
+        return
+    if not title_skin.texture is ImageTexture:
+        _fail("title is still using the old ornamental floral image")
+        return
+    if view.get_node_or_null("ForestBackdrop") == null:
+        _fail("new quiet backdrop is missing behind the game scene")
+        return
     var staging = load("res://scenes/public_viewer_staging.tscn").instantiate()
     root.add_child(staging)
     await process_frame
