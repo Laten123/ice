@@ -20,6 +20,9 @@ PROJECT="$ROOT/project"
 OUTPUT="$ROOT/web"
 mkdir -p "$PROJECT" "$OUTPUT"
 cp -a "$SOURCE_PROJECT/." "$PROJECT/"
+# Decode the original 16x16 tile atlas in the TEMP copy only. The public
+# viewer uses the pixel raster pass; the atlas is reusable for later TileMap.
+python3 "$PROJECT/tests/unpack_pixel_tile_atlas.py"
 
 # Include an OFL-licensed, unmodified Simplified Chinese font in the
 # TEMPORARY export only. Do not put font binaries or secrets in the repo.
