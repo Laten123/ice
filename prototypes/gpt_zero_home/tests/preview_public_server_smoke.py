@@ -77,6 +77,8 @@ def main():
             (folder / "admin.json").write_text('{"token":"SHOULD_NOT_EXPOSE"}')
             (folder / ".env").write_text("TOKEN=SECRET")
             (folder / "secret.js").write_text("const RESIDENT_SECRET = 'SHOULD_NOT_EXPOSE';")
+            (folder / "font-license.txt").write_text("SIL OPEN FONT LICENSE - test-only fixture")
+            (folder / "private-notes.txt").write_text("DO NOT SERVE THIS FILE")
             preview = start(make_handler(folder, TEST_ID, f"http://127.0.0.1:{upstream.server_port}"))
             try:
                 base = f"http://127.0.0.1:{preview.server_port}"
@@ -88,7 +90,9 @@ def main():
                 assert status == 200 and body == b"STAGING_VIEWER_ONLY"
                 status, body, _ = request(base + "/index.wasm")
                 assert status == 200 and body == b"\0asm"
-                for path in ["/intent", "/admin/register", "/observation", "/admin.json", "/secret.js", "/.env", "/../../../etc/passwd", "/public/world?token=evil"]:
+                status, body, _ = request(base + "/font-license.txt")
+                assert status == 200 and body.startswith(b"SIL OPEN FONT LICENSE")
+                for path in ["/intent", "/admin/register", "/observation", "/admin.json", "/secret.js", "/private-notes.txt", "/.env", "/../../../etc/passwd", "/public/world?token=evil"]:
                     status, _, _ = request(base + path)
                     assert status == 404, (path, status)
                 for method in ["POST", "PUT", "DELETE", "PATCH"]:
