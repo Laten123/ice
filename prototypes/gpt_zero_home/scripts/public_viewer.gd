@@ -114,16 +114,16 @@ func _build_visuals() -> void:
     actor_layer = Node2D.new()
     actor_layer.name = "PublicResidentVisuals"
     add_child(actor_layer)
-    # The observer draws a matching SVG stump. Its location/activity comes ONLY
-    # from the Python-authorized public snapshot; this art cannot issue intents.
-    var stump_texture_path := "res://art/objects/stump_scene.svg"
+    # Preserve the pixel-art stump as the visual style reference for the
+    # future Stardew-like scene. Authority remains on the Python server.
+    var stump_texture_path := "res://art/objects/stump_plain_32x32.png"
     if ResourceLoader.exists(stump_texture_path):
         stump_visual = Sprite2D.new()
         stump_visual.name = "GardenStumpArt"
         stump_visual.texture = load(stump_texture_path) as Texture2D
-        stump_visual.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+        stump_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
         stump_visual.position = HomeSpaces.EXTERIOR_V2_POSITIONS["stump"]
-        stump_visual.scale = Vector2(0.74, 0.74)
+        stump_visual.scale = Vector2(1.7, 1.7)
         actor_layer.add_child(stump_visual)
 
     var header := PanelContainer.new()
