@@ -451,7 +451,7 @@ func _walk_test_resident(point_id: String) -> void:
         var stops: Array[Vector2] = Points.test_corridor(test_scene, route[i - 1], route[i])
         stops.append(Points.point_position(test_scene, route[i]))
         for next_location in stops:
-            var distance := test_actor.position.distance_to(next_location)
+            var distance: float = test_actor.position.distance_to(next_location)
             var tween := create_tween()
             tween.tween_property(test_actor, "position", next_location, clampf(distance / 230.0, 0.25, 1.7))
             await tween.finished
