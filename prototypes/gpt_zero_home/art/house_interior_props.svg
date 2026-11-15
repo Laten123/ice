@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+<!-- Independently replaceable original furniture overlay -->
+<!-- window bench: this is an optional quiet stopping place, not a control -->
+<rect x="157" y="204" width="202" height="25" fill="#8e5b40" stroke="#4b382d" stroke-width="6"/>
+<rect x="174" y="229" width="166" height="35" fill="#b17d57" stroke="#4b382d" stroke-width="6"/>
+<rect x="189" y="233" width="66" height="26" fill="#e8d1a4"/><rect x="264" y="233" width="63" height="26" fill="#8d9a7d"/>
+<!-- bed and blanket -->
+<rect x="119" y="322" width="242" height="173" rx="6" fill="#5b4035" stroke="#312b28" stroke-width="9"/>
+<rect x="136" y="337" width="208" height="140" fill="#dbc19d"/>
+<rect x="146" y="351" width="80" height="32" fill="#f5e4c3"/><rect x="244" y="351" width="85" height="32" fill="#f5e4c3"/>
+<path d="M140 398h200v72H140Z" fill="#668a75" stroke="#476f64" stroke-width="7"/>
+<path d="M145 420h185M145 442h185" stroke="#8dad8a" stroke-width="4"/>
+<rect x="119" y="490" width="242" height="12" fill="#79523e"/>
+<!-- desk and chair -->
+<rect x="571" y="342" width="215" height="96" fill="#644333" stroke="#382a29" stroke-width="9"/>
+<rect x="579" y="350" width="198" height="57" fill="#bc9063" stroke="#d6ad77" stroke-width="5"/>
+<path d="M590 372h167M590 389h167" stroke="#a87956" stroke-width="4"/>
+<rect x="589" y="414" width="24" height="52" fill="#73513b"/><rect x="746" y="414" width="24" height="52" fill="#73513b"/>
+<rect x="622" y="442" width="94" height="23" fill="#765a4c" stroke="#3d302d" stroke-width="6"/>
+<rect x="633" y="465" width="12" height="29" fill="#70503e"/><rect x="697" y="465" width="12" height="29" fill="#70503e"/>
+<!-- quill / book / cup -->
+<path d="M610 363h67v28h-67z" fill="#e5d5a9" stroke="#73503a" stroke-width="5"/>
+<path d="M643 365v22" stroke="#967850" stroke-width="3"/>
+<rect x="713" y="360" width="21" height="20" fill="#f2d3a0" stroke="#76503b" stroke-width="4"/>
+<!-- bookshelf -->
+<rect x="746" y="86" width="128" height="240" fill="#684531" stroke="#352a26" stroke-width="9"/>
+<g stroke="#473329" stroke-width="7"><path d="M755 162h112M755 240h112"/></g>
+<g>
+<path d="M764 101v51h15v-51z" fill="#799485"/><path d="M783 110v42h18v-42z" fill="#d5b18b"/>
+<path d="M805 96v56h15V96z" fill="#c47f62"/><path d="M828 112v40h26v-40z" fill="#8298a2"/>
+<path d="M762 174v55h15v-55z" fill="#d8b386"/><path d="M784 182v47h18v-47z" fill="#648679"/>
+<path d="M806 170v59h15v-59z" fill="#b97a61"/><path d="M829 193v36h24v-36z" fill="#b8a578"/>
+<path d="M764 254v60h14v-60z" fill="#81989c"/><path d="M783 261v53h19v-53z" fill="#d3bd89"/>
+<path d="M810 252v62h15v-62z" fill="#ac7a61"/><path d="M833 264v50h22v-50z" fill="#729478"/>
+</g>
+<!-- plant + lamp by door -->
+<path d="M823 440h49l-9 53h-32z" fill="#9e674a" stroke="#5c4433" stroke-width="6"/>
+<path d="M845 438c-33-14-29-46-9-44 20 7 9 28 9 28s15-48 33-36c12 17-17 40-33 52z" fill="#5d8b65" stroke="#37664b" stroke-width="5"/>
+</svg>
