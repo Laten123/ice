@@ -1,7 +1,7 @@
 extends SceneTree
 ## Run only AFTER extracting the separate PNG art pack into the Godot project.
 ## Does not connect to the Python server and does not create AI intents.
-const Skin = preload("res://scripts/fantasia_ui_skin.gd")
+const FantasiaUiSkin = preload("res://scripts/fantasia_ui_skin.gd")
 
 func _initialize() -> void:
     call_deferred("_run")
@@ -11,14 +11,14 @@ func _fail(message: String) -> void:
     quit(1)
 
 func _run() -> void:
-    if not Skin.has_skin():
+    if not FantasiaUiSkin.has_skin():
         _fail("Art PNGs are not installed at res://art/ui/ yet")
         return
     var day := Button.new()
     var dusk := Button.new()
     root.add_child(day)
     root.add_child(dusk)
-    Skin.install(day, dusk)
+    FantasiaUiSkin.install(day, dusk)
     for button in [day, dusk]:
         if not button.get_theme_stylebox("normal") is StyleBoxTexture:
             _fail("Wooden Button missing normal texture state")
@@ -28,7 +28,7 @@ func _run() -> void:
             return
     var title := PanelContainer.new()
     root.add_child(title)
-    Skin.skin_title(title)
+    FantasiaUiSkin.skin_title(title)
     if not title.get_theme_stylebox("panel") is StyleBoxTexture:
         _fail("Wooden title plaque missing")
         return
