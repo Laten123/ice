@@ -50,3 +50,5 @@ jobs:
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/p1_contract_smoke.gd
       - name: Validate strictly read-only Godot public observer
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/public_viewer_smoke.gd
+      - name: Validate installed wooden UI and owner's actual stump PNG
+        run: godot --headless --path prototypes/gpt_zero_home --script res://tests/art_pack_smoke.gd
