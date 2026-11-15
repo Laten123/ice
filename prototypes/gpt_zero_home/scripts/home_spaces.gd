@@ -6,6 +6,10 @@ extends RefCounted
 const EXTERIOR := "exterior"
 const INTERIOR := "interior"
 
+# New backend-confirmed outdoor zone, kept separate from the older nine-node
+# movement graph until DeepSeek supplies its verified edge weights.
+const EXTERIOR_V2_POSITIONS := {"stump": Vector2(453.0, 515.0)}
+
 const INTERIOR_POSITIONS := {
     "house_entry": Vector2(483.0, 500.0),
     "window_corner": Vector2(254.0, 291.0),
@@ -19,6 +23,7 @@ const INTERIOR_POSITIONS := {
 const INTERACTION_POINTS := {
     "door": {"scene": EXTERIOR, "capacity": 1, "activities": ["stay"], "transition": "enter_house"},
     "stone_table": {"scene": EXTERIOR, "capacity": 2, "activities": ["sit", "read", "stay"]},
+    "stump": {"scene": EXTERIOR, "capacity": 1, "activities": ["sit", "rest", "stay"]},
     "riverbank": {"scene": EXTERIOR, "capacity": 2, "activities": ["stay", "rest"]},
     "book_corner": {"scene": EXTERIOR, "capacity": 1, "activities": ["read", "stay"]},
     "old_tree": {"scene": EXTERIOR, "capacity": 2, "activities": ["stay", "rest"]},
@@ -29,9 +34,8 @@ const INTERACTION_POINTS := {
     "rest_corner": {"scene": INTERIOR, "capacity": 1, "activities": ["rest", "stay"]}
 }
 
-# The owner's real visible tree stump is deliberately NOT a public travel node.
-# Keep the visual object until the backend implements collision, approach,
-# availability, and a genuinely voluntary sit/rest action.
+# The older idea "fallen_log" is still a SEPARATE reserved, unbuilt place.
+# DeepSeek's new V2 active tree stump uses the explicit ID "stump" above.
 const DEFERRED_INTERACTIONS := {
     "fallen_log": {"scene": EXTERIOR, "purpose": "quiet place to sit", "state": "visual_only"},
     "boat": {"scene": EXTERIOR, "purpose": "riverside scenery", "state": "visual_only"}
