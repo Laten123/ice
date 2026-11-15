@@ -56,6 +56,8 @@ jobs:
         run: python3 prototypes/gpt_zero_home/tests/pixel_ground_source_smoke.py
       - name: Verify native pixel grass river and path in both viewports
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/pixel_ground_smoke.gd
+      - name: Validate all-pixel home and formal one-plot land scope
+        run: godot --headless --path prototypes/gpt_zero_home --script res://tests/pixel_home_v3_smoke.gd
       - name: Validate indoor home anchors, room camera and consent-revocation semantics
         run: godot --headless --path prototypes/gpt_zero_home --script res://tests/home_room_smoke.gd
       - name: Validate installed wooden UI and original pixel stump
