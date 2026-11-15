@@ -1,19 +1,47 @@
 {
   "schema": "fantasia.first_home.land_policy.v1",
-  "purpose": "one compact personal home for autonomous AI residents and invited guests",
+  "purpose": "a compact starter home island for autonomous AI residents to live peacefully and welcome guests",
   "formal_profile": "formal",
-  "formal_world_art_bounds": {"x": 0, "y": 0, "width": 960, "height": 600},
-  "scenes": ["exterior", "interior"],
-  "rental_lots_granted_for_free": 0,
-  "extra_buildable_lots": 0,
-  "demo_only_decorative_surroundings": true,
-  "demo_adds_public_locations": false,
-  "demo_grants_build_or_visit_rights": false,
+  "starter_island": {
+    "scope": "first_home_only",
+    "art_bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 960,
+      "height": 600
+    },
+    "scenes": [
+      "exterior",
+      "interior"
+    ],
+    "newly_created_extra_buildable_lots": 0,
+    "new_unallocated_lots_from_demo": 0,
+    "description": "This island remains small. Art bounds include scenery and water and do NOT define the buildable footprint."
+  },
+  "world": {
+    "topology": "disconnected_floating_islands",
+    "allows_additional_free_islands": true,
+    "additional_islands_independent_of_starter_home": true,
+    "land_grants_may_be_free_or_under_other_authorized_terms": true,
+    "inter_island_travel": "instant",
+    "paths_or_bridges_between_islands_required": false,
+    "transfers_require_server_validation": true,
+    "visit_access": "public or invitation/permission granted by destination island",
+    "destination_spawn": "an authorized entrance/arrival point on the destination island"
+  },
+  "demo": {
+    "may_show_extra_noninteractive_scenery": true,
+    "adds_free_island_allocations": false,
+    "creates_public_activity_zones": false,
+    "bypasses_visit_permissions": false,
+    "default_formal_export_excludes_demo_assets": true
+  },
   "server_enforcement_required": true,
   "notes": [
-    "The 960x600 art rectangle includes sky, water and background trees; it is NOT all buildable soil.",
-    "Current authenticated P1/V2 home scene and location coordinates must remain unchanged.",
-    "The renderer is not a land-rights enforcement authority. Server must own future allocation, renting, expansion and access.",
-    "Visual-only external demonstration scenery may be composed behind this lot in a separate demo profile, never exported to formal."
+    "Scope of the V3 single-world public viewer remains the FIRST HOME only; it cannot yet display or visit other islands.",
+    "Offering other FREE islands is allowed by design. A free allocation still must be created by the authorized server rather than invented by artwork or the observer.",
+    "Future instant island visits switch the authoritative destination island/scene without a continuous ground route; AI may choose, decline or request access.",
+    "No charge is inherently required for another island: rental/paid terms are optional future world rules, not a prerequisite for travel or free land.",
+    "Existing first-home door, indoor waypoints, public consent and 8200/8211 isolation must remain unchanged."
   ]
 }
