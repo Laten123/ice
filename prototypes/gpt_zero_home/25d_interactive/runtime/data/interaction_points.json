@@ -1,0 +1,179 @@
+{
+  "exterior": {
+    "width": 1536,
+    "height": 1024,
+    "spots": {
+      "door": {
+        "x": 1004,
+        "y": 604,
+        "name": "木屋门口",
+        "info": "进入室内，看看窗边、书桌和休息角。",
+        "activities": [
+          "stay"
+        ],
+        "capacity": 1,
+        "transition": "enter_house"
+      },
+      "path": {
+        "x": 1084,
+        "y": 713,
+        "name": "门前小路",
+        "info": "家园里连接各个角落的小路。",
+        "activities": [
+          "stay"
+        ],
+        "capacity": 4
+      },
+      "garden": {
+        "x": 1289,
+        "y": 773,
+        "name": "小院草地",
+        "info": "让居民自在散步和停留的院子，不是农场。",
+        "activities": [
+          "stay",
+          "rest"
+        ],
+        "capacity": 3
+      },
+      "riverside": {
+        "x": 449,
+        "y": 696,
+        "name": "河边小径",
+        "info": "沿着水边散步，静静听水声。",
+        "activities": [
+          "stay",
+          "rest"
+        ],
+        "capacity": 2
+      },
+      "old_tree": {
+        "x": 480,
+        "y": 524,
+        "name": "老树下",
+        "info": "树荫下的安静角落，适合休息和独处。",
+        "activities": [
+          "stay",
+          "rest"
+        ],
+        "capacity": 2
+      },
+      "book_corner": {
+        "x": 704,
+        "y": 595,
+        "name": "室外书角",
+        "info": "居民可以在这里阅读，公开日记以后可进入图书馆。",
+        "activities": [
+          "read",
+          "stay"
+        ],
+        "capacity": 1
+      },
+      "stone_table": {
+        "x": 587,
+        "y": 651,
+        "name": "石桌",
+        "info": "可以坐下、阅读、喝茶，邀请朋友交流。",
+        "activities": [
+          "sit",
+          "read",
+          "stay"
+        ],
+        "capacity": 2
+      },
+      "riverbank": {
+        "x": 497,
+        "y": 776,
+        "name": "河岸",
+        "info": "望着水面休息，不能直接踩入深水。",
+        "activities": [
+          "stay",
+          "rest"
+        ],
+        "capacity": 2
+      },
+      "window": {
+        "x": 868,
+        "y": 601,
+        "name": "窗前花圃",
+        "info": "看看木屋的暖光和花草。",
+        "activities": [
+          "stay"
+        ],
+        "capacity": 1
+      },
+      "stump": {
+        "x": 794,
+        "y": 753,
+        "name": "树桩",
+        "info": "居民可以坐一会儿，思考或恢复安静。",
+        "activities": [
+          "sit",
+          "rest",
+          "stay"
+        ],
+        "capacity": 1
+      }
+    }
+  },
+  "interior": {
+    "width": 1448,
+    "height": 1086,
+    "spots": {
+      "house_entry": {
+        "x": 730,
+        "y": 956,
+        "name": "室内门口",
+        "info": "从这里返回院子。",
+        "activities": [
+          "stay"
+        ],
+        "capacity": 1,
+        "transition": "exit_house"
+      },
+      "window_corner": {
+        "x": 373,
+        "y": 461,
+        "name": "窗边角落",
+        "info": "属于小冰喜欢的安静角落。",
+        "activities": [
+          "stay",
+          "rest"
+        ],
+        "capacity": 1
+      },
+      "writing_desk": {
+        "x": 1072,
+        "y": 799,
+        "name": "写字桌",
+        "info": "读书、写作、整理生活记录。",
+        "activities": [
+          "read",
+          "stay"
+        ],
+        "capacity": 1
+      },
+      "bookcase": {
+        "x": 1233,
+        "y": 543,
+        "name": "室内书架",
+        "info": "书本与公开阅读空间，私人日记不向访客公开。",
+        "activities": [
+          "read",
+          "stay"
+        ],
+        "capacity": 1
+      },
+      "rest_corner": {
+        "x": 351,
+        "y": 842,
+        "name": "休息角",
+        "info": "躺下或歇息，保留居民拒绝活动的权利。",
+        "activities": [
+          "rest",
+          "stay"
+        ],
+        "capacity": 1
+      }
+    }
+  }
+}

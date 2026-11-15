@@ -1,0 +1,2 @@
+# Offline extraction/audit only. Neither Godot nor the V6 browser needs Python.
+Pillow==13.0.0

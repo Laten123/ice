@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "occluders": [
+    {
+      "id": "tree_trunk",
+      "scene": "exterior",
+      "depth": 527,
+      "origin": [
+        352,
+        268
+      ],
+      "size": [
+        254,
+        259
+      ],
+      "texture": "art/layers/environment/tree_trunk.png"
+    },
+    {
+      "id": "tree_crown",
+      "scene": "exterior",
+      "depth": 525,
+      "origin": [
+        184,
+        0
+      ],
+      "size": [
+        604,
+        351
+      ],
+      "texture": "art/layers/environment/tree_crown.png"
+    },
+    {
+      "id": "stone_table",
+      "scene": "exterior",
+      "depth": 625,
+      "origin": [
+        487,
+        550
+      ],
+      "size": [
+        165,
+        87
+      ],
+      "texture": "art/layers/environment/stone_table.png"
+    },
+    {
+      "id": "stump",
+      "scene": "exterior",
+      "depth": 748,
+      "origin": [
+        719,
+        669
+      ],
+      "size": [
+        132,
+        81
+      ],
+      "texture": "art/layers/environment/stump.png"
+    },
+    {
+      "id": "front_fence",
+      "scene": "exterior",
+      "depth": 791,
+      "origin": [
+        1201,
+        565
+      ],
+      "size": [
+        162,
+        225
+      ],
+      "texture": "art/layers/environment/front_fence.png"
+    },
+    {
+      "id": "room_desk",
+      "scene": "interior",
+      "depth": 783,
+      "origin": [
+        889,
+        575
+      ],
+      "size": [
+        358,
+        207
+      ],
+      "texture": "art/layers/environment/room_desk.png"
+    },
+    {
+      "id": "bed_foot",
+      "scene": "interior",
+      "depth": 914,
+      "origin": [
+        151,
+        681
+      ],
+      "size": [
+        360,
+        234
+      ],
+      "texture": "art/layers/environment/bed_foot.png"
+    },
+    {
+      "id": "room_stool",
+      "scene": "interior",
+      "depth": 891,
+      "origin": [
+        984,
+        782
+      ],
+      "size": [
+        160,
+        110
+      ],
+      "texture": "art/layers/environment/room_stool.png"
+    }
+  ],
+  "water_texture": "art/layers/environment/river_surface.png"
+}

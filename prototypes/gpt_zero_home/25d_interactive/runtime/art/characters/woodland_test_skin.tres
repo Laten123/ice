@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/home_25d_skin.gd" id="1"]
+[ext_resource type="Texture2D" path="res://art/characters/woodland_test_4dir.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+atlas = ExtResource("2")

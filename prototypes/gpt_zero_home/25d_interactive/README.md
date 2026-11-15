@@ -1,3 +1,13 @@
+# 当前源码开发入口
+
+正式开发分支：`prototype/ai-first-home`。当前工程：[runtime/project.godot](runtime/project.godot)（Godot 4.6.3）。先读 [V6 环境基线审计](v6_patch/V6_ENVIRONMENT_AUDIT.md)，再读 [V7 分层与骨架交接](runtime/V7_DEVELOPMENT_HANDOFF.md)。
+
+```bash
+python3 prototypes/gpt_zero_home/25d_interactive/runtime/tools/check_runtime.py
+```
+
+以下保留原始交付包记录。后续源码修改在 `runtime/` 中进行并提交 GitHub。
+
 # 《幻想乡》初代家园 2.5D 可交互工程 — 原始交付包
 
 本目录包含 **独立的 Godot 4.6.3 原型工程**。不是覆盖生产服务的补丁，也尚未合并到原 P1/V2 的长期主场景。

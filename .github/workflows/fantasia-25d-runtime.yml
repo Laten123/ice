@@ -1,0 +1,60 @@
+name: Fantasia 2.5D source runtime and resident rig
+
+on:
+  push:
+    branches: ["prototype/ai-first-home"]
+    paths:
+      - "prototypes/gpt_zero_home/25d_interactive/runtime/**"
+      - ".github/workflows/fantasia-25d-runtime.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: prototypes/gpt_zero_home/25d_interactive/runtime
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned art audit dependency and official Godot 4.6.3
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install -r tests/requirements.txt
+          curl -fL --retry 3 --output /tmp/godot-runtime.zip \
+            https://github.com/godotengine/godot/releases/download/4.6.3-stable/Godot_v4.6.3-stable_linux.x86_64.zip
+          unzip -q /tmp/godot-runtime.zip -d /tmp
+          sudo install -m 0755 /tmp/Godot_v4.6.3-stable_linux.x86_64 /usr/local/bin/godot
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb libgl1-mesa-dri libegl1
+      - name: Source artwork, browser V6, Godot V6 and V7 behavior regression
+        run: python tools/check_runtime.py
+      - name: Check rendered occlusion and water; capture actual Godot scenes
+        shell: bash
+        env:
+          FANTASIA_CAPTURE_DIR: ${{ runner.temp }}/v7-captures
+        run: |
+          set -euo pipefail
+          xvfb-run -a -s "-screen 0 1920x1200x24" \
+            godot --path . --rendering-driver opengl3 --script res://tests/capture_v7.gd 2>&1 | tee /tmp/v7-render.log
+          if grep -E 'SCRIPT ERROR|SHADER ERROR|Parse Error|^ERROR:|V7_RENDER_FAIL' /tmp/v7-render.log; then exit 1; fi
+          grep -q 'V7_RENDER_OK' /tmp/v7-render.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fantasia-v7-in-engine-previews
+          path: |
+            ${{ runner.temp }}/v7-captures/*.png
+            /tmp/v7-render.log
+          if-no-files-found: warn
+          retention-days: 14
