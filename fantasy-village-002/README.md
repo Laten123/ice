@@ -31,6 +31,8 @@ python tools/make_placeholder_font.py \
 - 覆盖：身份与异常存档、登录、家园只含主人与绑定 AI、点击 AI 只查看资料、点击地面只移动主人、设施行为接口/占用/释放、AI 自主完成长椅→小屋→休息→出门、室内入口、材质同步、私聊固定、480×800 与 844×390 布局、寻路回归、土地索引权限接口。
 - 预览：`docs/previews/` 下登录页、家园、AI 生活、室内、横屏（Xvfb + llvmpipe 实际渲染）。
 - 未验证：Web 导出与浏览器、Android/Windows 真机、真实模型/账号/网络；**Android 中文输入法（软键盘）仍待真机验收**。
+- 阶段 B 代码清理报告：`docs/002-阶段B-家园实现.md`。
+- 持续集成：`https://github.com/Laten123/ice/actions/runs/43828598386`（成功）。
 
 ![登录页](docs/previews/002-login.png)
 
