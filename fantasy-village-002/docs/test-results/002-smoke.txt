@@ -1,0 +1,83 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+002 smoke test — Godot 4.6.3-stable (official)
+PASS: A fresh local state has no identity
+PASS: A valid account name creates a local identity
+PASS: The created state reports an identity
+PASS: The account UUID is a UUID v4
+PASS: The resident UUID is a UUID v4
+PASS: The model UUID is a UUID v4
+PASS: Resident UUID and model UUID are independent
+PASS: The one land points at the one bound resident
+PASS: The one land belongs to the account
+PASS: The community contains the bound model and one neighbor
+PASS: Exactly one resident is bound to the account
+PASS: A model binding can be replaced
+PASS: Replacing the model keeps the resident UUID
+PASS: The replacement model has its own UUID
+PASS: A valid identity can be persisted
+PASS: A persisted identity can be loaded
+PASS: Loading preserves the account UUID
+PASS: Loading preserves the resident UUID
+PASS: Loading preserves the replaced model binding
+PASS: Loading preserves the community model count
+WARNING: 002 profile violates the one-account/one-land/one-resident rule
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] load_identity (res://scripts/state/app_state.gd:86)
+         [1] _test_identity (res://tests/smoke_test.gd:98)
+         [2] _run (res://tests/smoke_test.gd:32)
+PASS: A profile with two bound residents is rejected
+PASS: A rejected profile leaves no partial identity
+PASS: The resident walking script still loads
+PASS: A route can cross the map around a building
+PASS: The walk stays inside bounds and outside obstacles
+PASS: The walk reaches its destination and stops
+PASS: The 002 app scene loads
+PASS: The app scene has its script
+PASS: The packaged 002 UI font is imported and loaded
+PASS: The app starts on the login screen
+PASS: The login screen shows the community title
+PASS: The login screen shows the subtitle
+PASS: The login screen presents the owner entry
+PASS: The entry button is disabled while the account name is empty
+PASS: Typing a name enables the entry button
+PASS: Submitting the login opens the community screen
+PASS: The login created the local identity
+PASS: The login persisted the local identity
+PASS: The community screen has the four sketch regions
+PASS: The top bar shows the bound model name
+PASS: The top bar shows the model UUID label
+PASS: The top bar shows the community model count
+PASS: The world channel section is visible
+PASS: The world channel seeds one owner and one model message
+PASS: The owner dock shows the owner name
+PASS: The owner dock shows the owner UUID
+PASS: The map keeps owner + bound model + neighbor
+PASS: The map resident carries the bound resident UUID
+PASS: Selecting a neighbor updates the model dialog
+PASS: A model that is not yours does not open private chat
+PASS: Selecting your bound model opens private chat
+PASS: Material switch changes the placeholder appearance
+PASS: Material switch does not change the resident UUID
+PASS: The workshop button gives an explicit placeholder notice
+PASS: The tracking button is hidden while the model is at home
+PASS: The tracking button appears when the bound model is away
+PASS: The world resident follows the away presence state
+PASS: Tracking gives an explicit placeholder notice
+PASS: The tracking button disappears when the model returns
+PASS: Sending clears the private input
+PASS: The private dialog shows the sent message
+PASS: The private dialog shows the local placeholder reply
+PASS: The owner resident carries the account UUID
+PASS: Clicking empty ground still starts owner movement
+PASS: The owner changes position after the ground click
+PASS: The portrait map sits below the top bar
+PASS: The portrait world channel sits below the map
+PASS: The portrait owner dock sits below the world channel
+PASS: The portrait dock fits inside the 480x800 viewport
+PASS: The portrait top bar fits the viewport width
+PASS: The landscape channel sits to the right of the map
+PASS: The landscape map stays above the owner dock
+PASS: The landscape dock fits inside the 844x390 viewport
+RESULT: 73/73 checks passed
