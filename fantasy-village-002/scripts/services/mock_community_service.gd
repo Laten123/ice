@@ -5,9 +5,6 @@ const Identity = preload("res://scripts/models/identity.gd")
 ## Deterministic local stand-in for the future world channel / model service.
 ## It never performs network requests and its replies are explicitly placeholder.
 
-const TRACK_NOTICE := "追踪请求已记录。真实位置服务将在后续阶段接入。"
-const WORKSHOP_NOTICE := "创意工坊将在 003 阶段开放。"
-const MATERIAL_NOTICE := "材质已切换：只改变占位外观，居民与模型 UUID 不变。"
 
 
 static func world_messages(state: AppState) -> Array[Dictionary]:

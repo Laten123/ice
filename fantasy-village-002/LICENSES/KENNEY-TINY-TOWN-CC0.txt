@@ -1,0 +1,14 @@
+Kenney Tiny Town (CC0 1.0)
+
+Source: https://opengameart.org/content/tiny-town
+Author: Kenney (https://kenney.nl)
+Downloaded: 2026-11-16
+Archive SHA256: 9768692dccff1d706408a5aedd6ca4f6cd1409506cbc84cb2f862919764be977
+
+License: Creative Commons Zero 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+
+The original license text is stored at:
+assets/vendor/kenney/TINY-TOWN-LICENSE.txt
+
+Used in: 26x17 home plot tiles (house, fence, path, trees, flowers).

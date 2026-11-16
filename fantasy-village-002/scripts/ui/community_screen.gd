@@ -1,10 +1,9 @@
 class_name FvCommunityScreen
 extends Control
-## 002 community screen from the second sketch:
-## top binding bar -> community map -> world channel -> owner dock.
-## Placeholder art and local mock services only; no real model connection.
+## 002 community shell: binding bar, home plot, world channel and owner dock.
+## The scene only displays the home; private chat and identity remain outside it.
 
-const WorldScript = preload("res://scripts/world/community_world.gd")
+const HomePlot = preload("res://scripts/world/home_plot.gd")
 const BindingBar = preload("res://scripts/ui/binding_bar.gd")
 const WorldChannel = preload("res://scripts/ui/world_channel.gd")
 const OwnerDock = preload("res://scripts/ui/owner_dock.gd")
@@ -12,8 +11,6 @@ const AppState = preload("res://scripts/state/app_state.gd")
 const MockService = preload("res://scripts/services/mock_community_service.gd")
 
 const INK := Color("22201d")
-const MUTED := Color("6f6a63")
-const PAPER := Color("fbfaf6")
 const MAP_FILL := Color("e4edd8")
 const PAD_NARROW := 12.0
 const PAD_WIDE := 20.0
@@ -24,6 +21,7 @@ const DOCK_H_WIDE := 190.0
 const CHANNEL_H := 106.0
 const RIGHT_COL_W := 360.0
 const GAP := 8.0
+const HOME_SIZE := Vector2(416, 272)
 const MATERIALS := [
 	Color("84aeda"),
 	Color("8fbf9a"),
@@ -35,12 +33,12 @@ var state: AppState = null
 var top_bar: BindingBar
 var map_panel: Panel
 var map_clip: Control
-var world: Node2D
-var track_button: Button
+var home: HomePlot
 var channel: WorldChannel
 var dock: OwnerDock
 var _private_history: Array[String] = []
 var _material_index := 0
+var _profile_uuid := ""
 var _built := false
 
 
@@ -53,14 +51,16 @@ func _ready() -> void:
 	_build()
 	_built = true
 	_layout()
-	world.entity_selected.connect(_on_entity_selected)
-	world.resident_status_changed.connect(_on_world_status)
-	world.select_resident("ai_1")
-	_private_history = [state.bound_resident.display_name + "：你回来啦，我刚好在广场。"]
+	home.resident_inspected.connect(_on_entity_selected)
+	home.resident_status_changed.connect(_on_resident_status)
+	home.notice.connect(_on_notice)
+	home.interior_changed.connect(_on_interior_changed)
+	_private_history = [state.bound_resident.display_name + "：你回来啦，我刚好在院子里。"]
 	dock.set_history(_private_history)
-	var bound_agent = world.get_resident_by_uuid(state.bound_resident.uuid)
-	if bound_agent != null:
-		top_bar.set_model_color(bound_agent.color)
+	_profile_uuid = state.bound_resident.uuid
+	var bound_info: Dictionary = home.get_bound_info()
+	dock.set_selected(bound_info)
+	top_bar.set_model_color(bound_info.get("color", Color("84aeda")))
 
 
 func _notification(what: int) -> void:
@@ -86,19 +86,11 @@ func _build() -> void:
 	map_clip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	map_panel.add_child(map_clip)
 
-	world = WorldScript.new()
-	world.name = "CommunityWorld"
-	world.apply_identity(state)
-	world.font = theme.default_font if theme != null else null
-	map_clip.add_child(world)
-
-	track_button = Button.new()
-	track_button.name = "TrackButton"
-	track_button.text = "模型出门了 · 点击追踪位置"
-	track_button.add_theme_font_size_override("font_size", 12)
-	track_button.visible = false
-	track_button.pressed.connect(_on_track)
-	map_panel.add_child(track_button)
+	home = HomePlot.new()
+	home.name = "HomePlot"
+	home.setup(state)
+	home.font = theme.default_font if theme != null else null
+	map_clip.add_child(home)
 
 	top_bar = BindingBar.new()
 	top_bar.name = "BindingBar"
@@ -146,12 +138,10 @@ func _layout() -> void:
 		_place(channel, right_x, body_top, RIGHT_COL_W,
 			dock.position.y - GAP - body_top)
 	_place(map_clip, 6, 6, map_panel.size.x - 12, map_panel.size.y - 12)
-	var scale_value := minf(map_clip.size.x / 960.0, map_clip.size.y / 540.0)
-	world.scale = Vector2.ONE * scale_value
-	world.position = (map_clip.size - Vector2(960, 540) * scale_value) / 2.0
-	track_button.position = Vector2(maxf(8.0, (map_panel.size.x - 232.0) / 2.0),
-		map_panel.size.y - 50.0)
-	track_button.size = Vector2(232, 40)
+	var scale_value := maxf(1.0, floorf(minf(
+		map_clip.size.x / HOME_SIZE.x, map_clip.size.y / HOME_SIZE.y)))
+	home.scale = Vector2.ONE * scale_value
+	home.position = (map_clip.size - HOME_SIZE * scale_value) / 2.0
 
 
 func _place(control: Control, x: float, y: float, width: float, height: float) -> void:
@@ -160,19 +150,28 @@ func _place(control: Control, x: float, y: float, width: float, height: float) -
 
 
 func _on_entity_selected(info: Dictionary) -> void:
-	if str(info.get("kind", "")) != "resident":
-		dock.show_notice("查看：" + str(info.get("name", "场景物品")))
-		return
 	dock.set_selected(info)
+	_profile_uuid = str(info.get("uuid", ""))
 	dock.set_history(_private_history)
 
 
-func _on_world_status() -> void:
-	if dock == null or not _built:
+func _on_resident_status() -> void:
+	if dock == null:
 		return
-	var info: Dictionary = world.get_selected_info()
-	if str(info.get("kind", "")) == "resident":
-		dock.set_selected(info)
+	var info: Dictionary = home.get_resident_info(_profile_uuid)
+	if info.is_empty():
+		info = home.get_bound_info()
+	dock.set_selected(info)
+
+
+func _on_notice(text: String) -> void:
+	if dock != null:
+		dock.show_notice(text)
+
+
+func _on_interior_changed(is_open: bool) -> void:
+	if dock != null:
+		dock.show_notice("进入小屋" if is_open else "回到小院")
 
 
 func _on_private_message(text: String) -> void:
@@ -194,34 +193,9 @@ func _on_workshop() -> void:
 func _on_material() -> void:
 	_material_index = (_material_index + 1) % MATERIALS.size()
 	var color: Color = MATERIALS[_material_index]
-	var resident = world.get_resident_by_uuid(state.bound_resident.uuid)
-	if resident != null:
-		resident.color = color
-		world.queue_redraw()
-	if top_bar != null:
-		top_bar.set_model_color(color)
+	home.set_bound_color(color)
+	top_bar.set_model_color(color)
 	dock.show_notice("材质已同步，UUID 不变")
-
-
-func _on_track() -> void:
-	dock.show_notice("追踪请求已记录（占位）")
-
-
-func set_bound_presence(status: String) -> void:
-	if state == null or not state.has_identity():
-		return
-	state.bound_resident.status = status
-	world.set_resident_status("ai_1", status)
-	track_button.visible = status == "away"
-	top_bar.refresh()
-	var info: Dictionary = world.get_selected_info()
-	if str(info.get("kind", "")) == "resident":
-		dock.set_selected(info)
-
-
-func _unhandled_key_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
-		set_bound_presence("online" if state.bound_resident.status == "away" else "away")
 
 
 func _map_box() -> StyleBoxFlat:

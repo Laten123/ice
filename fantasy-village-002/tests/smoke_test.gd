@@ -256,59 +256,100 @@ func _test_login_and_community() -> void:
 	_check(_collect_text(community.dock).contains("林间"), "The owner dock shows the owner name")
 	_check(_collect_text(community.dock).contains("主人 UUID"), "The owner dock shows the owner UUID")
 
-	var residents: Array = community.world.get_residents()
-	_check(residents.size() == 3, "The map keeps owner + bound model + neighbor")
+	var home = community.home
+	var residents: Array = home.get_residents()
+	_check(residents.size() == 2, "The home contains only the owner and the bound AI")
 	var bound_uuid := str(app.state.bound_resident.uuid)
 	var found_bound := false
+	var found_neighbor := false
 	for info: Dictionary in residents:
 		if str(info.get("uuid", "")) == bound_uuid:
 			found_bound = bool(info.get("bound", false))
-	_check(found_bound, "The map resident carries the bound resident UUID")
+		if str(info.get("name", "")) == "阿澈":
+			found_neighbor = true
+	_check(found_bound, "The home resident carries the bound resident UUID")
+	_check(not found_neighbor, "The old public-village neighbor is not in the home")
 
-	community.world.select_resident("ai_2")
-	_check(community.dock.selected_name.text.contains("阿澈"),
-		"Selecting a neighbor updates the read-only model profile")
-	_check(community.dock.selected_status.text.contains("仅查看"),
-		"A visitor profile is explicitly read-only")
+	var bound_info: Dictionary = home.get_bound_info()
+	_check(str(bound_info.get("uuid", "")) == bound_uuid,
+		"The bound resident is the only AI in the home")
+	home._handle_pointer(bound_info.get("position", Vector2.ZERO))
+	_check(community.dock.selected_name.text.contains("小晴"),
+		"Clicking the bound AI updates only the read-only model profile")
 	_check(community.dock.input.visible,
-		"Selecting a visitor keeps the bound private chat input visible")
+		"Clicking the bound AI keeps the bound private chat visible")
 	_check(community.dock.chat_title.text.contains("小晴"),
 		"Private chat stays bound to the account resident")
-	_check(community.dock.history_label.text.contains("小晴："),
-		"Selecting a visitor does not replace the private chat history")
-	community.world.select_resident("ai_1")
-	_check(community.dock.selected_name.text.contains("小晴"),
-		"Selecting the bound model updates its profile")
-	_check(community.dock.input.visible, "The bound private chat remains visible")
 
-	var old_color: Color = community.world.get_resident_by_uuid(bound_uuid).color
+	var old_color: Color = home.bound.color
 	community.dock.material_button.pressed.emit()
-	var world_color: Color = community.world.get_resident_by_uuid(bound_uuid).color
-	_check(world_color != old_color,
-		"Material switch changes the placeholder appearance")
-	_check(community.top_bar.portrait.tint == world_color,
-		"Material switch keeps the top avatar in sync with the world resident")
-	_check(community.world.get_resident_by_uuid(bound_uuid).uuid == bound_uuid,
+	_check(home.bound.color != old_color,
+		"Material switch changes the home resident appearance")
+	_check(community.top_bar.portrait.tint == home.bound.color,
+		"Material switch keeps the top avatar in sync with the home resident")
+	_check(home.bound.uuid == bound_uuid,
 		"Material switch does not change the resident UUID")
 	community.dock.workshop_button.pressed.emit()
 	_check(not community.dock.notice_label.text.is_empty(),
 		"The workshop button gives an explicit placeholder notice")
 
-	_check(not community.track_button.visible,
-		"The tracking button is hidden while the model is at home")
-	community.set_bound_presence("away")
-	_check(community.track_button.visible,
-		"The tracking button appears when the bound model is away")
-	_check(str(community.world.get_resident_by_uuid(bound_uuid).status) == "away",
-		"The world resident follows the away presence state")
-	_check(community.top_bar.portrait.tint == world_color,
-		"A presence refresh keeps the material appearance in sync")
-	community.track_button.pressed.emit()
-	_check(community.dock.notice_label.text.contains("追踪"),
-		"Tracking gives an explicit placeholder notice")
-	community.set_bound_presence("online")
-	_check(not community.track_button.visible,
-		"The tracking button disappears when the model returns")
+	var bench: Dictionary = home.get_affordance("bench")
+	_check(not bench.is_empty(), "The bench exposes an AI-callable affordance")
+	_check(home.get_affordance("house").get("action", "") == "enter",
+		"The house door is an AI-callable entrance")
+	_check(home.registry.query_public_plots().size() == 6,
+		"The plot registry exposes six demo plots")
+	var demo_plot: Dictionary = home.registry.query_public_plots()[1]
+	var visit: Dictionary = home.registry.request_visit(bound_uuid, str(demo_plot["plot_uuid"]))
+	_check(bool(visit.get("ok", false)), "An AI visit request can be recorded")
+	var accepted: Dictionary = home.registry.respond_visit(
+		str(visit["request"]["id"]), str(demo_plot["resident_uuid"]), true)
+	_check(bool(accepted.get("ok", false)), "The visited resident can accept a request")
+	_check(home.registry.can_enter(str(demo_plot["plot_uuid"]), bound_uuid),
+		"An accepted request opens the plot permission")
+	_check(home.registry.return_home(bound_uuid).get("ok", false),
+		"The bound resident can return to its own home")
+
+	home.release_affordance("bench", bound_uuid)
+	_check(home.reserve_affordance("bench", bound_uuid),
+		"A facility can be reserved by a resident")
+	_check(home.get_affordance("bench").get("occupied_by", "") == bound_uuid,
+		"Reservation records the occupying resident")
+	_check(not home.reserve_affordance("bench", "another-resident"),
+		"An occupied facility rejects a second resident")
+	home.release_affordance("bench", bound_uuid)
+	_check(home.get_affordance("bench").get("occupied_by", "") == "",
+		"Releasing a facility clears its occupancy")
+
+	home.exit_house()
+	var owner_info: Dictionary = home.get_owner_info()
+	var owner_start: Vector2 = home.owner_resident.position
+	var bound_start: Vector2 = home.bound.position
+	home._handle_pointer(owner_start)
+	_check(community.dock.selected_name.text.contains(str(app.state.account.display_name)),
+		"Clicking the owner opens the owner profile, not a movement command")
+	_check(not home.owner_resident.moving, "Clicking the owner does not start movement")
+	home._handle_pointer(Vector2(300, 240))
+	_check(home.owner_resident.moving,
+		"Clicking empty ground starts the owner avatar moving")
+	for _step: int in range(60):
+		home.owner_resident.tick(1.0 / 60.0)
+	_check(home.owner_resident.position.distance_to(owner_start) > 1.0,
+		"The owner avatar moves after a ground click")
+	_check(home.bound.position == bound_start,
+		"Clicking ground does not move the bound AI")
+
+	var seen_actions := {}
+	for _step: int in range(2400):
+		home._process(1.0 / 60.0)
+		seen_actions[home.get_bound_action()] = true
+	_check(seen_actions.has("sit"), "The mock controller makes the AI sit on the bench")
+	_check(seen_actions.has("enter"), "The mock controller makes the AI enter the house")
+	_check(seen_actions.has("rest"), "The mock controller makes the AI rest in the house")
+	_check(seen_actions.has("exit"), "The mock controller makes the AI leave the house")
+	var valid_states := ["idle", "walk", "sit", "read", "rest", "enter", "exit", "interact"]
+	_check(home.get_bound_action() in valid_states,
+		"The AI uses a known action state independent from its sprite")
 
 	community.dock.input.text = "你好"
 	community.dock.send_button.pressed.emit()
@@ -317,17 +358,6 @@ func _test_login_and_community() -> void:
 		"The private dialog shows the sent message")
 	_check(community.dock.history_label.text.contains("小晴："),
 		"The private dialog shows the local placeholder reply")
-
-	var owner = community.world.get_resident_by_uuid(str(app.state.account.uuid))
-	_check(owner != null, "The owner resident carries the account UUID")
-	if owner != null:
-		community.world.select_resident("owner")
-		var start: Vector2 = owner.position
-		community.world._handle_pointer(Vector2(500, 450))
-		_check(owner.moving, "Clicking empty ground still starts owner movement")
-		community.world._process(1.0)
-		_check(owner.position.distance_to(start) > 1.0,
-			"The owner changes position after the ground click")
 
 	community.size = Vector2(480, 800)
 	community._layout()

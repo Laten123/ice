@@ -1,0 +1,14 @@
+Kenney Tiny Farm (CC0 1.0)
+
+Source: https://opengameart.org/content/tiny-farm
+Author: Kenney (https://kenney.nl)
+Downloaded: 2026-11-16
+Archive SHA256: a06f75f312c27eff15a2288475612e6f6699411be7259d408323cd15a790decc
+
+License: Creative Commons Zero 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+
+The original license text is stored at:
+assets/vendor/kenney/TINY-FARM-LICENSE.txt
+
+Used in: 26x17 home plot crops, furniture and resident placeholder sprites.
