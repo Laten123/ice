@@ -78,6 +78,7 @@ python tools/make_placeholder_font.py \
 
 - 统一目录：`assets/vendor/terrain|buildings|interiors|vegetation|characters|animals|animations|weather|audio|ui/`
 - 完整目录与许可证审计：`assets/vendor/ASSET_CATALOG.md`
+- 原始下载包（1x/2x/4x、全量 WAV、原始压缩包）：`assets/original_packages/`
 - 许可证原始证据与修改记录：`assets/vendor/LICENSE_AUDIT.md`
 - 缺失清单：`assets/vendor/MISSING_ASSETS.md`
 - 署名：`assets/vendor/ATTRIBUTION.md`

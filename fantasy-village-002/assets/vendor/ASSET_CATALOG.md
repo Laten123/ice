@@ -206,3 +206,14 @@ ASSET_PROBE png_ok=191 png_bad=0 alpha_png=111 audio_ok=18 audio_bad=0
 - 预览图/文档另计，见 `docs/asset-previews/` 与 `docs/asset-previews/godot/`；
 - 许可证证据和修改记录见 `LICENSE_AUDIT.md`。
 - 没有使用 Git LFS；当前体积不需要修改仓库管理方式。若后续加入完整音频/大型图集，再提出 LFS 或独立归档方案，未经确认不启用。
+
+
+## 10. 原始原样包
+
+`assets/original_packages/` 保存本轮全部原始下载包和解压目录，**不做 1x 筛选**：
+
+- 666 个文件，约 15.4 MB；
+- 包含 1x/2x/4x、全部 50 个 WAV、全部 15 个森林鸟 WAV、147 个火烟 PNG、原始压缩包；
+- `SHA256SUMS` 可逐文件核对；
+- `_archives/` 保留原始 zip/7z；
+- 轻量运行时副本仍在 `assets/vendor/`；两处不是互相替代，原样包用于审计和重新切片。
