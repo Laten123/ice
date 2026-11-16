@@ -15,6 +15,14 @@ PASS: Exactly one resident is bound to the account
 PASS: A model binding can be replaced
 PASS: Replacing the model keeps the resident UUID
 PASS: The replacement model has its own UUID
+PASS: A null model binding is rejected
+PASS: An empty model UUID is rejected
+PASS: An empty model ID is rejected
+PASS: An empty model display name is rejected
+PASS: A model UUID already used by another resident is rejected
+PASS: A rejected model binding leaves the bound model unchanged
+PASS: A rejected model binding leaves the community entry unchanged
+PASS: A rejected model binding leaves identity and community count unchanged
 PASS: A valid identity can be persisted
 PASS: A persisted identity can be loaded
 PASS: Loading preserves the account UUID
@@ -24,99 +32,159 @@ PASS: Loading preserves the community model count
 WARNING: 002 profile violates the one-account/one-land/one-resident rule
      at: push_warning (core/variant/variant_utility.cpp:1034)
      GDScript backtrace (most recent call first):
-         [0] _reject_profile (res://scripts/state/app_state.gd:181)
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
          [1] load_identity (res://scripts/state/app_state.gd:95)
-         [2] _expect_rejected (res://tests/smoke_test.gd:338)
-         [3] _test_identity (res://tests/smoke_test.gd:85)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:107)
          [4] _run (res://tests/smoke_test.gd:32)
 PASS: A profile with two bound residents is rejected
 PASS: A profile with two bound residents is rejected leaves no partial identity
 WARNING: 002 profile violates the one-account/one-land/one-resident rule
      at: push_warning (core/variant/variant_utility.cpp:1034)
      GDScript backtrace (most recent call first):
-         [0] _reject_profile (res://scripts/state/app_state.gd:181)
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
          [1] load_identity (res://scripts/state/app_state.gd:95)
-         [2] _expect_rejected (res://tests/smoke_test.gd:338)
-         [3] _test_identity (res://tests/smoke_test.gd:90)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:112)
          [4] _run (res://tests/smoke_test.gd:32)
 PASS: A profile with a duplicate model UUID is rejected
 PASS: A profile with a duplicate model UUID is rejected leaves no partial identity
 WARNING: 002 profile violates the one-account/one-land/one-resident rule
      at: push_warning (core/variant/variant_utility.cpp:1034)
      GDScript backtrace (most recent call first):
-         [0] _reject_profile (res://scripts/state/app_state.gd:181)
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
          [1] load_identity (res://scripts/state/app_state.gd:95)
-         [2] _expect_rejected (res://tests/smoke_test.gd:338)
-         [3] _test_identity (res://tests/smoke_test.gd:95)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:117)
          [4] _run (res://tests/smoke_test.gd:32)
 PASS: A profile with a duplicate resident UUID is rejected
 PASS: A profile with a duplicate resident UUID is rejected leaves no partial identity
 WARNING: 002 bound resident is missing from the community list
      at: push_warning (core/variant/variant_utility.cpp:1034)
      GDScript backtrace (most recent call first):
-         [0] _reject_profile (res://scripts/state/app_state.gd:181)
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
          [1] load_identity (res://scripts/state/app_state.gd:92)
-         [2] _expect_rejected (res://tests/smoke_test.gd:338)
-         [3] _test_identity (res://tests/smoke_test.gd:99)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:121)
          [4] _run (res://tests/smoke_test.gd:32)
 PASS: A profile whose bound resident is absent is rejected
 PASS: A profile whose bound resident is absent is rejected leaves no partial identity
-WARNING: 002 bound resident and community entry disagree on the model
+WARNING: 002 bound resident and community entry disagree on identity data
      at: push_warning (core/variant/variant_utility.cpp:1034)
      GDScript backtrace (most recent call first):
-         [0] _reject_profile (res://scripts/state/app_state.gd:181)
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
          [1] load_identity (res://scripts/state/app_state.gd:88)
-         [2] _expect_rejected (res://tests/smoke_test.gd:338)
-         [3] _test_identity (res://tests/smoke_test.gd:103)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:125)
          [4] _run (res://tests/smoke_test.gd:32)
 PASS: A profile with an empty bound model UUID is rejected
 PASS: A profile with an empty bound model UUID is rejected leaves no partial identity
 WARNING: 002 profile violates the one-account/one-land/one-resident rule
      at: push_warning (core/variant/variant_utility.cpp:1034)
      GDScript backtrace (most recent call first):
-         [0] _reject_profile (res://scripts/state/app_state.gd:181)
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
          [1] load_identity (res://scripts/state/app_state.gd:95)
-         [2] _expect_rejected (res://tests/smoke_test.gd:338)
-         [3] _test_identity (res://tests/smoke_test.gd:107)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:129)
          [4] _run (res://tests/smoke_test.gd:32)
 PASS: A profile whose land points at another resident is rejected
 PASS: A profile whose land points at another resident is rejected leaves no partial identity
-WARNING: 002 bound resident and community entry disagree on the model
+WARNING: 002 bound resident and community entry disagree on identity data
      at: push_warning (core/variant/variant_utility.cpp:1034)
      GDScript backtrace (most recent call first):
-         [0] _reject_profile (res://scripts/state/app_state.gd:181)
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
          [1] load_identity (res://scripts/state/app_state.gd:88)
-         [2] _expect_rejected (res://tests/smoke_test.gd:338)
-         [3] _test_identity (res://tests/smoke_test.gd:112)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:134)
          [4] _run (res://tests/smoke_test.gd:32)
 PASS: A profile with a bound/community model mismatch is rejected
 PASS: A profile with a bound/community model mismatch is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:138)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound name differs from the community is rejected
+PASS: A profile whose bound name differs from the community is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:142)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound status differs from the community is rejected
+PASS: A profile whose bound status differs from the community is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:146)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound model name differs is rejected
+PASS: A profile whose bound model name differs is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:150)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound model ID differs is rejected
+PASS: A profile whose bound model ID differs is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:154)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound model presence differs is rejected
+PASS: A profile whose bound model presence differs is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:158)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound flag is false is rejected
+PASS: A profile whose bound flag is false is rejected leaves no partial identity
 WARNING: 002 profile is missing required identity sections
      at: push_warning (core/variant/variant_utility.cpp:1034)
      GDScript backtrace (most recent call first):
-         [0] _reject_profile (res://scripts/state/app_state.gd:181)
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
          [1] load_identity (res://scripts/state/app_state.gd:71)
-         [2] _expect_rejected (res://tests/smoke_test.gd:338)
-         [3] _test_identity (res://tests/smoke_test.gd:116)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:162)
          [4] _run (res://tests/smoke_test.gd:32)
 PASS: A profile without an account section is rejected
 PASS: A profile without an account section is rejected leaves no partial identity
 WARNING: Unsupported 002 profile version
      at: push_warning (core/variant/variant_utility.cpp:1034)
      GDScript backtrace (most recent call first):
-         [0] _reject_profile (res://scripts/state/app_state.gd:181)
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
          [1] load_identity (res://scripts/state/app_state.gd:64)
-         [2] _expect_rejected (res://tests/smoke_test.gd:338)
-         [3] _test_identity (res://tests/smoke_test.gd:120)
+         [2] _expect_rejected (res://tests/smoke_test.gd:384)
+         [3] _test_identity (res://tests/smoke_test.gd:166)
          [4] _run (res://tests/smoke_test.gd:32)
 PASS: A profile with an unsupported version is rejected
 PASS: A profile with an unsupported version is rejected leaves no partial identity
 WARNING: 002 profile is not valid JSON
      at: push_warning (core/variant/variant_utility.cpp:1034)
      GDScript backtrace (most recent call first):
-         [0] _reject_profile (res://scripts/state/app_state.gd:181)
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
          [1] load_identity (res://scripts/state/app_state.gd:58)
-         [2] _test_identity (res://tests/smoke_test.gd:127)
+         [2] _test_identity (res://tests/smoke_test.gd:173)
          [3] _run (res://tests/smoke_test.gd:32)
 PASS: Malformed JSON is rejected
 PASS: Malformed JSON leaves no partial identity
@@ -179,4 +247,4 @@ PASS: The landscape owner dock sits to the right of the map
 PASS: The landscape dock sits below the world channel
 PASS: The landscape map is not squeezed below 240 pixels
 PASS: The landscape dock fits inside the 844x390 viewport
-RESULT: 99/99 checks passed
+RESULT: 119/119 checks passed

@@ -70,6 +70,28 @@ func _test_identity() -> void:
 	_check(state.bound_resident.uuid == resident_uuid, "Replacing the model keeps the resident UUID")
 	_check(state.bound_resident.model.model_uuid != resident_uuid,
 		"The replacement model has its own UUID")
+	var model_before := state.bound_resident.model
+	var neighbor_model_uuid: String = state.community_models[1].model.model_uuid
+	_check(not state.set_model_binding(null), "A null model binding is rejected")
+	_check(not state.set_model_binding(
+		Identity.ModelBinding.new("", "local-fantasy-0.3", "坏模型", true)),
+		"An empty model UUID is rejected")
+	_check(not state.set_model_binding(
+		Identity.ModelBinding.new("33333333-4444-4555-8666-777777777777", "", "坏模型", true)),
+		"An empty model ID is rejected")
+	_check(not state.set_model_binding(
+		Identity.ModelBinding.new("44444444-5555-4666-8777-888888888888",
+			"local-fantasy-0.3", "", true)),
+		"An empty model display name is rejected")
+	_check(not state.set_model_binding(
+		Identity.ModelBinding.new(neighbor_model_uuid, "local-fantasy-0.3", "重复模型", true)),
+		"A model UUID already used by another resident is rejected")
+	_check(state.bound_resident.model == model_before,
+		"A rejected model binding leaves the bound model unchanged")
+	_check(state.community_models[0].model == model_before,
+		"A rejected model binding leaves the community entry unchanged")
+	_check(state.bound_resident.uuid == resident_uuid and state.model_count() == 2,
+		"A rejected model binding leaves identity and community count unchanged")
 	_check(state.save_identity(), "A valid identity can be persisted")
 	var loaded := AppState.new()
 	loaded.save_path = TEST_SAVE
@@ -110,6 +132,30 @@ func _test_identity() -> void:
 	model_mismatch["community_models"][0]["model"]["model_uuid"] = \
 		"22222222-3333-4444-8555-666666666666"
 	_expect_rejected(model_mismatch, "A profile with a bound/community model mismatch is rejected")
+
+	var name_mismatch := base.duplicate(true)
+	name_mismatch["bound_resident"]["display_name"] = "冒充的居民"
+	_expect_rejected(name_mismatch, "A profile whose bound name differs from the community is rejected")
+
+	var status_mismatch := base.duplicate(true)
+	status_mismatch["bound_resident"]["status"] = "away"
+	_expect_rejected(status_mismatch, "A profile whose bound status differs from the community is rejected")
+
+	var model_name_mismatch := base.duplicate(true)
+	model_name_mismatch["bound_resident"]["model"]["display_name"] = "另一个小晴"
+	_expect_rejected(model_name_mismatch, "A profile whose bound model name differs is rejected")
+
+	var model_id_mismatch := base.duplicate(true)
+	model_id_mismatch["bound_resident"]["model"]["model_id"] = "another-local-model"
+	_expect_rejected(model_id_mismatch, "A profile whose bound model ID differs is rejected")
+
+	var model_online_mismatch := base.duplicate(true)
+	model_online_mismatch["bound_resident"]["model"]["online"] = false
+	_expect_rejected(model_online_mismatch, "A profile whose bound model presence differs is rejected")
+
+	var bound_flag_mismatch := base.duplicate(true)
+	bound_flag_mismatch["bound_resident"]["bound"] = false
+	_expect_rejected(bound_flag_mismatch, "A profile whose bound flag is false is rejected")
 
 	var missing_account := base.duplicate(true)
 	missing_account.erase("account")

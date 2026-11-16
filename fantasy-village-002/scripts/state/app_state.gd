@@ -77,15 +77,15 @@ func load_identity() -> bool:
 		if not (entry is Dictionary):
 			return _reject_profile("002 community model entry is not an object")
 		community_models.append(Identity.resident_from_dict(entry))
-	# Keep a single source of truth: the bound resident must be the same object
-	# as the bound entry in the community list, including its model binding.
+	# The bound copy and the community copy must describe the same resident in
+	# every field, not just the model UUID. A conflicting save is rejected.
 	if bound_resident == null or bound_resident.model == null:
 		return _reject_profile("002 profile has no bound resident model")
 	var matched: Identity.Resident = null
 	for resident: Identity.Resident in community_models:
 		if resident.uuid == bound_resident.uuid:
-			if resident.model == null or resident.model.model_uuid != bound_resident.model.model_uuid:
-				return _reject_profile("002 bound resident and community entry disagree on the model")
+			if not _resident_identity_matches(bound_resident, resident):
+				return _reject_profile("002 bound resident and community entry disagree on identity data")
 			matched = resident
 			break
 	if matched == null:
@@ -121,12 +121,22 @@ func save_identity() -> bool:
 func set_model_binding(binding: Identity.ModelBinding) -> bool:
 	if bound_resident == null or binding == null:
 		return false
+	if not _is_valid() or not _model_is_valid(binding):
+		return false
 	var resident_uuid := bound_resident.uuid
-	bound_resident.model = binding
+	var matched: Identity.Resident = null
 	for resident: Identity.Resident in community_models:
 		if resident.uuid == resident_uuid:
-			resident.model = binding
-	return bound_resident.uuid == resident_uuid
+			matched = resident
+			continue
+		if resident.model != null and resident.model.model_uuid == binding.model_uuid:
+			return false
+	if matched == null or matched != bound_resident:
+		return false
+	# Validation passed; mutate only now so a failure cannot leave a partial swap.
+	bound_resident.model = binding
+	matched.model = binding
+	return true
 
 
 func model_count() -> int:
@@ -236,3 +246,22 @@ func _model_is_valid(model: Identity.ModelBinding) -> bool:
 	return model != null and not model.model_uuid.is_empty() \
 		and not model.model_id.is_empty() \
 		and not model.display_name.strip_edges().is_empty()
+
+
+func _resident_identity_matches(first: Identity.Resident, second: Identity.Resident) -> bool:
+	if first == null or second == null:
+		return false
+	return first.uuid == second.uuid \
+		and first.display_name == second.display_name \
+		and first.bound == second.bound \
+		and first.status == second.status \
+		and _models_match(first.model, second.model)
+
+
+func _models_match(first: Identity.ModelBinding, second: Identity.ModelBinding) -> bool:
+	if first == null or second == null:
+		return false
+	return first.model_uuid == second.model_uuid \
+		and first.model_id == second.model_id \
+		and first.display_name == second.display_name \
+		and first.online == second.online
