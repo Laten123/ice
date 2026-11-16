@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "skin_id": "fv.forest",
+  "version": "1.0.0",
+  "display_name": "林间旅人",
+  "author": "Spaceyyy / FV project derivatives",
+  "author_id": "fv-test",
+  "source": "https://opengameart.org/content/cozy-town-lite-%E2%80%94-16x16-top-down-street-tiles-caf%C3%A9-and-walking-character",
+  "license": "CC-BY-4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Cozy Town Lite by Spaceyyy. Native frames split into parts; palette and action derivatives by FV project.",
+  "rig_version": "1.0",
+  "canvas": [
+    48,
+    48
+  ],
+  "foot_origin": [
+    24,
+    40
+  ],
+  "pixel_scale": 1,
+  "filter": "nearest",
+  "directions": [
+    "front",
+    "left",
+    "right",
+    "back"
+  ],
+  "parts": {
+    "front": {
+      "head": {
+        "path": "parts/front-head.png",
+        "anchor": [
+          24,
+          26
+        ],
+        "z": 0
+      },
+      "hair": {
+        "path": "parts/front-hair.png",
+        "anchor": [
+          24,
+          24
+        ],
+        "z": 1
+      },
+      "torso": {
+        "path": "parts/front-torso.png",
+        "anchor": [
+          24,
+          32
+        ],
+        "z": 2
+      },
+      "arm_l": {
+        "path": "parts/front-arm_l.png",
+        "anchor": [
+          20,
+          32
+        ],
+        "z": 3
+      },
+      "arm_r": {
+        "path": "parts/front-arm_r.png",
+        "anchor": [
+          28,
+          32
+        ],
+        "z": 4
+      },
+      "leg_l": {
+        "path": "parts/front-leg_l.png",
+        "anchor": [
+          21,
+          37
+        ],
+        "z": 5
+      },
+      "leg_r": {
+        "path": "parts/front-leg_r.png",
+        "anchor": [
+          26,
+          37
+        ],
+        "z": 6
+      }
+    },
+    "left": {
+      "head": {
+        "path": "parts/left-head.png",
+        "anchor": [
+          24,
+          26
+        ],
+        "z": 0
+      },
+      "hair": {
+        "path": "parts/left-hair.png",
+        "anchor": [
+          24,
+          24
+        ],
+        "z": 1
+      },
+      "torso": {
+        "path": "parts/left-torso.png",
+        "anchor": [
+          24,
+          32
+        ],
+        "z": 2
+      },
+      "arm_l": {
+        "path": "parts/left-arm_l.png",
+        "anchor": [
+          20,
+          32
+        ],
+        "z": 3
+      },
+      "arm_r": {
+        "path": "parts/left-arm_r.png",
+        "anchor": [
+          28,
+          32
+        ],
+        "z": 4
+      },
+      "leg_l": {
+        "path": "parts/left-leg_l.png",
+        "anchor": [
+          21,
+          37
+        ],
+        "z": 5
+      },
+      "leg_r": {
+        "path": "parts/left-leg_r.png",
+        "anchor": [
+          26,
+          37
+        ],
+        "z": 6
+      }
+    },
+    "right": {
+      "head": {
+        "path": "parts/right-head.png",
+        "anchor": [
+          24,
+          26
+        ],
+        "z": 0
+      },
+      "hair": {
+        "path": "parts/right-hair.png",
+        "anchor": [
+          24,
+          24
+        ],
+        "z": 1
+      },
+      "torso": {
+        "path": "parts/right-torso.png",
+        "anchor": [
+          24,
+          32
+        ],
+        "z": 2
+      },
+      "arm_l": {
+        "path": "parts/right-arm_l.png",
+        "anchor": [
+          20,
+          32
+        ],
+        "z": 3
+      },
+      "arm_r": {
+        "path": "parts/right-arm_r.png",
+        "anchor": [
+          28,
+          32
+        ],
+        "z": 4
+      },
+      "leg_l": {
+        "path": "parts/right-leg_l.png",
+        "anchor": [
+          21,
+          37
+        ],
+        "z": 5
+      },
+      "leg_r": {
+        "path": "parts/right-leg_r.png",
+        "anchor": [
+          26,
+          37
+        ],
+        "z": 6
+      }
+    },
+    "back": {
+      "head": {
+        "path": "parts/back-head.png",
+        "anchor": [
+          24,
+          26
+        ],
+        "z": 0
+      },
+      "hair": {
+        "path": "parts/back-hair.png",
+        "anchor": [
+          24,
+          24
+        ],
+        "z": 1
+      },
+      "torso": {
+        "path": "parts/back-torso.png",
+        "anchor": [
+          24,
+          32
+        ],
+        "z": 2
+      },
+      "arm_l": {
+        "path": "parts/back-arm_l.png",
+        "anchor": [
+          20,
+          32
+        ],
+        "z": 3
+      },
+      "arm_r": {
+        "path": "parts/back-arm_r.png",
+        "anchor": [
+          28,
+          32
+        ],
+        "z": 4
+      },
+      "leg_l": {
+        "path": "parts/back-leg_l.png",
+        "anchor": [
+          21,
+          37
+        ],
+        "z": 5
+      },
+      "leg_r": {
+        "path": "parts/back-leg_r.png",
+        "anchor": [
+          26,
+          37
+        ],
+        "z": 6
+      }
+    }
+  },
+  "expressions": {
+    "front": {
+      "blink": "parts/front-blink.png",
+      "sleep": "parts/front-sleep.png"
+    },
+    "left": {
+      "blink": "parts/left-blink.png",
+      "sleep": "parts/left-sleep.png"
+    },
+    "right": {
+      "blink": "parts/right-blink.png",
+      "sleep": "parts/right-sleep.png"
+    },
+    "back": {}
+  },
+  "optional_clothing": {},
+  "correctives": {},
+  "occlusion": [
+    "leg_l",
+    "leg_r",
+    "torso",
+    "head",
+    "hair",
+    "book",
+    "arm_l",
+    "arm_r"
+  ],
+  "held_anchors": {
+    "left": [
+      20,
+      32
+    ],
+    "right": [
+      28,
+      32
+    ]
+  },
+  "actions": [
+    "idle",
+    "blink",
+    "breathe",
+    "walk",
+    "turn",
+    "sit_down",
+    "sit_idle",
+    "stand_up",
+    "take_book",
+    "open_book",
+    "read",
+    "turn_page",
+    "close_book",
+    "put_book",
+    "approach_bed",
+    "lie_down",
+    "sleep",
+    "wake",
+    "get_up",
+    "open_door",
+    "enter_house",
+    "exit_house",
+    "close_door",
+    "tea"
+  ],
+  "unsupported": {
+    "blink:back": "背面无可见眼睛；不伪造正面眨眼"
+  },
+  "modifications": [
+    "Split original 16x24 into native transparent parts; 48x48 animation canvas, unchanged 5px collision.",
+    "Native source palette."
+  ],
+  "content_hash": ""
+}

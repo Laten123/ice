@@ -1,0 +1,49 @@
+{
+  "version": "1.0",
+  "canvas": [
+    48,
+    48
+  ],
+  "foot_origin": [
+    24,
+    40
+  ],
+  "collision_radius": 5,
+  "joints": {
+    "head": [
+      24,
+      26
+    ],
+    "hair": [
+      24,
+      24
+    ],
+    "torso": [
+      24,
+      32
+    ],
+    "arm_l": [
+      20,
+      32
+    ],
+    "arm_r": [
+      28,
+      32
+    ],
+    "leg_l": [
+      21,
+      37
+    ],
+    "leg_r": [
+      26,
+      37
+    ]
+  },
+  "directions": [
+    "front",
+    "left",
+    "right",
+    "back"
+  ],
+  "filter": "nearest"
+}

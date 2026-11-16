@@ -1,0 +1,7 @@
+{
+  "path": "assets/vendor/buildings/cozy-town-lite/characters/player-1-walk.png",
+  "sha256": "772eaaeb9d71c63d54766eda5f3e3dba83c939f63f1224ac4909c72443b2e7b3",
+  "author": "Spaceyyy",
+  "license": "CC-BY-4.0",
+  "modifications": "native part split; moon palette/ribbon; no generative service"
+}

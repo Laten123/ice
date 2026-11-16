@@ -1,0 +1,3637 @@
+{
+  "version": "1.0",
+  "rig_version": "1.0",
+  "actions": {
+    "idle": {
+      "label": "待机",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ],
+            "torso": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              -1
+            ],
+            "hair": [
+              0,
+              -1
+            ],
+            "torso": [
+              0,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 2,
+      "loop": true,
+      "directions": [
+        "front",
+        "left",
+        "right",
+        "back"
+      ],
+      "fixture": "blank",
+      "next": "idle"
+    },
+    "blink": {
+      "label": "眨眼",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {},
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {},
+          "expression": "blink",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {},
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 5,
+      "loop": false,
+      "directions": [
+        "front",
+        "left",
+        "right"
+      ],
+      "fixture": "blank",
+      "next": "idle"
+    },
+    "breathe": {
+      "label": "呼吸",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ],
+            "torso": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              -1
+            ],
+            "hair": [
+              0,
+              -1
+            ],
+            "torso": [
+              0,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ],
+            "torso": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              -1
+            ],
+            "hair": [
+              0,
+              -1
+            ],
+            "torso": [
+              0,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 3,
+      "loop": true,
+      "directions": [
+        "front",
+        "left",
+        "right",
+        "back"
+      ],
+      "fixture": "blank",
+      "next": "idle"
+    },
+    "walk": {
+      "label": "行走",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              1,
+              -1
+            ],
+            "leg_r": [
+              -1,
+              0
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "head": [
+              0,
+              -1
+            ],
+            "hair": [
+              0,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              -1,
+              0
+            ],
+            "leg_r": [
+              1,
+              -1
+            ],
+            "arm_l": [
+              1,
+              0
+            ],
+            "arm_r": [
+              -1,
+              0
+            ],
+            "head": [
+              0,
+              -1
+            ],
+            "hair": [
+              0,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": true,
+      "directions": [
+        "front",
+        "left",
+        "right",
+        "back"
+      ],
+      "fixture": "blank",
+      "next": "idle"
+    },
+    "turn": {
+      "label": "转身",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {},
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {},
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 1
+        },
+        {
+          "offsets": {},
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 2
+        },
+        {
+          "offsets": {},
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 3
+        }
+      ],
+      "fps": 5,
+      "loop": false,
+      "directions": [
+        "front",
+        "left",
+        "right",
+        "back"
+      ],
+      "fixture": "blank",
+      "next": "idle"
+    },
+    "sit_down": {
+      "label": "坐下",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ],
+            "torso": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "leg_l": [
+              -1,
+              0
+            ],
+            "leg_r": [
+              1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              1
+            ],
+            "hair": [
+              0,
+              1
+            ],
+            "torso": [
+              0,
+              1
+            ],
+            "arm_l": [
+              0,
+              1
+            ],
+            "arm_r": [
+              0,
+              1
+            ],
+            "leg_l": [
+              -1,
+              -1
+            ],
+            "leg_r": [
+              1,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              1
+            ],
+            "hair": [
+              0,
+              1
+            ],
+            "torso": [
+              0,
+              1
+            ],
+            "arm_l": [
+              0,
+              1
+            ],
+            "arm_r": [
+              0,
+              1
+            ],
+            "leg_l": [
+              -1,
+              -1
+            ],
+            "leg_r": [
+              1,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              0,
+              2
+            ],
+            "arm_r": [
+              0,
+              2
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front"
+      ],
+      "fixture": "bench",
+      "next": "idle"
+    },
+    "sit_idle": {
+      "label": "坐姿待机",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              0,
+              2
+            ],
+            "arm_r": [
+              0,
+              2
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              0,
+              2
+            ],
+            "arm_r": [
+              0,
+              2
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              0,
+              2
+            ],
+            "arm_r": [
+              0,
+              2
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              0,
+              2
+            ],
+            "arm_r": [
+              0,
+              2
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": true,
+      "directions": [
+        "front"
+      ],
+      "fixture": "bench",
+      "next": "idle"
+    },
+    "stand_up": {
+      "label": "起身",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              0,
+              2
+            ],
+            "arm_r": [
+              0,
+              2
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              1
+            ],
+            "hair": [
+              0,
+              1
+            ],
+            "torso": [
+              0,
+              1
+            ],
+            "arm_l": [
+              0,
+              1
+            ],
+            "arm_r": [
+              0,
+              1
+            ],
+            "leg_l": [
+              -1,
+              -1
+            ],
+            "leg_r": [
+              1,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              1
+            ],
+            "hair": [
+              0,
+              1
+            ],
+            "torso": [
+              0,
+              1
+            ],
+            "arm_l": [
+              0,
+              1
+            ],
+            "arm_r": [
+              0,
+              1
+            ],
+            "leg_l": [
+              -1,
+              -1
+            ],
+            "leg_r": [
+              1,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ],
+            "torso": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "leg_l": [
+              -1,
+              0
+            ],
+            "leg_r": [
+              1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front"
+      ],
+      "fixture": "bench",
+      "next": "idle"
+    },
+    "take_book": {
+      "label": "拿书",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ],
+            "book": [
+              0,
+              7
+            ]
+          },
+          "expression": "none",
+          "book": "closed",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ],
+            "book": [
+              0,
+              5
+            ]
+          },
+          "expression": "none",
+          "book": "closed",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ],
+            "book": [
+              0,
+              2
+            ]
+          },
+          "expression": "none",
+          "book": "closed",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ],
+            "book": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "closed",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front"
+      ],
+      "fixture": "desk",
+      "next": "idle"
+    },
+    "open_book": {
+      "label": "打开书",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front"
+      ],
+      "fixture": "desk",
+      "next": "idle"
+    },
+    "read": {
+      "label": "阅读",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 1,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 2,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 3,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": true,
+      "directions": [
+        "front"
+      ],
+      "fixture": "desk",
+      "next": "idle"
+    },
+    "turn_page": {
+      "label": "翻页",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 1,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 2,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 3,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 1,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front"
+      ],
+      "fixture": "desk",
+      "next": "idle"
+    },
+    "close_book": {
+      "label": "合书",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "open",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front"
+      ],
+      "fixture": "desk",
+      "next": "idle"
+    },
+    "put_book": {
+      "label": "收书",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ],
+            "book": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "closed",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ],
+            "book": [
+              0,
+              2
+            ]
+          },
+          "expression": "none",
+          "book": "closed",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ],
+            "book": [
+              0,
+              5
+            ]
+          },
+          "expression": "none",
+          "book": "closed",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ],
+            "book": [
+              0,
+              7
+            ]
+          },
+          "expression": "none",
+          "book": "closed",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front"
+      ],
+      "fixture": "desk",
+      "next": "idle"
+    },
+    "approach_bed": {
+      "label": "走近床",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              1,
+              -1
+            ],
+            "leg_r": [
+              -1,
+              0
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "head": [
+              0,
+              -1
+            ],
+            "hair": [
+              0,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              -1,
+              0
+            ],
+            "leg_r": [
+              1,
+              -1
+            ],
+            "arm_l": [
+              1,
+              0
+            ],
+            "arm_r": [
+              -1,
+              0
+            ],
+            "head": [
+              0,
+              -1
+            ],
+            "hair": [
+              0,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front"
+      ],
+      "fixture": "bed",
+      "next": "idle"
+    },
+    "lie_down": {
+      "label": "躺下",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              1
+            ],
+            "hair": [
+              0,
+              1
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              1
+            ],
+            "hair": [
+              0,
+              1
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "sleep",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "sleep",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "sleep",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front"
+      ],
+      "fixture": "bed",
+      "next": "idle"
+    },
+    "sleep": {
+      "label": "睡眠",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "sleep",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              1
+            ],
+            "hair": [
+              0,
+              1
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "sleep",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "sleep",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              1
+            ],
+            "hair": [
+              0,
+              1
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "sleep",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": true,
+      "directions": [
+        "front"
+      ],
+      "fixture": "bed",
+      "next": "idle"
+    },
+    "wake": {
+      "label": "醒来",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "sleep",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "sleep",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front"
+      ],
+      "fixture": "bed",
+      "next": "idle"
+    },
+    "get_up": {
+      "label": "起床",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              1
+            ],
+            "hair": [
+              0,
+              1
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              1
+            ],
+            "hair": [
+              0,
+              1
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ],
+            "arm_l": [
+              2,
+              1
+            ],
+            "arm_r": [
+              -2,
+              1
+            ],
+            "leg_l": [
+              1,
+              0
+            ],
+            "leg_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front"
+      ],
+      "fixture": "bed",
+      "next": "idle"
+    },
+    "open_door": {
+      "label": "开门",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              -4
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              -5
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              -6
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front",
+        "back"
+      ],
+      "fixture": "door",
+      "next": "idle"
+    },
+    "enter_house": {
+      "label": "进屋",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              1,
+              -1
+            ],
+            "leg_r": [
+              -1,
+              0
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "head": [
+              0,
+              -1
+            ],
+            "hair": [
+              0,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              -1,
+              0
+            ],
+            "leg_r": [
+              1,
+              -1
+            ],
+            "arm_l": [
+              1,
+              0
+            ],
+            "arm_r": [
+              -1,
+              0
+            ],
+            "head": [
+              0,
+              -1
+            ],
+            "hair": [
+              0,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front",
+        "back"
+      ],
+      "fixture": "door",
+      "next": "idle"
+    },
+    "exit_house": {
+      "label": "出屋",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              1,
+              -1
+            ],
+            "leg_r": [
+              -1,
+              0
+            ],
+            "arm_l": [
+              -1,
+              0
+            ],
+            "arm_r": [
+              1,
+              0
+            ],
+            "head": [
+              0,
+              -1
+            ],
+            "hair": [
+              0,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              -1,
+              0
+            ],
+            "leg_r": [
+              1,
+              -1
+            ],
+            "arm_l": [
+              1,
+              0
+            ],
+            "arm_r": [
+              -1,
+              0
+            ],
+            "head": [
+              0,
+              -1
+            ],
+            "hair": [
+              0,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "leg_l": [
+              0,
+              0
+            ],
+            "leg_r": [
+              0,
+              0
+            ],
+            "arm_l": [
+              0,
+              0
+            ],
+            "arm_r": [
+              0,
+              0
+            ],
+            "head": [
+              0,
+              0
+            ],
+            "hair": [
+              0,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front",
+        "back"
+      ],
+      "fixture": "door",
+      "next": "idle"
+    },
+    "close_door": {
+      "label": "关门",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              -6
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              -5
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              -4
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              -1
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "arm_r": [
+              -1,
+              0
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 8,
+      "loop": false,
+      "directions": [
+        "front",
+        "back"
+      ],
+      "fixture": "door",
+      "next": "idle"
+    },
+    "tea": {
+      "label": "茶座休息",
+      "priority": "P0",
+      "implemented": true,
+      "frames": [
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              0,
+              2
+            ],
+            "arm_r": [
+              0,
+              2
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              0,
+              2
+            ],
+            "arm_r": [
+              0,
+              2
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              0,
+              2
+            ],
+            "arm_r": [
+              0,
+              2
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        },
+        {
+          "offsets": {
+            "head": [
+              0,
+              2
+            ],
+            "hair": [
+              0,
+              2
+            ],
+            "torso": [
+              0,
+              2
+            ],
+            "arm_l": [
+              0,
+              2
+            ],
+            "arm_r": [
+              0,
+              2
+            ],
+            "leg_l": [
+              -1,
+              -2
+            ],
+            "leg_r": [
+              1,
+              -2
+            ]
+          },
+          "expression": "none",
+          "book": "none",
+          "page": 0,
+          "facing_step": 0
+        }
+      ],
+      "fps": 4,
+      "loop": true,
+      "directions": [
+        "front"
+      ],
+      "fixture": "tea",
+      "next": "idle"
+    },
+    "dance": {
+      "label": "舞蹈（P1 未实现）",
+      "priority": "P1",
+      "implemented": false,
+      "directions": []
+    },
+    "plant": {
+      "label": "种植（P2 待扩展）",
+      "priority": "P2",
+      "implemented": false,
+      "directions": []
+    }
+  }
+}
