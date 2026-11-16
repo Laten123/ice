@@ -68,15 +68,26 @@ python tools/make_placeholder_font.py \
 
 ## 已实现与未实现
 
-已实现：26×17 独立家园、CC0 像素素材、主人 + 绑定 AI、AI 本地自主生活演示、设施行为接口与占用、动作状态与图集分离、室内占位房间、固定绑定私聊、世界频道、材质同步、身份/存档校验、土地索引 AI 接口。
+已实现：26×17 独立家园、CC0/CC-BY 像素素材、主人 + 绑定 AI、AI 本地自主生活演示、设施行为接口与占用、动作状态与图集分离、室内占位房间、固定绑定私聊、世界频道、材质同步、身份/存档校验、土地索引 AI 接口。
 
 明确未实现：世界地图界面（阶段 C）、真实模型、真实跨账号拜访、私人记忆、经济系统、多人同步、材质持久化、完整室内装修。
 
+## 素材库
+
+本轮只建立素材库，不改地图代码。
+
+- 统一目录：`assets/vendor/terrain|buildings|interiors|vegetation|characters|animals|animations|weather|audio|ui/`
+- 完整目录与许可证审计：`assets/vendor/ASSET_CATALOG.md`
+- 缺失清单：`assets/vendor/MISSING_ASSETS.md`
+- 署名：`assets/vendor/ATTRIBUTION.md`
+- 可视化预览与尺寸透视报告：`docs/asset-previews/`
+
 ## 素材许可
 
-- Kenney Tiny Town：CC0 1.0。
-- Kenney Tiny Farm：CC0 1.0。
-- 来源、SHA256、下载日期和原始许可证见 `assets/vendor/kenney/MANIFEST.md` 与 `LICENSES/KENNEY-*.txt`。
+- Cozy Farm Lite / Village / Autumn / SFX：CC-BY 4.0，署名见 `assets/vendor/ATTRIBUTION.md`。
+- Kenney Tiny Town / Tiny Farm：CC0 1.0。
+- 其余动画、室内、角色、鸟鸣素材：CC0 1.0；逐项来源见 `assets/vendor/ASSET_CATALOG.md`。
+- 原始压缩包 SHA256、文件名和下载日期见 `assets/vendor/ASSET_CATALOG.md` 与 `assets/vendor/kenney/MANIFEST.md`。
 
 ## 与 001 的关系
 
