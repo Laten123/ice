@@ -27,9 +27,9 @@ jobs:
     timeout-minutes: 20
     env:
       GODOT_BIN: ${{ github.workspace }}/fantasy-village-001/.build-tools/godot/Godot_v4.6.3-stable_linux.x86_64
-      XDG_CONFIG_HOME: ${{ runner.temp }}/fantasy-village-001/config
-      XDG_DATA_HOME: ${{ runner.temp }}/fantasy-village-001/data
-      XDG_CACHE_HOME: ${{ runner.temp }}/fantasy-village-001/cache
+      XDG_CONFIG_HOME: ${{ github.workspace }}/fantasy-village-001/.build-tools/xdg/config
+      XDG_DATA_HOME: ${{ github.workspace }}/fantasy-village-001/.build-tools/xdg/data
+      XDG_CACHE_HOME: ${{ github.workspace }}/fantasy-village-001/.build-tools/xdg/cache
     steps:
       - name: Check out the authorized project branch
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
