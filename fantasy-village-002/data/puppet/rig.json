@@ -45,5 +45,15 @@
     "right",
     "back"
   ],
-  "filter": "nearest"
+  "filter": "nearest",
+  "markers": {
+    "eyes": [
+      24,
+      27
+    ],
+    "pelvis": [
+      24,
+      35
+    ]
+  }
 }

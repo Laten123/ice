@@ -16,3 +16,10 @@ static func png(path: String) -> Image:
 		if tex is Texture2D:return tex.get_image()
 	return null
 static func v(p) -> Vector2i:return Vector2i(int(p[0]),int(p[1]))
+
+static func content_hash(skin: Dictionary) -> String:
+	var m=skin.manifest.duplicate(true);m.content_hash=""
+	var hash=HashingContext.new();hash.start(HashingContext.HASH_SHA256);hash.update(JSON.stringify(m,"",true).to_utf8_buffer())
+	var paths=skin.images.keys();paths.sort()
+	for path in paths:hash.update(path.to_utf8_buffer());hash.update(skin.images[path].save_png_to_buffer())
+	return hash.finish().hex_encode()

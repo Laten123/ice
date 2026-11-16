@@ -340,7 +340,7 @@ func _test_login_and_community() -> void:
 		"Clicking ground does not move the bound AI")
 
 	var seen_actions := {}
-	for _step: int in range(2400):
+	for _step: int in range(4800): # Full P0 transitions add door/book/wake phases to the life cycle.
 		home._process(1.0 / 60.0)
 		seen_actions[home.get_bound_action()] = true
 	_check(seen_actions.has("sit"), "The mock controller makes the AI sit on the bench")

@@ -12,6 +12,9 @@ const Controller = preload("res://scripts/world/resident_controller.gd")
 const MockController = preload("res://scripts/world/mock_life_controller.gd")
 const Registry = preload("res://scripts/world/plot_registry.gd")
 const Presentation = preload("res://scripts/world/home_presentation.gd")
+const Appearance=preload("res://scripts/puppet/appearance.gd")
+const PuppetLib=preload("res://scripts/puppet/library.gd")
+const Fixtures=preload("res://scripts/puppet/fixtures.gd")
 const SIZE := Vector2(416,272)
 var state = null
 var props: Array[Dictionary] = []
@@ -42,6 +45,8 @@ func _ready() -> void:
 	presentation = Presentation.new()
 	add_child(presentation)
 	_sync()
+	var saved=Appearance.get_skin(bound.uuid)
+	if saved!="":presentation.set_actor_skin("bound",saved)
 
 func _process(delta: float) -> void:
 	owner_resident.tick(delta)
@@ -56,14 +61,31 @@ func _sync() -> void:
 	presentation.set_view(interior_visible)
 	var motion := "idle_%d" % bound.facing
 	if bound.moving:motion = "walk_%d" % bound.facing
-	elif phase == "lower":motion = "rest" if bound_action.current == Action.REST else "sit_down"
-	elif phase in ["open_book","close_book"]:motion = phase
-	elif phase == "rise":motion = "rest" if bound_action.current == Action.REST else "stand_up"
+	elif phase == "lower":motion = "lie_down" if bound_action.current == Action.REST else "sit_down"
+	elif phase in ["take_book","open_book","close_book","put_book","get_up"]:motion = phase
+	elif phase == "rise":motion = "wake" if bound_action.current == Action.REST else "stand_up"
 	elif phase == "hold" and _active.get("action", "") != "observe":
 		motion = "rest" if bound_action.current == Action.REST else ("tea" if bound_action.current == Action.INTERACT else "read")
-	elif phase in ["approach_seat","leave_seat","portal"]:motion = "walk_%d" % bound.facing
+	elif phase in ["open_portal","close_portal","portal"]:
+		motion=("open_door" if phase=="open_portal" else "close_door" if phase=="close_portal" else "enter_house" if _active.get("action")=="enter" else "exit_house")+"_%d"%bound.facing
+	elif phase in ["approach_seat","leave_seat"]:motion = "walk_%d" % bound.facing
 	presentation.sync_actor("bound",bound.region,bound.position,motion,bound.color)
-	presentation.sync_actor("owner",owner_resident.region,owner_resident.position,"walk_%d"%owner_resident.facing if owner_resident.moving or not _owner_portal.is_empty() else "idle_%d"%owner_resident.facing,owner_resident.color)
+	var owner_motion="walk_%d"%owner_resident.facing if owner_resident.moving else "idle_%d"%owner_resident.facing
+	if not _owner_portal.is_empty() and not owner_resident.moving:
+		owner_motion=("open_door" if _owner_portal.phase=="open" else "close_door" if _owner_portal.phase=="close" else "enter_house" if _owner_portal.entering else "exit_house")+"_%d"%owner_resident.facing
+	presentation.sync_actor("owner",owner_resident.region,owner_resident.position,owner_motion,owner_resident.color)
+	var door_weight=0.0
+	if phase in ["open_portal","portal","close_portal"]:
+		door_weight=Fixtures.openness("open_door" if phase=="open_portal" else "close_door" if phase=="close_portal" else "enter_house",presentation.actors.bound.frame)
+	if not _owner_portal.is_empty() and not owner_resident.moving:
+		door_weight=Fixtures.openness("open_door" if _owner_portal.phase=="open" else "close_door" if _owner_portal.phase=="close" else "enter_house",presentation.actors.owner.frame)
+	presentation.set_door(door_weight)
+
+func set_bound_skin(path: String,persist: bool=true) -> bool:
+	if not presentation.set_actor_skin("bound",path):return false
+	return Appearance.set_skin(bound.uuid,path) if persist else true
+func motion_duration(action: String) -> float:
+	var def=PuppetLib.actions()[action];return float(def.frames.size())/def.fps
 
 func _unhandled_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed) or (event is InputEventScreenTouch and event.pressed):
@@ -93,6 +115,7 @@ func _handle_pointer(point: Vector2) -> void:
 	move_owner_to(local)
 
 func move_owner_to(point: Vector2) -> bool:
+	if not _owner_portal.is_empty():return false
 	var region := "inside" if interior_visible else "outside"
 	if owner_resident.region != region:
 		notice.emit("主人在另一处；通过房门进入或离开。")
@@ -113,27 +136,31 @@ func exit_house() -> void:
 	if presentation != null:presentation.set_view(false)
 
 func move_owner_through_door() -> bool:
-	if not _owner_portal.is_empty():return false
-	var approach := Vector2(200,168) if owner_resident.region == "outside" else Vector2(104,152)
-	if not owner_resident.set_destination(approach,get_obstacles(owner_resident.region),bounds(owner_resident.region)):return false
-	_owner_portal = {"elapsed":0.0,"start":approach}
-	owner_action.begin(Action.WALK)
-	return true
-
+	if not _owner_portal.is_empty() or not reserve_affordance("house",owner_resident.uuid):return false
+	var approach: Vector2=get_affordance("house").approach if owner_resident.region=="outside" else Vector2(104,152)
+	if not owner_resident.set_destination(approach,get_obstacles(owner_resident.region),bounds(owner_resident.region)):
+		release_affordance("house",owner_resident.uuid);return false
+	_owner_portal={"elapsed":0.0,"start":approach,"entering":owner_resident.region=="outside","phase":"open"}
+	owner_action.begin(Action.WALK);return true
 func _tick_owner_portal(delta: float) -> void:
 	if _owner_portal.is_empty() or owner_resident.moving:return
-	_owner_portal.elapsed += delta
-	var entering := owner_resident.region == "outside"
+	_owner_portal.elapsed+=delta
+	var entering=bool(_owner_portal.entering)
+	owner_resident.facing=(3 if entering else 0) if _owner_portal.phase!="close" else (0 if entering else 3)
 	owner_action.begin(Action.ENTER if entering else Action.EXIT)
-	owner_resident.facing = 3 if entering else 0
-	owner_resident.position = (_owner_portal.start as Vector2).lerp(Vector2(200,136) if entering else Vector2(104,168),minf(_owner_portal.elapsed/.8,1))
-	if _owner_portal.elapsed >= .8:
-		owner_resident.region = "inside" if entering else "outside"
-		owner_resident.position = Vector2(104,152) if entering else Vector2(200,168)
-		_owner_portal = {}
-		owner_action.reset()
-		if entering:enter_house()
-		else:exit_house()
+	match _owner_portal.phase:
+		"open":
+			if _owner_portal.elapsed>=motion_duration("open_door"):_owner_portal.phase="portal";_owner_portal.elapsed=0
+		"portal":
+			owner_resident.position=(_owner_portal.start as Vector2).lerp(Vector2(200,136) if entering else Vector2(104,168),minf(_owner_portal.elapsed/motion_duration("enter_house"),1))
+			if _owner_portal.elapsed>=motion_duration("enter_house"):
+				owner_resident.region="inside" if entering else "outside";owner_resident.position=Vector2(104,152) if entering else get_affordance("house").approach
+				_owner_portal.phase="close";_owner_portal.elapsed=0
+				if entering:enter_house()
+				else:exit_house()
+		"close":
+			if _owner_portal.elapsed>=motion_duration("close_door"):
+				_owner_portal={};owner_action.reset();release_affordance("house",owner_resident.uuid)
 
 func set_bound_color(color: Color) -> void:
 	bound.color = color
@@ -167,7 +194,7 @@ func can_reserve_affordance(id: String, uuid: String) -> bool:
 	var f := get_affordance(id)
 	return not f.is_empty() and bool(f.get("enabled",false)) and (str(f.get("occupied_by","")) in ["",uuid])
 func reserve_affordance(id: String, uuid: String) -> bool:
-	if uuid != bound.uuid or not can_reserve_affordance(id,uuid):return false
+	if (uuid != bound.uuid and not (id=="house" and uuid==owner_resident.uuid)) or not can_reserve_affordance(id,uuid):return false
 	get_affordance(id)["occupied_by"] = uuid
 	return true
 func release_affordance(id: String, uuid: String) -> void:
@@ -183,27 +210,38 @@ func _tick_bound(delta: float) -> void:
 		var f := get_affordance(str(_active.affordance))
 		var duration := float(_active.get("duration",3.0))
 		match phase:
+			"open_portal":
+				if _elapsed>=motion_duration("open_door"):_phase("portal")
+			"close_portal":
+				if _elapsed>=motion_duration("close_door"):_finish_action()
 			"portal":
-				bound.position = _origin.lerp(Vector2(200,136) if bound.region == "outside" else Vector2(104,168),minf(_elapsed/.8,1))
-				if _elapsed >= .8:
+				bound.position = _origin.lerp(Vector2(200,136) if bound.region == "outside" else Vector2(104,168),minf(_elapsed/motion_duration("enter_house"),1))
+				if _elapsed >= motion_duration("enter_house"):
 					bound.region = "inside" if bound.region == "outside" else "outside"
-					bound.position = Vector2(104,152) if bound.region == "inside" else Vector2(200,168)
-					_finish_action()
+					bound.position = Vector2(104,152) if bound.region == "inside" else get_affordance("house").approach
+					bound.facing=0 if bound.region=="inside" else 3
+					_phase("close_portal")
 			"approach_seat":
 				bound.position = _origin.lerp(f.position,minf(_elapsed/.75,1))
 				if _elapsed >= .75:_phase("lower")
 			"lower":
-				if _elapsed >= .5:
+				if _elapsed >= motion_duration("lie_down" if bound_action.current==Action.REST else "sit_down"):
 					if bound_action.current == Action.SIT:bound_action.begin(Action.READ,f.id,duration)
-					_phase("open_book" if bound_action.current in [Action.READ,Action.SIT] else "hold")
+					_phase("take_book" if bound_action.current in [Action.READ,Action.SIT] else "hold")
+			"take_book":
+				if _elapsed>=motion_duration("take_book"):_phase("open_book")
 			"open_book":
-				if _elapsed >= .5:_phase("hold")
+				if _elapsed>=motion_duration("open_book"):_phase("hold")
 			"close_book":
-				if _elapsed >= .5:_phase("rise")
+				if _elapsed>=motion_duration("close_book"):_phase("put_book")
+			"put_book":
+				if _elapsed>=motion_duration("put_book"):_phase("rise")
 			"hold":
 				if _elapsed >= duration:_phase("close_book" if bound_action.current == Action.READ else "rise")
 			"rise":
-				if _elapsed >= .5:_phase("leave_seat")
+				if _elapsed>=motion_duration("wake" if bound_action.current==Action.REST else "stand_up"):_phase("get_up" if bound_action.current==Action.REST else "leave_seat")
+			"get_up":
+				if _elapsed>=motion_duration("get_up"):_phase("leave_seat")
 			"leave_seat":
 				bound.position = _origin.lerp(f.approach,minf(_elapsed/.75,1))
 				if _elapsed >= .75:_finish_action()
@@ -249,7 +287,7 @@ func _start_action(intent: Dictionary) -> void:
 	var action := str(intent.get("action","interact"))
 	bound_action.begin(Action.INTERACT if action == "observe" else action,f.id,float(intent.get("duration",3)))
 	bound.facing = 3 if action == "enter" else 0
-	if action in ["enter","exit"]:_phase("portal")
+	if action in ["enter","exit"]:_phase("open_portal")
 	elif action == "observe":_phase("hold")
 	else:_phase("approach_seat")
 	resident_status_changed.emit()

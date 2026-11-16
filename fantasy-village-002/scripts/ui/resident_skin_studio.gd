@@ -148,7 +148,7 @@ func choose_zip() -> void:
 	if OS.has_feature("web"):
 		_web_callback=JavaScriptBridge.create_callback(func(args):accept_import(store.import_zip(Marshalls.base64_to_raw(str(args[0])))))
 		JavaScriptBridge.get_interface("window").fvSkinImport=_web_callback
-		JavaScriptBridge.eval("const p=document.createElement('input');p.type='file';p.accept='.zip';p.onchange=async()=>{let f=p.files[0];if(!f||f.size>8388608)return;let a=new Uint8Array(await f.arrayBuffer()),s='';for(let i=0;i<a.length;i+=8192)s+=String.fromCharCode(...a.subarray(i,i+8192));window.fvSkinImport(btoa(s));};p.click();")
+		JavaScriptBridge.eval("(()=>{const p=document.createElement('input');p.type='file';p.accept='.zip';p.onchange=async()=>{let f=p.files[0];if(!f||f.size>8388608)return;let a=new Uint8Array(await f.arrayBuffer()),s='';for(let i=0;i<a.length;i+=8192)s+=String.fromCharCode(...a.subarray(i,i+8192));window.fvSkinImport(btoa(s));};p.click();})();")
 	else:
 		var dialog=FileDialog.new();dialog.access=FileDialog.ACCESS_FILESYSTEM;dialog.file_mode=FileDialog.FILE_MODE_OPEN_FILE;dialog.filters=PackedStringArray(["*.zip ; Resident Skin"]);add_child(dialog);dialog.file_selected.connect(func(path):accept_import(store.import_zip(FileAccess.get_file_as_bytes(path)));dialog.queue_free());dialog.popup_centered_ratio(.8)
 func download(path: String,mime: String) -> void:

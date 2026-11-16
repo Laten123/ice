@@ -29,7 +29,7 @@ static func props() -> Array[Dictionary]:
 static func affordances() -> Array[Dictionary]:
 	return [
 		{"id":"bench","name":"树下阅读","region":"outside","action":"sit","position":Vector2(94,190),"approach":Vector2(136,216),"duration":4.0,"capacity":1,"permission":"bound"},
-		{"id":"house","name":"房门","region":"outside","action":"enter","position":Vector2(200,136),"approach":Vector2(200,168),"duration":.8,"capacity":1,"permission":"bound"},
+		{"id":"house","name":"房门","region":"outside","action":"enter","position":Vector2(200,136),"approach":Vector2(200,152),"duration":.8,"capacity":1,"permission":"bound"},
 		{"id":"bed","name":"床铺","region":"inside","action":"rest","position":Vector2(51,63),"approach":Vector2(88,120),"duration":6.0,"capacity":1,"permission":"bound"},
 		{"id":"reading","name":"室内阅读","region":"inside","action":"read","position":Vector2(123,83),"approach":Vector2(120,104),"duration":4.0,"capacity":1,"permission":"bound"},
 		{"id":"table","name":"茶桌","region":"inside","action":"interact","position":Vector2(146,142),"approach":Vector2(120,152),"duration":3.0,"capacity":1,"permission":"bound"},

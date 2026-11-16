@@ -1,6 +1,12 @@
 class_name HomePresentation
 extends Node2D
 ## Rendering adapter only: state/controller own identity, regions and decisions.
+const Puppet=preload("res://scripts/puppet/player.gd")
+const Validator=preload("res://scripts/puppet/validator.gd")
+const Render=preload("res://scripts/puppet/renderer.gd")
+const Fixtures=preload("res://scripts/puppet/fixtures.gd")
+var default_skin: Dictionary={}
+var door_sprite: Sprite2D
 const PATH := "res://assets/derived/home_v3/"
 var exterior: Node2D
 var interior: Node2D
@@ -38,6 +44,7 @@ func _ready() -> void:
 	ground(exterior, "exterior_ground", Vector2i(26,17))
 	ground(interior, "interior_ground", Vector2i(14,11))
 	prop(exterior,"house",Vector2(140,28),114)
+	door_sprite=Sprite2D.new();door_sprite.centered=false;door_sprite.position=Vector2(184,142);door_sprite.offset=Vector2(0,-37);door_sprite.texture=Fixtures.door_texture(0);exterior.add_child(door_sprite)
 	prop(exterior,"chimney",Vector2(238,37),18,2)
 	animated(exterior,"Smoke","smoke",6,5,Vector2(232,0),false)
 	animated(exterior,"Pond","water",13,6,Vector2(40,208),false)
@@ -49,7 +56,7 @@ func _ready() -> void:
 	prop(exterior,"bench_front",Vector2(79,188),5)
 	for p in [Vector2(35,209),Vector2(92,239),Vector2(58,247)]:prop(exterior,"rock",p,11)
 	prop(interior,"bed",Vector2(23,35),60,-1)
-	prop(interior,"blanket",Vector2(27,62),33)
+	var blanket=Sprite2D.new();blanket.centered=false;blanket.texture=ImageTexture.create_from_image(preload("res://scripts/puppet/library.gd").png("res://assets/derived/puppet/blanket.png"));blanket.position=Vector2(27,95);blanket.offset=Vector2(0,-43);interior.add_child(blanket)
 	prop(interior,"bookcase",Vector2(169,24),49)
 	prop(interior,"desk",Vector2(105,34),30)
 	prop(interior,"chair",Vector2(114,63),23,-1)
@@ -75,18 +82,11 @@ func _ready() -> void:
 	light.z_index = -1
 	interior.add_child(light)
 	night_lights.append(light)
-	frames = SpriteFrames.new()
+	default_skin=Validator.load_skin("res://skins/forest").skin
+	frames=SpriteFrames.new() # Compatibility inspection aliases use the same runtime renderer.
 	for direction in range(4):
-		add_frames(frames,"walk_%d"%direction,"walk_%d"%direction,6,8,true)
-		add_frames(frames,"idle_%d"%direction,"idle_%d"%direction,2,1,true)
-	for action in ["sit","read","rest","tea"]:add_frames(frames,action,action,4,3,true)
-	add_frames(frames,"sit_down","sit_down",3,6,false)
-	add_frames(frames,"open_book","open_book",3,6,false)
-	add_frames(frames,"close_book","close_book",3,6,false)
-	frames.add_animation("stand_up")
-	frames.set_animation_loop("stand_up",false)
-	frames.set_animation_speed("stand_up",6)
-	for i in range(2,-1,-1):frames.add_frame("stand_up",tex("sit_down_%d"%i))
+		for action in ["walk","idle"]:alias_frames(action+"_%d"%direction,action,["front","left","right","back"][direction])
+	for pair in [["sit","sit_idle"],["read","read"],["rest","sleep"],["tea","tea"],["sit_down","sit_down"],["stand_up","stand_up"],["open_book","open_book"],["close_book","close_book"]]:alias_frames(pair[0],pair[1],"front")
 	interior.visible = false
 
 func ground(parent: Node2D, id: String, dimensions: Vector2i) -> void:
@@ -136,20 +136,28 @@ func animated(parent: Node2D, name: String,prefix: String,count: int,fps: float,
 	sprite.play("loop")
 	return sprite
 
-func sync_actor(id: String, region: String, pos: Vector2, motion: String, tint: Color) -> void:
+func alias_frames(alias: String,action: String,direction: String) -> void:
+	frames.add_animation(alias)
+	for texture in Render.textures(default_skin,action,direction):frames.add_frame(alias,texture)
+func set_actor_skin(id: String,path: String) -> bool:
+	var result=Validator.load_skin(path)
+	if not result.ok or not actors.has(id):return false
+	actors[id].set_skin(result.skin)
+	return true
+func sync_actor(id: String, region: String, pos: Vector2, motion: String, _tint: Color) -> void:
 	if not actors.has(id):
-		var a := AnimatedSprite2D.new()
-		a.sprite_frames = frames
-		a.offset = Vector2(0,-16)
-		actors[id] = a
-		exterior.add_child(a)
-	var actor: AnimatedSprite2D = actors[id]
-	var destination: Node2D = interior if region == "inside" else exterior
-	if actor.get_parent() != destination:actor.reparent(destination,false)
-	actor.position = pos.round()
-	actor.modulate = Color.WHITE.lerp(tint,.22)
-	if not frames.has_animation(motion):motion = "idle_0"
-	if actor.animation != motion:actor.play(motion)
+		var a=Puppet.new();a.set_skin(default_skin);actors[id]=a;exterior.add_child(a)
+	var actor=actors[id]
+	var destination=interior if region=="inside" else exterior
+	if actor.get_parent()!=destination:actor.reparent(destination,false)
+	actor.position=pos.round();actor.modulate=Color.WHITE
+	var dir="front"
+	if motion.right(2) in ["_0","_1","_2","_3"]:
+		dir=["front","left","right","back"][int(motion.right(1))];motion=motion.left(-2)
+	motion={"rest":"sleep","sit":"sit_idle"}.get(motion,motion)
+	actor.request(motion,dir)
+func set_door(weight: float) -> void:
+	door_sprite.texture=Fixtures.door_texture(weight)
 
 func set_view(inside: bool) -> void:
 	exterior.visible = not inside

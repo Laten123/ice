@@ -13,11 +13,8 @@ static func write(path: String,data: PackedByteArray) -> bool:
 	file.store_buffer(data);return true
 static func json_write(path: String,value) -> bool:return write(path,JSON.stringify(value,"\t",true).to_utf8_buffer())
 static func payload_hash(skin: Dictionary) -> String:
-	var m=skin.manifest.duplicate(true);m.content_hash=""
-	var hash=HashingContext.new();hash.start(HashingContext.HASH_SHA256);hash.update(JSON.stringify(m,"",true).to_utf8_buffer())
-	var paths=skin.images.keys();paths.sort()
-	for path in paths:hash.update(path.to_utf8_buffer());hash.update(skin.images[path].save_png_to_buffer())
-	return hash.finish().hex_encode()
+	return Lib.content_hash(skin)
+
 func catalog() -> Array:
 	var result=["res://skins/forest","res://skins/moon"]
 	var file=base.path_join("index.json")
@@ -50,6 +47,7 @@ func save_draft(skin: Dictionary,title: String,author: String,recolor: bool=true
 func export_skin(skin: Dictionary,path: String,reviewed: bool=false) -> Dictionary:
 	var result=V.load_skin(skin.root)
 	if not result.ok:return result
+	if payload_hash(skin)!=payload_hash(result.skin):return {"ok":false,"errors":["请先保存并重新校验修改"]}
 	if not reviewed:return {"ok":false,"errors":["导出前须确认人工美术与许可证检查；元数据不等于授权"]}
 	var m=skin.manifest.duplicate(true);m.content_hash=payload_hash(skin)
 	var zip=ZIPPacker.new();DirAccess.make_dir_recursive_absolute(path.get_base_dir())
@@ -73,7 +71,7 @@ static func inspect_zip(bytes: PackedByteArray) -> Dictionary:
 		var size=bytes.decode_u32(pos+24);var length=bytes.decode_u16(pos+28);var next=pos+46+length+bytes.decode_u16(pos+30)+bytes.decode_u16(pos+32)
 		if next>bytes.size() or size>LIMIT:return {"ok":false,"errors":["ZIP解压大小超限"]}
 		var name=bytes.slice(pos+46,pos+46+length).get_string_from_utf8();var test=name.trim_suffix("/")
-		if not V.safe_path(test) or name in names or ((bytes.decode_u32(pos+38)>>16)&0xf000)==0xa000:return {"ok":false,"errors":["禁止ZIP路径/重复条目/符号链接"]}
+		if not V.safe_path(test) or name.to_lower() in names.map(func(p):return p.to_lower()) or ((bytes.decode_u32(pos+38)>>16)&0xf000)==0xa000:return {"ok":false,"errors":["禁止ZIP路径/重复条目/符号链接"]}
 		if not name.ends_with("/") and name.get_extension().to_lower() not in ["png","json","txt","md"]:return {"ok":false,"errors":["ZIP含可执行或非资源文件"]}
 		if bytes.decode_u16(pos+8)&1 or bytes.decode_u16(pos+10) not in [0,8]:return {"ok":false,"errors":["不支持加密/压缩格式"]}
 		total+=size;names.append(name);pos=next

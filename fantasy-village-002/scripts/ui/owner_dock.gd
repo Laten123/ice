@@ -67,7 +67,7 @@ func _build() -> void:
 	owner_status = _label(self, "", 11, ONLINE)
 	owner_uuid = _label(self, "", 9, MUTED)
 
-	workshop_button = _button(self, "创意工坊")
+	workshop_button = _button(self, "居民换皮")
 	workshop_button.pressed.connect(func() -> void: workshop_requested.emit())
 	material_button = _button(self, "材质切换")
 	material_button.pressed.connect(func() -> void: material_requested.emit())

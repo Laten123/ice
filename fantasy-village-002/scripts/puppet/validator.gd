@@ -175,5 +175,6 @@ static func load_skin(root: String) -> Dictionary:
 				var center=Vector2(r.get_center())
 				if i>0 and center.distance_to(previous)>7:warnings.append("动作帧异常抖动："+action+":"+dir)
 				previous=center
+	if m.get("content_hash","")!="" and m.content_hash!=Lib.content_hash(skin):errors.append("内容哈希不匹配")
 	var report={"ok":errors.is_empty(),"status":"error" if not errors.is_empty() else "warning" if not warnings.is_empty() else "pass","errors":errors,"warnings":warnings,"license_status":"metadata_present_not_legal_verification","skin":skin}
 	return report

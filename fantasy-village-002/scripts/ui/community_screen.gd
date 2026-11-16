@@ -191,7 +191,12 @@ func _on_private_message(text: String) -> void:
 
 
 func _on_workshop() -> void:
-	dock.show_notice("创意工坊 003 开放")
+	var studio=preload("res://scripts/ui/resident_skin_studio.gd").new()
+	add_child(studio)
+	studio.skin_applied.connect(func(path):
+		if home.set_bound_skin(path):dock.show_notice("皮肤已应用；居民身份与模型绑定保持不变")
+		else:dock.show_notice("皮肤应用失败，请检查校验结果")
+	)
 
 
 func _on_material() -> void:

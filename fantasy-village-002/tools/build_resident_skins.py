@@ -5,7 +5,7 @@ import json,hashlib
 R=Path(__file__).resolve().parents[1];D=R/'data/puppet';D.mkdir(exist_ok=True)
 def js(p,d):p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
 joints={'head':[24,26],'hair':[24,24],'torso':[24,32],'arm_l':[20,32],'arm_r':[28,32],'leg_l':[21,37],'leg_r':[26,37]}
-js(D/'rig.json',{'version':'1.0','canvas':[48,48],'foot_origin':[24,40],'collision_radius':5,'joints':joints,'directions':['front','left','right','back'],'filter':'nearest'})
+js(D/'rig.json',{'version':'1.0','canvas':[48,48],'foot_origin':[24,40],'collision_radius':5,'joints':joints,'directions':['front','left','right','back'],'filter':'nearest','markers':{'eyes':[24,27],'pelvis':[24,35]}})
 actions={}
 def action(id,label,count,fps=8,loop=False,dirs=None,fixture='blank'):
  frames=[]
@@ -25,7 +25,7 @@ def action(id,label,count,fps=8,loop=False,dirs=None,fixture='blank'):
     if id=='put_book':o['book']=[0,round(t*7)]
   if id in ['lie_down','sleep','wake','get_up']:
    k=round(2*t) if id=='lie_down' else round(2*(1-t)) if id=='get_up' else 2
-   o={'head':[0,k-(i%2 if id=='sleep' else 0)],'hair':[0,k-(i%2 if id=='sleep' else 0)],'arm_l':[2,1],'arm_r':[-2,1],'leg_l':[1,0],'leg_r':[-1,0]}
+   o={'head':[0,-k-(i%2 if id=='sleep' else 0)],'hair':[0,-k-(i%2 if id=='sleep' else 0)],'arm_l':[2,1],'arm_r':[-2,1],'leg_l':[1,0],'leg_r':[-1,0]}
    expr='sleep' if id=='sleep' or (id=='lie_down' and t>.5) or (id=='wake' and t<.5) else 'none'
   if id in ['open_door','close_door']:
    k=round(6*(t if id=='open_door' else 1-t));o={'arm_r':[-1,-k]}

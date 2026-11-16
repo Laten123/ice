@@ -40,8 +40,12 @@ func run() -> void:
 	check(home.move_owner_through_door(),"Owner can path to outdoor door")
 	for i in range(600):home._process(1.0/60)
 	check(home.owner_resident.region=="inside" and home.interior_visible,"Owner crosses door and observes indoor view")
-	check(home.move_owner_through_door(),"Owner can path to indoor door")
-	for i in range(600):home._process(1.0/60)
+	var exit_requested=false
+	for i in range(1200):
+		if not exit_requested:exit_requested=home.move_owner_through_door()
+		home._process(1.0/60)
+		if exit_requested and home.owner_resident.region=="outside":break
+	check(exit_requested,"Owner can path to indoor door after occupied doorway releases")
 	check(home.owner_resident.region=="outside" and not home.interior_visible,"Owner leaves room via doorway")
 	var initial: Vector2=home.bound.position
 	var initial_region: String=home.bound.region
@@ -86,7 +90,10 @@ func run() -> void:
 		check(home.presentation.frames.get_frame_count(motion)>=3,"Reusable visible frames for "+motion)
 	var f: SpriteFrames=home.presentation.frames
 	check(f.get_frame_texture("read",0).get_image().get_data()!=f.get_frame_texture("read",1).get_image().get_data(),"Reading actually changes page pixels")
-	check(f.get_frame_texture("rest",0).get_image().get_data()!=f.get_frame_texture("rest",2).get_image().get_data(),"Rest has visible breathing frames")
+	var rest_changes=false
+	for i in range(1,f.get_frame_count("rest")):
+		if f.get_frame_texture("rest",0).get_image().get_data()!=f.get_frame_texture("rest",i).get_image().get_data():rest_changes=true
+	check(rest_changes,"Rest has visible breathing frames")
 	home.release_affordance("bench",home.bound.uuid)
 	check(home.reserve_affordance("bench",home.bound.uuid),"Facility reservation succeeds")
 	check(not home.reserve_affordance("bench","forged-resident"),"Another identity cannot take occupied facility")
