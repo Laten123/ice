@@ -6,10 +6,11 @@ extends "res://scripts/world/resident_controller.gd"
 const PLAN := [
 	{"affordance": "bench", "action": "sit", "duration": 5.0},
 	{"affordance": "house", "action": "enter", "duration": 0.6},
+	{"affordance": "reading", "action": "read", "duration": 3.0},
 	{"affordance": "bed", "action": "rest", "duration": 6.0},
+	{"affordance": "table", "action": "interact", "duration": 3.0},
 	{"affordance": "house", "action": "exit", "duration": 0.5},
 	{"affordance": "garden", "action": "observe", "duration": 4.0},
-	{"affordance": "table", "action": "interact", "duration": 2.0},
 ]
 
 var _index := 0

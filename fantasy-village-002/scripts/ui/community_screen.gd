@@ -138,8 +138,8 @@ func _layout() -> void:
 		_place(channel, right_x, body_top, RIGHT_COL_W,
 			dock.position.y - GAP - body_top)
 	_place(map_clip, 6, 6, map_panel.size.x - 12, map_panel.size.y - 12)
-	var scale_value := maxf(1.0, floorf(minf(
-		map_clip.size.x / HOME_SIZE.x, map_clip.size.y / HOME_SIZE.y)))
+	var fit := minf(map_clip.size.x / HOME_SIZE.x, map_clip.size.y / HOME_SIZE.y)
+	var scale_value := floorf(fit) if fit >= 1.0 else fit
 	home.scale = Vector2.ONE * scale_value
 	home.position = (map_clip.size - HOME_SIZE * scale_value) / 2.0
 

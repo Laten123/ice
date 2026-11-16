@@ -16,17 +16,27 @@ win=Image.new('RGBA',(40,28));d=ImageDraw.Draw(win);d.rectangle((1,1,38,25),fill
 floor=Image.new('RGBA',(224,176),'#b08b68');d=ImageDraw.Draw(floor)
 for y in range(16,160,12):
  d.line((16,y,207,y),fill='#997553');d.line((16,y+1,207,y+1),fill='#c5a27b')
- for x in range(16+(24 if (y//12)%2 else 0),208,48):d.line((x,y,x,y+11),fill='#a17d5a')
+ for x in range(16+(48 if (y//12)%2 else 0),208,96):d.line((x,y,x,y+11),fill='#a17d5a')
 for rect in [(0,0,224,16),(0,16,16,160),(208,16,224,160),(0,160,96,176),(128,160,224,176)]:d.rectangle(rect,fill='#e2d6be',outline='#88684f',width=2)
+# Pixel contact shadows stay below furniture, not blurred screen overlays.
+shade=Image.new('RGBA',floor.size);sd=ImageDraw.Draw(shade)
+for box in [(24,86,79,99),(169,65,204,76),(106,57,143,68),(114,78,135,89),(166,124,199,136),(137,137,158,147),(190,157,206,166)]:sd.ellipse(box,fill=(70,53,42,40))
+floor=Image.alpha_composite(floor,shade)
 save(floor,'interior_ground')
 # Ground tiles, colored patches intentionally follow borders and worn routes.
-ground=Image.new('RGBA',(416,272),'#9dab78');d=ImageDraw.Draw(ground)
-for poly,col in [([(0,0),(136,0),(111,74),(40,124),(0,110)],'#96a573'), ([(298,0),(416,0),(416,154),(373,161),(302,94)],'#8c9d6a'), ([(18,193),(121,185),(155,272),(0,272)],'#a5b17e')]:d.polygon(poly,fill=col)
+ground=Image.new('RGBA',(416,272),'#a9b982');d=ImageDraw.Draw(ground)
+# Coherent broad vegetation variations with irregular/dithered transitions.
+import math
+for y in range(272):
+ for x in range(416):
+  v=math.sin(x*.029+y*.017)*2+math.cos(y*.041-x*.011)*2
+  noise=((x*17+y*29)%7-3)*.32
+  ground.putpixel((x,y),(int(169+v+noise),int(185+v+noise),int(130+v+noise),255))
 rng=random.Random(303)
 for i in range(700):
  x,y=rng.randrange(416),rng.randrange(272)
  if x<126 or x>286 or y>210:
-  col=rng.choice(['#a4b17d','#91a16f','#acb886']);d.line((x,y,x+1,y),fill=col)
+  col=rng.choice(['#a5b47d','#9fb079','#b0bf88']);d.line((x,y,x+1,y),fill=col)
 for x,y,w,h in [(176,128,3,9),(96,176,6,2),(304,176,4,4)]:ns['rect_tiles'](ground,'soil' if x==304 else 'path',x,y,w,h)
 # Pond banks: stepped non-rectangular wet-earth shoreline and underwater depth.
 pond=[(45,216),(57,207),(88,211),(100,225),(95,242),(76,249),(50,242),(41,229)]
@@ -39,6 +49,14 @@ for row,k in enumerate(['carrot','tomato','wheat']):
 for x,y in [(16,16),(32,16),(48,16),(64,16),(320,250),(336,250),(352,250)]:ground.alpha_composite(asset(F+'fences/fence-h-post.png',tone='wood'),(x,y))
 for x,y in [(113,151),(132,153),(268,152),(286,157),(366,190)]:ground.alpha_composite(asset(F+'props/flowers.png'),(x,y))
 for x,y in [(28,111),(42,153),(76,133),(341,146),(366,218),(290,250)]:ground.alpha_composite(asset(C,(7,105,27,120),'green'),(x,y))
+# Worn doorstep, eave/contact shadows, natural pond reeds.
+shade=Image.new('RGBA',ground.size);sd=ImageDraw.Draw(shade)
+sd.polygon([(151,130),(280,130),(286,146),(155,146)],fill=(52,49,37,55))
+for box in [(28,72,80,83),(74,111,126,122),(331,85,383,96),(359,156,411,167),(78,187,113,196)]:sd.ellipse(box,fill=(49,63,38,36))
+ground=Image.alpha_composite(ground,shade);d=ImageDraw.Draw(ground)
+d.rectangle((187,140,215,143),fill='#b7ad8b');d.line((186,144,216,144),fill='#887f65');d.line((188,139,214,139),fill='#d8c9a5')
+for x,y in [(44,235),(91,214),(100,236),(53,208)]:
+ d.line((x,y,x-2,y-6),fill='#697c54');d.line((x+1,y,x+2,y-8),fill='#788b5b');d.line((x+2,y,x+4,y-4),fill='#b4c18a')
 save(ground,'exterior_ground')
 # Real sequential water frames from original 13-frame strip, bounded to shoreline.
 strip=asset('animations/animated-flowing-water/water_strip13.png',tone='water');waterframes=[]
@@ -52,7 +70,7 @@ for n in range(13):
 for n in range(6):
  smoke=Image.new('RGBA',(24,40));dr=ImageDraw.Draw(smoke)
  for k in range(3):
-  cy=32-((n*3+k*11)%34);cx=10+(k%2)*3+(n//2)%3;dr.rectangle((cx-3,cy-3,cx+3,cy+3),fill=(224,219,199,150-k*25))
+  cy=32-((n*3+k*11)%34);cx=10+(k%2)*3+(n//2)%3;dr.ellipse((cx-4,cy-3,cx+3,cy+3),fill=(235,231,210,125-k*22));dr.rectangle((cx-2,cy-4,cx+1,cy+3),fill=(235,231,210,125-k*22))
  save(smoke,f'smoke_{n}')
 for n,dx in enumerate([0,1,0,-1]):
  tree=ns['pine'];im=Image.new('RGBA',(58,64));im.alpha_composite(tree.crop((0,48,56,64)),(1,48));im.alpha_composite(tree.crop((0,0,56,48)),(1+dx,0));save(im,f'tree_{n}')
@@ -66,8 +84,8 @@ for direction in range(4):
  for n in range(6):save(body(base.crop((n*16,(direction+4)*24,n*16+16,(direction+5)*24))),f'walk_{direction}_{n}')
  for n in range(2):
   f=base.crop((0,direction*24,16,(direction+1)*24))
-  if n and direction!=3:
-   dr=ImageDraw.Draw(f);dr.line((5,8,6,8),fill='#665244');dr.line((10,8,11,8),fill='#665244')
+  if n and direction==0:
+   dr=ImageDraw.Draw(f);dr.rectangle((4,10,6,11),fill='#f2d0b5');dr.rectangle((9,10,11,11),fill='#f2d0b5');dr.line((4,11,6,11),fill='#665244');dr.line((9,11,11,11),fill='#665244')
   save(body(f),f'idle_{direction}_{n}')
 front=base.crop((0,0,16,24))
 for phase in ['sit','read','rest','tea']:
@@ -78,7 +96,7 @@ for phase in ['sit','read','rest','tea']:
   if phase=='read':
    dr.rectangle((2,12,14,17),fill='#69503c');dr.rectangle((3,12,8,16),fill='#f2e1b1');dr.rectangle((9,12,13,16),fill='#e1ce9f');dr.line((9 if n%2 else 8,12,8,16),fill='#b7a47e');dr.point((2,14),fill='#ecc6a0');dr.point((14,14),fill='#ecc6a0')
   elif phase=='rest':
-   f=front.crop((0,0,16,12));dr=ImageDraw.Draw(f);dr.line((4,8,6,8),fill='#6a4f3c');dr.line((10,8,12,8),fill='#6a4f3c');f=body(f);f= f.transform(f.size,Image.Transform.AFFINE,(1,0,0,0,1,-(1 if n==2 else 0)),Image.Resampling.NEAREST)
+   f=front.crop((0,0,16,15));dr=ImageDraw.Draw(f);dr.rectangle((4,10,6,11),fill='#f2d0b5');dr.rectangle((9,10,11,11),fill='#f2d0b5');dr.line((4,11,6,11),fill='#6a4f3c');dr.line((9,11,11,11),fill='#6a4f3c');f=body(f);f= f.transform(f.size,Image.Transform.AFFINE,(1,0,0,0,1,-(1 if n==2 else 0)),Image.Resampling.NEAREST)
   elif phase=='tea':dr.rectangle((10,12-(n%2),14,15-(n%2)),fill='#e9ddbf');dr.point((14,13-(n%2)),fill='#97755d')
   if phase!='rest':f=body(f)
   save(f,f'{phase}_{n}')
@@ -96,3 +114,13 @@ print('Derived art built',len(list(OUT.glob('*.png'))),'PNGs')
 save(ns['chair'].crop((0,16,19,23)),'chair_front')
 save(ns['bench'].crop((0,10,31,15)),'bench_front')
 tea=Image.new('RGBA',(32,25));dd=ImageDraw.Draw(tea);dd.rectangle((5,13,8,24),fill='#80634e');dd.rectangle((24,13,27,24),fill='#80634e');dd.ellipse((0,2,31,18),fill='#a78260',outline='#725b49',width=2);dd.rectangle((13,5,18,10),fill='#f0e2be');dd.point((19,7),fill='#f0e2be');save(tea,'tea_table')
+# Hand-edited knee folding frames, not merely translating a standing sprite.
+for n in range(3):
+ f=front.copy();dr=ImageDraw.Draw(f)
+ if n:
+  dr.rectangle((2,17,13,23),fill=(0,0,0,0));dr.rectangle((3,17,12,20-n),fill='#405a69');dr.rectangle((2,20,5,21),fill='#735346');dr.rectangle((10,20,13,21),fill='#735346')
+ im=Image.new('RGBA',(32,40));im.alpha_composite(f,(8,12+n));save(im,f'sit_down_{n}')
+for phase in ['open_book','close_book']:
+ for n in range(3):
+  im=Image.open(OUT/'sit_0.png').convert('RGBA');dr=ImageDraw.Draw(im);width=[3,7,12][n if phase=='open_book' else 2-n];left=16-width//2
+  dr.rectangle((left,24,left+width,29),fill='#72553d');dr.rectangle((left+1,24,left+width-1,28),fill='#eedcb0');dr.line((16,24,16,28),fill='#a68c60');save(im,f'{phase}_{n}')

@@ -6,6 +6,8 @@ const GRID_SIZE: float = 16.0
 const WALK_SPEED: float = 55.0
 const FOOT_RADIUS: float = 5.0
 
+var region := "outside"
+var facing := 0
 var id: String = ""
 var display_name: String = ""
 var role: String = ""
@@ -28,6 +30,7 @@ var idle_time: float = 0.0
 
 
 func configure(data: Dictionary) -> void:
+	region = str(data.get("region", "outside"))
 	id = str(data.get("id", ""))
 	display_name = str(data.get("name", data.get("display_name", id)))
 	role = str(data.get("role", "居民"))
@@ -117,6 +120,9 @@ func tick(delta: float) -> bool:
 			position = position.move_toward(next_point, remaining)
 			remaining = 0.0
 	moving = not waypoints.is_empty()
+	var movement := position - previous
+	if movement.length() > 0.01:
+		facing = (2 if movement.x > 0 else 1) if absf(movement.x) > absf(movement.y) else (0 if movement.y > 0 else 3)
 	return not position.is_equal_approx(previous)
 
 

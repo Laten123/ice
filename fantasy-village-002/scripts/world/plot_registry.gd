@@ -8,10 +8,15 @@ const Access = ["self", "open", "request", "closed"]
 var plots: Array[Dictionary] = []
 var visit_requests: Array[Dictionary] = []
 var _next_request := 1
+var _authenticated_owner := ""
+var _authenticated_resident := ""
 
 
 func _init(state = null) -> void:
 	plots = _build_demo_plots(state)
+	if state != null and state.has_identity():
+		_authenticated_owner = state.account.uuid
+		_authenticated_resident = state.bound_resident.uuid
 
 
 func query_public_plots(_requester_uuid: String = "") -> Array[Dictionary]:
@@ -41,6 +46,11 @@ func find_home() -> Dictionary:
 
 
 func request_visit(from_resident_uuid: String, plot_uuid: String, message: String = "") -> Dictionary:
+	if from_resident_uuid.is_empty() or from_resident_uuid != _authenticated_resident:
+		return {"ok":false,"reason":"not_authenticated"}
+	for previous: Dictionary in visit_requests:
+		if previous.from_resident_uuid == from_resident_uuid and previous.plot_uuid == plot_uuid and previous.status == "pending":
+			return {"ok":true,"request":previous.duplicate(true)}
 	var plot := find_plot(plot_uuid)
 	if plot.is_empty() or str(plot.get("access", "")) == "closed":
 		return {"ok": false, "reason": "closed"}
@@ -60,6 +70,10 @@ func respond_visit(request_id: String, actor_uuid: String, accept: bool) -> Dict
 	for request: Dictionary in visit_requests:
 		if str(request.get("id", "")) != request_id:
 			continue
+		if actor_uuid.is_empty() or actor_uuid not in [_authenticated_owner,_authenticated_resident]:
+			return {"ok":false,"reason":"not_authenticated"}
+		if str(request.get("status","")) != "pending":
+			return {"ok":false,"reason":"already_resolved"}
 		var plot := find_plot(str(request.get("plot_uuid", "")))
 		if plot.is_empty():
 			return {"ok": false, "reason": "missing_plot"}

@@ -7,20 +7,27 @@ var interior: Node2D
 var actors: Dictionary = {}
 var textures: Dictionary = {}
 var night_lights: Array[CanvasItem] = []
-var clock := 0.0
+var clock := 45.0 # Begin in daylight; accelerated local day/night cycle is 90 seconds.
 var night_weight := 0.0
 var frames: SpriteFrames
 
 func tex(id: String) -> Texture2D:
 	if not textures.has(id):
-		var image := Image.new()
-		var err := image.load_png_from_buffer(FileAccess.get_file_as_bytes(PATH + id + ".png"))
-		assert(err == OK, "Missing art " + id)
-		textures[id] = ImageTexture.create_from_image(image)
+		var path := PATH + id + ".png"
+		if FileAccess.file_exists(path):
+			var image := Image.new()
+			var err := image.load_png_from_buffer(FileAccess.get_file_as_bytes(path))
+			assert(err == OK, "Unreadable art " + id)
+			textures[id] = ImageTexture.create_from_image(image)
+		else:
+			# Exported PNGs are remapped to .ctex; source-only headless runs use raw PNGs.
+			textures[id] = load(path) as Texture2D
+		assert(textures[id] != null, "Missing art " + id)
 	return textures[id]
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	z_index = 10 # Keep negative ground layers above the enclosing UI panel.
 	exterior = Node2D.new()
 	interior = Node2D.new()
 	add_child(exterior)
@@ -31,8 +38,8 @@ func _ready() -> void:
 	ground(exterior, "exterior_ground", Vector2i(26,17))
 	ground(interior, "interior_ground", Vector2i(14,11))
 	prop(exterior,"house",Vector2(140,28),114)
-	prop(exterior,"chimney",Vector2(247,31),18)
-	animated(exterior,"Smoke","smoke",6,5,Vector2(242,-7),false)
+	prop(exterior,"chimney",Vector2(238,37),18,2)
+	animated(exterior,"Smoke","smoke",6,5,Vector2(232,0),false)
 	animated(exterior,"Pond","water",13,6,Vector2(40,208),false)
 	for p in [Vector2(24,17),Vector2(70,55),Vector2(327,30),Vector2(355,101)]:
 		animated(exterior,"Tree","tree",4,1.6,p,true)
@@ -74,6 +81,8 @@ func _ready() -> void:
 		add_frames(frames,"idle_%d"%direction,"idle_%d"%direction,2,1,true)
 	for action in ["sit","read","rest","tea"]:add_frames(frames,action,action,4,3,true)
 	add_frames(frames,"sit_down","sit_down",3,6,false)
+	add_frames(frames,"open_book","open_book",3,6,false)
+	add_frames(frames,"close_book","close_book",3,6,false)
 	frames.add_animation("stand_up")
 	frames.set_animation_loop("stand_up",false)
 	frames.set_animation_speed("stand_up",6)

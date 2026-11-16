@@ -26,13 +26,15 @@ func _ready() -> void:
 
 
 func _setup_theme() -> void:
-	# 直接读取打包的字体文件，不依赖编辑器导入缓存。
-	# 本机 arm64 容器执行 --import 会崩溃；运行时加载在桌面、无头测试和 Web
-	# 导出中行为一致，导出预设会把原始 otf 一并打包。
-	var font_file := FontFile.new()
-	var error := font_file.load_dynamic_font("res://assets/ui/placeholder_ui.otf")
-	if error == OK and font_file.has_char("幻".unicode_at(0)):
-		ui_font = font_file
+	# Source checkout works before editor import; exports use Godot's imported font remap.
+	var candidate: FontFile
+	if FileAccess.file_exists("res://assets/ui/placeholder_ui.otf"):
+		candidate = FontFile.new()
+		if candidate.load_dynamic_font("res://assets/ui/placeholder_ui.otf") != OK:candidate = null
+	else:
+		candidate = load("res://assets/ui/placeholder_ui.otf") as FontFile
+	if candidate != null and candidate.has_char("幻".unicode_at(0)):
+		ui_font = candidate
 		font_loaded = true
 	else:
 		ui_font = ThemeDB.fallback_font

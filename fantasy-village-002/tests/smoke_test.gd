@@ -302,11 +302,11 @@ func _test_login_and_community() -> void:
 	var demo_plot: Dictionary = home.registry.query_public_plots()[1]
 	var visit: Dictionary = home.registry.request_visit(bound_uuid, str(demo_plot["plot_uuid"]))
 	_check(bool(visit.get("ok", false)), "An AI visit request can be recorded")
-	var accepted: Dictionary = home.registry.respond_visit(
+	var rejected: Dictionary = home.registry.respond_visit(
 		str(visit["request"]["id"]), str(demo_plot["resident_uuid"]), true)
-	_check(bool(accepted.get("ok", false)), "The visited resident can accept a request")
-	_check(home.registry.can_enter(str(demo_plot["plot_uuid"]), bound_uuid),
-		"An accepted request opens the plot permission")
+	_check(not bool(rejected.get("ok", false)), "A caller cannot impersonate another land owner to approve a visit")
+	_check(not home.registry.can_enter(str(demo_plot["plot_uuid"]), bound_uuid),
+		"An unapproved request does not grant entry")
 	_check(home.registry.return_home(bound_uuid).get("ok", false),
 		"The bound resident can return to its own home")
 
