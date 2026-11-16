@@ -1,0 +1,45 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+001 smoke test — Godot 4.6.3-stable (official)
+PASS: A route can cross the map around a building
+PASS: An out-of-bounds move is rejected
+PASS: A rejected move preserves the current valid route
+PASS: A move inside a building is rejected
+PASS: Walking changes a resident's position
+PASS: The entire walk stays inside bounds and outside building footprints
+PASS: Walking reaches the requested destination and stops
+PASS: A stopped resident remains still
+PASS: The community starts with an owner and two AI placeholders
+PASS: Resident IDs support the owner and both model avatars
+PASS: Selecting owner returns its information
+PASS: Selecting ai_1 returns its information
+PASS: Selecting ai_2 returns its information
+PASS: Resident selection emits information for the UI
+PASS: Greeting an AI emits a local placeholder dialogue
+PASS: Dialogue contains a speaker and a nonempty line
+PASS: A touch selects a house through the map's scale and offset
+PASS: A selected object exposes a description
+PASS: Inspecting an object preserves the active moving resident
+PASS: A pointer outside the scene leaves selection unchanged
+PASS: Clicking empty ground starts the active resident walking
+PASS: The scene's ground click moves the owner to its destination
+PASS: Residents remain inside scene bounds and outside object footprints during simulation
+PASS: Both AI placeholders walk autonomously
+PASS: The AI placeholders exchange scheduled local dialogue
+PASS: The playable main scene starts
+PASS: The main scene has its application script
+PASS: The top bar displays the community name
+PASS: The bottom dock has the owner and two AI avatars
+PASS: Clicking an AI avatar updates world selection and the information card
+PASS: The greeting button displays the selected resident's placeholder line
+PASS: Clicking a house updates its information and disables resident dialogue
+PASS: A touch on a resident updates the integrated information card
+PASS: A real viewport mouse click reaches the world through the GUI
+PASS: A real viewport click activates the owner avatar button
+PASS: A real viewport ground click starts owner movement
+PASS: The owner changes position after a dispatched ground click
+PASS: A real viewport touch reaches the resident through the GUI
+PASS: The compact layout test uses a 480 by 800 viewport
+PASS: Visible information-card controls fit inside the panel at 480 by 800
+PASS: The compact information card stays above the avatar dock
+RESULT: 41/41 checks passed

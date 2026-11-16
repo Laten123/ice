@@ -1,0 +1,11 @@
+# Godot editor/import cache
+.godot/
+.build-tools/
+__pycache__/
+*.py[cod]
+
+# Exported binaries are supplied separately from the source repository.
+builds/
+/test-results/
+*.tmp
+
