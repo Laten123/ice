@@ -12,6 +12,12 @@ static func frame(skin: Dictionary,action: String,direction: String,index: int) 
 	var correction=skin.manifest.correctives.get(action,{}).get(facing,[])
 	if not correction.is_empty():return skin.images[correction[posmod(index,correction.size())]].duplicate()
 	for part in skin.manifest.occlusion:
+		if skin.manifest.optional_clothing.has(part):
+			var clothing=skin.manifest.optional_clothing[part][facing]
+			var bind=clothing.get("bind","head")
+			var delta=Lib.v(Lib.rig().joints[bind])-Lib.v(clothing.anchor)+Lib.v(data.offsets.get(bind,[0,0]))
+			result.blend_rect(skin.images[clothing.path],Rect2i(0,0,48,48),delta)
+			continue
 		if part=="book":
 			if data.book!="none":
 				var left=Lib.v(skin.manifest.held_anchors.left);var right=Lib.v(skin.manifest.held_anchors.right)
@@ -22,7 +28,10 @@ static func frame(skin: Dictionary,action: String,direction: String,index: int) 
 		var entry=skin.manifest.parts[facing][part]
 		var offset=Lib.v(Lib.rig().joints[part])-Lib.v(entry.anchor)+Lib.v(data.offsets.get(part,[0,0]))
 		var im=skin.images[entry.path]
-		result.blend_rect(im,Rect2i(Vector2i.ZERO,im.get_size()),offset)
+		if part.begins_with("leg_") and data.get("fold_legs",false):
+			var used=im.get_used_rect();var bent=im.get_region(used);bent.rotate_90(CLOCKWISE if part=="leg_l" else COUNTERCLOCKWISE)
+			result.blend_rect(bent,Rect2i(Vector2i.ZERO,bent.get_size()),used.position+offset)
+		else:result.blend_rect(im,Rect2i(Vector2i.ZERO,im.get_size()),offset)
 		if part=="hair" and data.expression!="none":
 			var path=skin.manifest.expressions.get(facing,{}).get(data.expression,"")
 			if skin.images.has(path):result.blend_rect(skin.images[path],Rect2i(0,0,48,48),Lib.v(data.offsets.get("head",[0,0])))

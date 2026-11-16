@@ -11,11 +11,13 @@ var looped=true
 var speed=1.0
 var elapsed=0.0
 var last_event=""
+var requested=""
 func _init() -> void:
 	texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
 	offset=Vector2(0,-16) # 48/2 - 40; logical foot stays at node origin.
 func set_skin(value: Dictionary) -> void:
-	skin=value;refresh()
+	var index=frame
+	skin=value;refresh();frame=mini(index,sprite_frames.get_frame_count("default")-1)
 func select(action: String,dir: String,loop_override=null) -> bool:
 	var def=Lib.actions().get(action,{})
 	if not def.get("implemented",false) or dir not in def.directions or action not in skin.manifest.actions:return false
@@ -42,3 +44,8 @@ func advance(delta: float) -> void:
 		action_completed.emit(completed);state_restored.emit("completed");return
 	frame=posmod(i,count)
 func current_image() -> Image:return Render.frame(skin,action_id,direction,frame)
+
+func request(action: String,dir: String) -> void:
+	var key=action+":"+dir
+	if requested!=key:
+		requested=key;select(action,dir)

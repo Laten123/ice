@@ -29,7 +29,7 @@ def action(id,label,count,fps=8,loop=False,dirs=None,fixture='blank'):
    expr='sleep' if id=='sleep' or (id=='lie_down' and t>.5) or (id=='wake' and t<.5) else 'none'
   if id in ['open_door','close_door']:
    k=round(6*(t if id=='open_door' else 1-t));o={'arm_r':[-1,-k]}
-  frames.append({'offsets':o,'expression':expr,'book':book,'page':i%4 if id in ['read','turn_page'] else 0,'facing_step':i if id=='turn' else 0})
+  frames.append({'offsets':o,'expression':expr,'book':book,'page':i%4 if id in ['read','turn_page'] else 0,'facing_step':i if id=='turn' else 0,'fold_legs':(t>=.5 if id=='sit_down' else t<.5 if id=='stand_up' else id in ['sit_idle','take_book','open_book','read','turn_page','close_book','put_book','tea'])})
  actions[id]={'label':label,'priority':'P0','implemented':True,'frames':frames,'fps':fps,'loop':loop,'directions':dirs or ['front','left','right','back'],'fixture':fixture,'next':'idle'}
 for args in [('idle','待机',2,2,True),('blink','眨眼',3,5,False,['front','left','right']),('breathe','呼吸',4,3,True),('walk','行走',6,8,True),('turn','转身',4,5,False)]:action(*args)
 for id,label,n,loop in [('sit_down','坐下',4,False),('sit_idle','坐姿待机',4,True),('stand_up','起身',4,False)]:action(id,label,n,8,loop,['front'],'bench')
@@ -42,7 +42,7 @@ actions['plant']={'label':'种植（P2 待扩展）','priority':'P2','implemente
 js(D/'actions.json',{'version':'1.0','rig_version':'1.0','actions':actions})
 source=R/'assets/vendor/buildings/cozy-town-lite/characters/player-1-walk.png';sheet=Image.open(source).convert('RGBA')
 for name,title,variant in [('forest','林间旅人',0),('moon','月白居民',1)]:
- root=R/'skins'/name;(root/'parts').mkdir(parents=True,exist_ok=True);parts={};expressions={}
+ root=R/'skins'/name;(root/'parts').mkdir(parents=True,exist_ok=True);parts={};expressions={};clothing={}
  for di,direction in enumerate(['front','left','right','back']):
   f=sheet.crop((0,di*24,16,(di+1)*24));layers={p:Image.new('RGBA',(48,48)) for p in joints}
   for y in range(24):
@@ -57,7 +57,9 @@ for name,title,variant in [('forest','林间旅人',0),('moon','月白居民',1)
     layers[part].putpixel((16+x,17+y),c)
     if y<9:layers['hair'].putpixel((16+x,17+y),c)
   if variant:
-   dr=ImageDraw.Draw(layers['hair']);dr.rectangle((29,21,32,22),fill='#aa547a');dr.point((31,23),fill='#aa547a')
+   im=Image.new('RGBA',(48,48));dr=ImageDraw.Draw(im);bx=17 if direction=='left' else 28
+   dr.rectangle((bx,25,bx+3,26),fill='#aa547a');dr.point((bx+1,27),fill='#aa547a')
+   rel=f'parts/{direction}-headwear.png';im.save(root/rel);clothing.setdefault('headwear',{})[direction]={'path':rel,'anchor':joints['head'],'bind':'head'}
   parts[direction]={}
   for p,im in layers.items():
    rel=f'parts/{direction}-{p}.png';im.save(root/rel);parts[direction][p]={'path':rel,'anchor':joints[p],'z':list(joints).index(p)}
@@ -72,7 +74,7 @@ for name,title,variant in [('forest','林间旅人',0),('moon','月白居民',1)
       if a and max(r,g,b)<60:
        dr.point((16+x,17+y),fill='#f2d0b5' if y==10 else '#665244')
     rel=f'parts/{direction}-{exp}.png';im.save(root/rel);expressions[direction][exp]=rel
- manifest={'schema_version':1,'skin_id':'fv.'+name,'version':'1.0.0','display_name':title,'author':'Spaceyyy / FV project derivatives','author_id':'fv-test','source':'https://opengameart.org/content/cozy-town-lite-%E2%80%94-16x16-top-down-street-tiles-caf%C3%A9-and-walking-character','license':'CC-BY-4.0','license_url':'https://creativecommons.org/licenses/by/4.0/','attribution':'Cozy Town Lite by Spaceyyy. Native frames split into parts; palette and action derivatives by FV project.','rig_version':'1.0','canvas':[48,48],'foot_origin':[24,40],'pixel_scale':1,'filter':'nearest','directions':['front','left','right','back'],'parts':parts,'expressions':expressions,'optional_clothing':{},'correctives':{},'occlusion':['leg_l','leg_r','torso','head','hair','book','arm_l','arm_r'],'held_anchors':{'left':[20,32],'right':[28,32]},'actions':[k for k,v in actions.items() if v['implemented']],'unsupported':{'blink:back':'背面无可见眼睛；不伪造正面眨眼'},'modifications':['Split original 16x24 into native transparent parts; 48x48 animation canvas, unchanged 5px collision.', 'White hair, ribbon and violet clothing palette.' if variant else 'Native source palette.'],'content_hash':''}
+ manifest={'schema_version':1,'skin_id':'fv.'+name,'version':'1.0.0','display_name':title,'author':'Spaceyyy / FV project derivatives','author_id':'fv-test','source':'https://opengameart.org/content/cozy-town-lite-%E2%80%94-16x16-top-down-street-tiles-caf%C3%A9-and-walking-character','license':'CC-BY-4.0','license_url':'https://creativecommons.org/licenses/by/4.0/','attribution':'Cozy Town Lite by Spaceyyy. Native frames split into parts; palette and action derivatives by FV project.','rig_version':'1.0','canvas':[48,48],'foot_origin':[24,40],'pixel_scale':1,'filter':'nearest','directions':['front','left','right','back'],'parts':parts,'expressions':expressions,'optional_clothing':clothing,'correctives':{},'occlusion':['leg_l','leg_r','torso','head','hair']+(['headwear'] if variant else [])+['book','arm_l','arm_r'],'held_anchors':{'left':[20,32],'right':[28,32]},'actions':[k for k,v in actions.items() if v['implemented']],'unsupported':{'blink:back':'背面无可见眼睛；不伪造正面眨眼'},'modifications':['Split original 16x24 into native transparent parts; 48x48 animation canvas, unchanged 5px collision.', 'White hair, ribbon and violet clothing palette.' if variant else 'Native source palette.'],'content_hash':''}
  js(root/'skin.json',manifest);(root/'LICENSE.txt').write_text('CC BY 4.0 https://creativecommons.org/licenses/by/4.0/legalcode\n'+manifest['attribution']+'\nSource: '+manifest['source']+'\n')
 # Shared fixture occlusion uses native home source pixels.
 out=R/'assets/derived/puppet';out.mkdir(exist_ok=True)

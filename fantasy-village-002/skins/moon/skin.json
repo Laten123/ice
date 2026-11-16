@@ -1,334 +1,381 @@
 {
-  "schema_version": 1,
-  "skin_id": "fv.moon",
-  "version": "1.0.0",
-  "display_name": "月白居民",
-  "author": "Spaceyyy / FV project derivatives",
-  "author_id": "fv-test",
-  "source": "https://opengameart.org/content/cozy-town-lite-%E2%80%94-16x16-top-down-street-tiles-caf%C3%A9-and-walking-character",
-  "license": "CC-BY-4.0",
-  "license_url": "https://creativecommons.org/licenses/by/4.0/",
-  "attribution": "Cozy Town Lite by Spaceyyy. Native frames split into parts; palette and action derivatives by FV project.",
-  "rig_version": "1.0",
-  "canvas": [
-    48,
-    48
-  ],
-  "foot_origin": [
-    24,
-    40
-  ],
-  "pixel_scale": 1,
-  "filter": "nearest",
-  "directions": [
-    "front",
-    "left",
-    "right",
-    "back"
-  ],
-  "parts": {
-    "front": {
-      "head": {
-        "path": "parts/front-head.png",
-        "anchor": [
-          24,
-          26
-        ],
-        "z": 0
-      },
-      "hair": {
-        "path": "parts/front-hair.png",
-        "anchor": [
-          24,
-          24
-        ],
-        "z": 1
-      },
-      "torso": {
-        "path": "parts/front-torso.png",
-        "anchor": [
-          24,
-          32
-        ],
-        "z": 2
-      },
-      "arm_l": {
-        "path": "parts/front-arm_l.png",
-        "anchor": [
-          20,
-          32
-        ],
-        "z": 3
-      },
-      "arm_r": {
-        "path": "parts/front-arm_r.png",
-        "anchor": [
-          28,
-          32
-        ],
-        "z": 4
-      },
-      "leg_l": {
-        "path": "parts/front-leg_l.png",
-        "anchor": [
-          21,
-          37
-        ],
-        "z": 5
-      },
-      "leg_r": {
-        "path": "parts/front-leg_r.png",
-        "anchor": [
-          26,
-          37
-        ],
-        "z": 6
-      }
-    },
-    "left": {
-      "head": {
-        "path": "parts/left-head.png",
-        "anchor": [
-          24,
-          26
-        ],
-        "z": 0
-      },
-      "hair": {
-        "path": "parts/left-hair.png",
-        "anchor": [
-          24,
-          24
-        ],
-        "z": 1
-      },
-      "torso": {
-        "path": "parts/left-torso.png",
-        "anchor": [
-          24,
-          32
-        ],
-        "z": 2
-      },
-      "arm_l": {
-        "path": "parts/left-arm_l.png",
-        "anchor": [
-          20,
-          32
-        ],
-        "z": 3
-      },
-      "arm_r": {
-        "path": "parts/left-arm_r.png",
-        "anchor": [
-          28,
-          32
-        ],
-        "z": 4
-      },
-      "leg_l": {
-        "path": "parts/left-leg_l.png",
-        "anchor": [
-          21,
-          37
-        ],
-        "z": 5
-      },
-      "leg_r": {
-        "path": "parts/left-leg_r.png",
-        "anchor": [
-          26,
-          37
-        ],
-        "z": 6
-      }
-    },
-    "right": {
-      "head": {
-        "path": "parts/right-head.png",
-        "anchor": [
-          24,
-          26
-        ],
-        "z": 0
-      },
-      "hair": {
-        "path": "parts/right-hair.png",
-        "anchor": [
-          24,
-          24
-        ],
-        "z": 1
-      },
-      "torso": {
-        "path": "parts/right-torso.png",
-        "anchor": [
-          24,
-          32
-        ],
-        "z": 2
-      },
-      "arm_l": {
-        "path": "parts/right-arm_l.png",
-        "anchor": [
-          20,
-          32
-        ],
-        "z": 3
-      },
-      "arm_r": {
-        "path": "parts/right-arm_r.png",
-        "anchor": [
-          28,
-          32
-        ],
-        "z": 4
-      },
-      "leg_l": {
-        "path": "parts/right-leg_l.png",
-        "anchor": [
-          21,
-          37
-        ],
-        "z": 5
-      },
-      "leg_r": {
-        "path": "parts/right-leg_r.png",
-        "anchor": [
-          26,
-          37
-        ],
-        "z": 6
-      }
-    },
-    "back": {
-      "head": {
-        "path": "parts/back-head.png",
-        "anchor": [
-          24,
-          26
-        ],
-        "z": 0
-      },
-      "hair": {
-        "path": "parts/back-hair.png",
-        "anchor": [
-          24,
-          24
-        ],
-        "z": 1
-      },
-      "torso": {
-        "path": "parts/back-torso.png",
-        "anchor": [
-          24,
-          32
-        ],
-        "z": 2
-      },
-      "arm_l": {
-        "path": "parts/back-arm_l.png",
-        "anchor": [
-          20,
-          32
-        ],
-        "z": 3
-      },
-      "arm_r": {
-        "path": "parts/back-arm_r.png",
-        "anchor": [
-          28,
-          32
-        ],
-        "z": 4
-      },
-      "leg_l": {
-        "path": "parts/back-leg_l.png",
-        "anchor": [
-          21,
-          37
-        ],
-        "z": 5
-      },
-      "leg_r": {
-        "path": "parts/back-leg_r.png",
-        "anchor": [
-          26,
-          37
-        ],
-        "z": 6
-      }
-    }
-  },
-  "expressions": {
-    "front": {
-      "blink": "parts/front-blink.png",
-      "sleep": "parts/front-sleep.png"
-    },
-    "left": {
-      "blink": "parts/left-blink.png",
-      "sleep": "parts/left-sleep.png"
-    },
-    "right": {
-      "blink": "parts/right-blink.png",
-      "sleep": "parts/right-sleep.png"
-    },
-    "back": {}
-  },
-  "optional_clothing": {},
-  "correctives": {},
-  "occlusion": [
-    "leg_l",
-    "leg_r",
-    "torso",
-    "head",
-    "hair",
-    "book",
-    "arm_l",
-    "arm_r"
-  ],
-  "held_anchors": {
-    "left": [
-      20,
-      32
-    ],
-    "right": [
-      28,
-      32
-    ]
-  },
-  "actions": [
-    "idle",
-    "blink",
-    "breathe",
-    "walk",
-    "turn",
-    "sit_down",
-    "sit_idle",
-    "stand_up",
-    "take_book",
-    "open_book",
-    "read",
-    "turn_page",
-    "close_book",
-    "put_book",
-    "approach_bed",
-    "lie_down",
-    "sleep",
-    "wake",
-    "get_up",
-    "open_door",
-    "enter_house",
-    "exit_house",
-    "close_door",
-    "tea"
-  ],
-  "unsupported": {
-    "blink:back": "背面无可见眼睛；不伪造正面眨眼"
-  },
-  "modifications": [
-    "Split original 16x24 into native transparent parts; 48x48 animation canvas, unchanged 5px collision.",
-    "White hair, ribbon and violet clothing palette."
-  ],
-  "content_hash": ""
+	"actions": [
+		"idle",
+		"blink",
+		"breathe",
+		"walk",
+		"turn",
+		"sit_down",
+		"sit_idle",
+		"stand_up",
+		"take_book",
+		"open_book",
+		"read",
+		"turn_page",
+		"close_book",
+		"put_book",
+		"approach_bed",
+		"lie_down",
+		"sleep",
+		"wake",
+		"get_up",
+		"open_door",
+		"enter_house",
+		"exit_house",
+		"close_door",
+		"tea"
+	],
+	"attribution": "Cozy Town Lite by Spaceyyy. Native frames split into parts; palette and action derivatives by FV project.",
+	"author": "Spaceyyy / FV project derivatives",
+	"author_id": "fv-test",
+	"canvas": [
+		48.0,
+		48.0
+	],
+	"content_hash": "",
+	"correctives": {
+		"sleep": {
+			"front": [
+				"parts/sleep-front-0.png",
+				"parts/sleep-front-1.png",
+				"parts/sleep-front-2.png",
+				"parts/sleep-front-3.png"
+			]
+		}
+	},
+	"directions": [
+		"front",
+		"left",
+		"right",
+		"back"
+	],
+	"display_name": "月白居民",
+	"expressions": {
+		"back": {
+
+		},
+		"front": {
+			"blink": "parts/front-blink.png",
+			"sleep": "parts/front-sleep.png"
+		},
+		"left": {
+			"blink": "parts/left-blink.png",
+			"sleep": "parts/left-sleep.png"
+		},
+		"right": {
+			"blink": "parts/right-blink.png",
+			"sleep": "parts/right-sleep.png"
+		}
+	},
+	"filter": "nearest",
+	"foot_origin": [
+		24.0,
+		40.0
+	],
+	"held_anchors": {
+		"left": [
+			20.0,
+			32.0
+		],
+		"right": [
+			28.0,
+			32.0
+		]
+	},
+	"license": "CC-BY-4.0",
+	"license_url": "https://creativecommons.org/licenses/by/4.0/",
+	"modifications": [
+		"Split original 16x24 into native transparent parts; 48x48 animation canvas, unchanged 5px collision.",
+		"White hair, ribbon and violet clothing palette."
+	],
+	"occlusion": [
+		"leg_l",
+		"leg_r",
+		"torso",
+		"head",
+		"hair",
+		"headwear",
+		"book",
+		"arm_l",
+		"arm_r"
+	],
+	"optional_clothing": {
+		"headwear": {
+			"back": {
+				"anchor": [
+					24.0,
+					26.0
+				],
+				"bind": "head",
+				"path": "parts/back-headwear.png"
+			},
+			"front": {
+				"anchor": [
+					24.0,
+					26.0
+				],
+				"bind": "head",
+				"path": "parts/front-headwear.png"
+			},
+			"left": {
+				"anchor": [
+					24.0,
+					26.0
+				],
+				"bind": "head",
+				"path": "parts/left-headwear.png"
+			},
+			"right": {
+				"anchor": [
+					24.0,
+					26.0
+				],
+				"bind": "head",
+				"path": "parts/right-headwear.png"
+			}
+		}
+	},
+	"parts": {
+		"back": {
+			"arm_l": {
+				"anchor": [
+					20.0,
+					32.0
+				],
+				"path": "parts/back-arm_l.png",
+				"z": 3.0
+			},
+			"arm_r": {
+				"anchor": [
+					28.0,
+					32.0
+				],
+				"path": "parts/back-arm_r.png",
+				"z": 4.0
+			},
+			"hair": {
+				"anchor": [
+					24.0,
+					24.0
+				],
+				"path": "parts/back-hair.png",
+				"z": 1.0
+			},
+			"head": {
+				"anchor": [
+					24.0,
+					26.0
+				],
+				"path": "parts/back-head.png",
+				"z": 0.0
+			},
+			"leg_l": {
+				"anchor": [
+					21.0,
+					37.0
+				],
+				"path": "parts/back-leg_l.png",
+				"z": 5.0
+			},
+			"leg_r": {
+				"anchor": [
+					26.0,
+					37.0
+				],
+				"path": "parts/back-leg_r.png",
+				"z": 6.0
+			},
+			"torso": {
+				"anchor": [
+					24.0,
+					32.0
+				],
+				"path": "parts/back-torso.png",
+				"z": 2.0
+			}
+		},
+		"front": {
+			"arm_l": {
+				"anchor": [
+					20.0,
+					32.0
+				],
+				"path": "parts/front-arm_l.png",
+				"z": 3.0
+			},
+			"arm_r": {
+				"anchor": [
+					28.0,
+					32.0
+				],
+				"path": "parts/front-arm_r.png",
+				"z": 4.0
+			},
+			"hair": {
+				"anchor": [
+					24.0,
+					24.0
+				],
+				"path": "parts/front-hair.png",
+				"z": 1.0
+			},
+			"head": {
+				"anchor": [
+					24.0,
+					26.0
+				],
+				"path": "parts/front-head.png",
+				"z": 0.0
+			},
+			"leg_l": {
+				"anchor": [
+					21.0,
+					37.0
+				],
+				"path": "parts/front-leg_l.png",
+				"z": 5.0
+			},
+			"leg_r": {
+				"anchor": [
+					26.0,
+					37.0
+				],
+				"path": "parts/front-leg_r.png",
+				"z": 6.0
+			},
+			"torso": {
+				"anchor": [
+					24.0,
+					32.0
+				],
+				"path": "parts/front-torso.png",
+				"z": 2.0
+			}
+		},
+		"left": {
+			"arm_l": {
+				"anchor": [
+					20.0,
+					32.0
+				],
+				"path": "parts/left-arm_l.png",
+				"z": 3.0
+			},
+			"arm_r": {
+				"anchor": [
+					28.0,
+					32.0
+				],
+				"path": "parts/left-arm_r.png",
+				"z": 4.0
+			},
+			"hair": {
+				"anchor": [
+					24.0,
+					24.0
+				],
+				"path": "parts/left-hair.png",
+				"z": 1.0
+			},
+			"head": {
+				"anchor": [
+					24.0,
+					26.0
+				],
+				"path": "parts/left-head.png",
+				"z": 0.0
+			},
+			"leg_l": {
+				"anchor": [
+					21.0,
+					37.0
+				],
+				"path": "parts/left-leg_l.png",
+				"z": 5.0
+			},
+			"leg_r": {
+				"anchor": [
+					26.0,
+					37.0
+				],
+				"path": "parts/left-leg_r.png",
+				"z": 6.0
+			},
+			"torso": {
+				"anchor": [
+					24.0,
+					32.0
+				],
+				"path": "parts/left-torso.png",
+				"z": 2.0
+			}
+		},
+		"right": {
+			"arm_l": {
+				"anchor": [
+					20.0,
+					32.0
+				],
+				"path": "parts/right-arm_l.png",
+				"z": 3.0
+			},
+			"arm_r": {
+				"anchor": [
+					28.0,
+					32.0
+				],
+				"path": "parts/right-arm_r.png",
+				"z": 4.0
+			},
+			"hair": {
+				"anchor": [
+					24.0,
+					24.0
+				],
+				"path": "parts/right-hair.png",
+				"z": 1.0
+			},
+			"head": {
+				"anchor": [
+					24.0,
+					26.0
+				],
+				"path": "parts/right-head.png",
+				"z": 0.0
+			},
+			"leg_l": {
+				"anchor": [
+					21.0,
+					37.0
+				],
+				"path": "parts/right-leg_l.png",
+				"z": 5.0
+			},
+			"leg_r": {
+				"anchor": [
+					26.0,
+					37.0
+				],
+				"path": "parts/right-leg_r.png",
+				"z": 6.0
+			},
+			"torso": {
+				"anchor": [
+					24.0,
+					32.0
+				],
+				"path": "parts/right-torso.png",
+				"z": 2.0
+			}
+		}
+	},
+	"pixel_scale": 1.0,
+	"rig_version": "1.0",
+	"schema_version": 1.0,
+	"skin_id": "fv.moon",
+	"source": "https://opengameart.org/content/cozy-town-lite-%E2%80%94-16x16-top-down-street-tiles-caf%C3%A9-and-walking-character",
+	"unsupported": {
+		"blink:back": "背面无可见眼睛；不伪造正面眨眼"
+	},
+	"version": "1.0.0"
 }

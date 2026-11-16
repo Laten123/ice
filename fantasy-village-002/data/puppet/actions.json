@@ -25,7 +25,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -45,7 +46,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 2,
@@ -69,21 +71,24 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {},
           "expression": "blink",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {},
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 5,
@@ -119,7 +124,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -139,7 +145,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -159,7 +166,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -179,7 +187,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 3,
@@ -228,7 +237,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -260,7 +270,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -292,7 +303,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -324,7 +336,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -356,7 +369,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -388,7 +402,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 8,
@@ -412,28 +427,32 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {},
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 1
+          "facing_step": 1,
+          "fold_legs": false
         },
         {
           "offsets": {},
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 2
+          "facing_step": 2,
+          "fold_legs": false
         },
         {
           "offsets": {},
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 3
+          "facing_step": 3,
+          "fold_legs": false
         }
       ],
       "fps": 5,
@@ -486,7 +505,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -522,7 +542,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -558,7 +579,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -594,7 +616,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         }
       ],
       "fps": 8,
@@ -644,7 +667,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -680,7 +704,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -716,7 +741,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -752,7 +778,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         }
       ],
       "fps": 8,
@@ -802,7 +829,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -838,7 +866,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -874,7 +903,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -910,7 +940,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 8,
@@ -964,7 +995,8 @@
           "expression": "none",
           "book": "closed",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1004,7 +1036,8 @@
           "expression": "none",
           "book": "closed",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1044,7 +1077,8 @@
           "expression": "none",
           "book": "closed",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1084,7 +1118,8 @@
           "expression": "none",
           "book": "closed",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         }
       ],
       "fps": 8,
@@ -1134,7 +1169,8 @@
           "expression": "none",
           "book": "open",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1170,7 +1206,8 @@
           "expression": "none",
           "book": "open",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1206,7 +1243,8 @@
           "expression": "none",
           "book": "open",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1242,7 +1280,8 @@
           "expression": "none",
           "book": "open",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         }
       ],
       "fps": 8,
@@ -1292,7 +1331,8 @@
           "expression": "none",
           "book": "open",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1328,7 +1368,8 @@
           "expression": "none",
           "book": "open",
           "page": 1,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1364,7 +1405,8 @@
           "expression": "none",
           "book": "open",
           "page": 2,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1400,7 +1442,8 @@
           "expression": "none",
           "book": "open",
           "page": 3,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         }
       ],
       "fps": 8,
@@ -1450,7 +1493,8 @@
           "expression": "none",
           "book": "open",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1486,7 +1530,8 @@
           "expression": "none",
           "book": "open",
           "page": 1,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1522,7 +1567,8 @@
           "expression": "none",
           "book": "open",
           "page": 2,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1558,7 +1604,8 @@
           "expression": "none",
           "book": "open",
           "page": 3,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1594,7 +1641,8 @@
           "expression": "none",
           "book": "open",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1630,7 +1678,8 @@
           "expression": "none",
           "book": "open",
           "page": 1,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         }
       ],
       "fps": 8,
@@ -1680,7 +1729,8 @@
           "expression": "none",
           "book": "open",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1716,7 +1766,8 @@
           "expression": "none",
           "book": "open",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1752,7 +1803,8 @@
           "expression": "none",
           "book": "open",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1788,7 +1840,8 @@
           "expression": "none",
           "book": "open",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         }
       ],
       "fps": 8,
@@ -1842,7 +1895,8 @@
           "expression": "none",
           "book": "closed",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1882,7 +1936,8 @@
           "expression": "none",
           "book": "closed",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1922,7 +1977,8 @@
           "expression": "none",
           "book": "closed",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -1962,7 +2018,8 @@
           "expression": "none",
           "book": "closed",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         }
       ],
       "fps": 8,
@@ -2008,7 +2065,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2040,7 +2098,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2072,7 +2131,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2104,7 +2164,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2136,7 +2197,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2168,7 +2230,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 8,
@@ -2214,7 +2277,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2246,7 +2310,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2278,7 +2343,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2310,7 +2376,8 @@
           "expression": "sleep",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2342,7 +2409,8 @@
           "expression": "sleep",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2374,7 +2442,8 @@
           "expression": "sleep",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 8,
@@ -2420,7 +2489,8 @@
           "expression": "sleep",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2452,7 +2522,8 @@
           "expression": "sleep",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2484,7 +2555,8 @@
           "expression": "sleep",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2516,7 +2588,8 @@
           "expression": "sleep",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 8,
@@ -2562,7 +2635,8 @@
           "expression": "sleep",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2594,7 +2668,8 @@
           "expression": "sleep",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2626,7 +2701,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2658,7 +2734,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 8,
@@ -2704,7 +2781,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2736,7 +2814,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2768,7 +2847,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2800,7 +2880,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2832,7 +2913,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2864,7 +2946,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 8,
@@ -2890,7 +2973,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2902,7 +2986,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2914,7 +2999,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2926,7 +3012,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2938,7 +3025,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -2950,7 +3038,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 8,
@@ -2997,7 +3086,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3029,7 +3119,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3061,7 +3152,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3093,7 +3185,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3125,7 +3218,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3157,7 +3251,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 8,
@@ -3204,7 +3299,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3236,7 +3332,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3268,7 +3365,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3300,7 +3398,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3332,7 +3431,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3364,7 +3464,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 8,
@@ -3391,7 +3492,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3403,7 +3505,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3415,7 +3518,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3427,7 +3531,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3439,7 +3544,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         },
         {
           "offsets": {
@@ -3451,7 +3557,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": false
         }
       ],
       "fps": 8,
@@ -3502,7 +3609,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -3538,7 +3646,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -3574,7 +3683,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         },
         {
           "offsets": {
@@ -3610,7 +3720,8 @@
           "expression": "none",
           "book": "none",
           "page": 0,
-          "facing_step": 0
+          "facing_step": 0,
+          "fold_legs": true
         }
       ],
       "fps": 4,
