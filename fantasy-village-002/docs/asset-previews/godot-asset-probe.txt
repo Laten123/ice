@@ -1,3 +1,3 @@
 Godot 4.6.3-stable (official)
-ASSET_PROBE png_ok=178 png_bad=0 alpha_png=98 audio_ok=18 audio_bad=0
+ASSET_PROBE png_ok=191 png_bad=0 alpha_png=111 audio_ok=18 audio_bad=0
 exit code 0

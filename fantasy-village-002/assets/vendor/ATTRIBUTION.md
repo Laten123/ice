@@ -8,7 +8,11 @@
 - **Cozy Farm Village Lite** by Bramble & Byte — https://aquumgifts.itch.io
 - **Cozy Farm Autumn Lite** by Bramble & Byte — https://aquumgifts.itch.io
 - **Cozy Farm SFX** by Bramble & Byte — https://aquumgifts.itch.io
-
+- **Cozy Town Lite** by Spaceyyy — https://aquumgifts.itch.io
+- **Cottage Core Bedroom Furniture Set** by Pixelandbeans — https://opengameart.org/users/pixelandbeans
+- **Warm Eclectic Bedroom Furniture Set** by Pixelandbeans — https://opengameart.org/users/pixelandbeans
+- **Cottage Top-down Asset Pack** by Lexaei — https://opengameart.org/users/lexaei
+- **Cozy Town derived stand/sit/read/rest** — based on "Cozy Town Lite" by Spaceyyy; modified by this project, CC-BY 4.0.
 原始下载页均为 OpenGameArt；对应页面和作者信息见 `ASSET_CATALOG.md`。四个 Lite 包的 `LICENSE.txt` 已随包保留。
 
 ## CC0 1.0（不强制署名，但仍记录来源）
@@ -22,6 +26,10 @@
 - **Forest bird sounds** — pauliuw — https://opengameart.org/content/forest-bird-sounds
 - **Birds and Wind — Ambient** — Spring Spring — https://opengameart.org/content/birds-and-wind-ambient-birds-wind-and-synth
 - **Kenney Tiny Town / Tiny Farm** — Kenney — https://kenney.nl（现有，见 `kenney/MANIFEST.md`）
+
+## 派生文件
+
+`characters/cozy-town-actions/actions_sit_read_rest.png` 是基于 Cozy Town Lite 的修改文件，不是原始作者的独立动作包。修改内容见同目录 `SOURCE.md`；继续按 CC-BY 4.0 署名。
 
 ## 使用约束
 

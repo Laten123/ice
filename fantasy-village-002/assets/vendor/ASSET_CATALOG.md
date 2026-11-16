@@ -2,13 +2,15 @@
 
 更新日期：2026-11-16。本轮只准备素材，没有修改地图、身份、私聊、寻路或场景代码。
 
+许可证原始证据与修改记录：`LICENSE_AUDIT.md`。
+
 基准：**16×16 像素网格**，透明 PNG；运行时由 Godot 4.6.3 直接读取原始文件。
 
 ## 1. 12 套基础资源核对结果
 
 | # | 资源 | 作者 | 许可证 | 原始来源 | 可公开再分发 | 已入库 | 正式地图建议 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Cozy Farm Lite | Bramble & Byte / roberto mellado | CC-BY 4.0 | [OGA](https://opengameart.org/content/cozy-farm-lite-16x16-top-down-farm-tiles-crops-farmer-hen) | 是，必须署名 | 88 PNG（1x） | 推荐作主地形 |
+| 1 | Cozy Farm Lite | Bramble & Byte / roberto mellado | CC-BY 4.0 | [OGA](https://opengameart.org/content/cozy-farm-lite-16x16-top-down-farm-tiles-crops-farmer-hen) | 是，必须署名 | 94 PNG（1x，含 6 张合集） | 推荐作主地形 |
 | 2 | Cozy Farm Village Lite | Bramble & Byte / roberto mellado | CC-BY 4.0 | [OGA](https://opengameart.org/content/cozy-farm-village-lite-16x16-cottage-cobblestone-baker) | 是，必须署名 | 19 PNG（1x） | 推荐作建筑补充 |
 | 3 | Cozy Farm Autumn Lite | Bramble & Byte / roberto mellado | CC-BY 4.0 | [OGA](https://opengameart.org/content/cozy-farm-autumn-lite-16x16-autumn-tiles-trees-path) | 是，必须署名 | 23 PNG（1x） | 推荐作秋景补充 |
 | 4 | Interior Spritesheet 16×16 | InThePixel | CC0 1.0 | [OGA](https://opengameart.org/content/interior-spritesheet-16x16-tiles) | 是 | 1 PNG | 只作墙/地板，不是家具套件 |
@@ -20,6 +22,11 @@
 | 10 | Cozy Farm SFX | Bramble & Byte / roberto mellado | CC-BY 4.0 | [OGA](https://opengameart.org/content/cozy-farm-sfx-50-farming-game-sound-effects-tools-harvest-shop-ui-jingles) | 是，必须署名 | 14 OGG（选自 50 WAV） | 推荐作生活音效 |
 | 11 | Forest Bird Sounds | pauliuw | CC0 1.0 | [OGA](https://opengameart.org/content/forest-bird-sounds) | 是 | 3 OGG（选自 15 WAV） | 推荐作鸟鸣环境音 |
 | 12 | Birds and Wind | Spring Spring | CC0 1.0 | [OGA](https://opengameart.org/content/birds-and-wind-ambient-birds-wind-and-synth) | 是 | 1 OGG（压缩版） | 推荐作环境循环 |
+| 13 | Cozy Town Lite（补充） | Spaceyyy | CC-BY 4.0 | [OGA](https://opengameart.org/content/cozy-town-lite-%E2%80%94-16x16-top-down-street-tiles-caf%C3%A9-and-walking-character) | 是，必须署名 | 3 PNG + JSON | 推荐作红瓦建筑/街道/待机角色 |
+| 14 | Cottage Core 家具（补充） | Pixelandbeans | CC-BY 4.0 | [OGA](https://opengameart.org/content/cottage-core-bedroom-furniture-set) | 是，必须署名 | 1 PNG | 风格接近，需做统一性测试 |
+| 15 | Warm Eclectic 家具（补充） | Pixelandbeans | CC-BY 4.0 | [OGA](https://opengameart.org/content/warm-eclectic-bedroom-furniture-set) | 是，必须署名 | 1 PNG | 风格接近，需做统一性测试 |
+| 16 | Cottage Top-down（候选） | Lexaei | CC-BY 4.0 | [OGA](https://opengameart.org/content/cottage-top-down-asset-pack) | 是，必须署名 | 1 PNG | 细节木屋；比例未确认，暂不推荐正式用 |
+| 17 | Cozy Town derived actions（项目派生） | Spaceyyy + 本项目 | CC-BY 4.0 | 基于 Cozy Town Lite | 是，必须署名 | 1 PNG | stand/sit/read/rest 原型，非原始动作包 |
 
 ### 已有素材
 
@@ -55,7 +62,7 @@ Kenney Tiny Town / Tiny Farm 继续保留在 `assets/vendor/kenney/`，不重复
 
 | 资源 | 入库文件数 | 原始文件数 | 尺寸 | 备注 |
 | --- | ---: | ---: | --- | --- |
-| Cozy Farm Lite | 88 PNG | 282 PNG | 16×16 为主；树 32×48；角色 48×64；母鸡 48×80；作物条 64×16 | 只保留 1x，不提交 2x/4x |
+| Cozy Farm Lite | 94 PNG（含 sheets/tileset） | 282 PNG | 16×16 为主；树 32×48；角色 48×64；母鸡 48×80；作物条 64×16 | 只保留 1x，不提交 2x/4x |
 | Cozy Farm Village Lite | 19 PNG | 57 PNG | 小屋 48×48；长椅/花箱 32×16；路灯 16×32；其余 16×16 | 只保留 1x |
 | Cozy Farm Autumn Lite | 23 PNG | 69 PNG | 树 32×48；其余 16×16 / 32×16 | 只保留 1x |
 | Kenney Tiny Town / Tiny Farm | 2 PNG | 2 PNG | 192×176 packed 图集，16×16 格 | 现有，未重复提交 |
@@ -74,6 +81,11 @@ Kenney Tiny Town / Tiny Farm 继续保留在 `assets/vendor/kenney/`，不重复
 | 资源 | 入库文件数 | 尺寸 / 帧数 | 动画结论 |
 | --- | ---: | --- | --- |
 | Interior Spritesheet | 1 PNG | 112×112 = 7×7 个 16px | 墙/地板模块，**没有家具** |
+| Cozy Town Lite | 3 PNG + JSON | 咖啡屋 80×80；街道图集 128×48；角色 96×192 | 红瓦/烟囱/窗/花箱/遮阳棚；角色 idle + walk 4 方向，16×24 帧 |
+| Cottage Core 家具 | 1 PNG | 333×64 | 床、书柜、凳子、灯、地毯等；细节密度高于 Cozy Farm |
+| Warm Eclectic 家具 | 1 PNG | 223×128 | 床、书柜、椅子、地毯等；不同作者 |
+| Cottage Top-down | 1 PNG | 440×256 | 精细木屋/红瓦/烟囱/窗/花箱；比例待确认 |
+| Cozy Town derived actions | 1 PNG | 96×96 = 4×4 个 24×24 帧 | stand/sit/read/rest 四方向；项目派生，不是原始动作包 |
 | 16×16 Animated Tiles | 4 PNG | 288×704 | 4 帧环境 tileset，循环；原文件是 JPEG 数据但后缀 PNG，已转真 PNG |
 | Animated Flowing Water | 1 PNG | 208×16 = 13 帧 16×16 | 横向水流，13 帧循环，右到左 |
 | Animated Tree and Water | 1 PNG | 100×85 | 3 帧 32×32 树摇曳 + 水/浪花帧；洋红底已转透明 |
@@ -94,14 +106,25 @@ Kenney Tiny Town / Tiny Farm 继续保留在 `assets/vendor/kenney/`，不重复
 在无编辑器导入缓存的临时工程中逐文件读取：
 
 ```text
-ASSET_PROBE png_ok=178 png_bad=0 alpha_png=98 audio_ok=18 audio_bad=0
+ASSET_PROBE png_ok=191 png_bad=0 alpha_png=111 audio_ok=18 audio_bad=0
 ```
 
-- 178 个 PNG 全部能通过 `Image.load_png_from_buffer` 读取；
-- 98 个带 alpha；
+- 191 个 PNG 全部能通过 `Image.load_png_from_buffer` 读取；
+- 111 个带 alpha；
 - 18 个 OGG 全部能由 `AudioStreamOggVorbis.load_from_file` 读取；
 - 没有依赖 `.import` 缓存；
 - 没有修改场景代码。
+
+### 实际 Godot 播放
+
+用 `tools/asset_animation_preview.gd` 在 Godot 4.6.3 中实际渲染：
+
+- `docs/asset-previews/godot/godot-water.gif`（13 帧）
+- `docs/asset-previews/godot/godot-tree.gif`（3 帧）
+- `docs/asset-previews/godot/godot-smoke.gif`（13 帧）
+- `docs/asset-previews/godot/godot-fire.gif`（17 帧）
+
+这些 GIF 的每一帧由 Godot SubViewport + AnimatedSprite2D 渲染，不是 Pillow 直接读素材生成的示意图。详见 `docs/asset-previews/godot/README.md`。
 
 ## 5. 推荐组合
 
@@ -109,44 +132,77 @@ ASSET_PROBE png_ok=178 png_bad=0 alpha_png=98 audio_ok=18 audio_bad=0
 
 - 地面/泥土/道路/围栏/作物：**Cozy Farm Lite**；
 - 蓝顶小屋/长椅/路灯/花箱/石板路：**Cozy Farm Village Lite**；
+- 红瓦建筑：**Cozy Town Lite 咖啡屋**（同作者、同调色板；是商业建筑，不是住宅木屋）；
 - 秋景树/落叶：**Cozy Farm Autumn Lite**（仅秋景版本，不混季节）；
 - 水景：**Animated Flowing Water** + **16×16 Animated Tiles**；
 - 烟/火：**SmokeLarge / SmokeSmall / FirePlume**；
-- 角色：Cozy Farm 农夫或面包师（只选一个主角，避免同图重复）。
+- 角色：Cozy Farm 农夫/面包师，或 Cozy Town player（idle + walk；只选一个主角，避免同图重复）；
+- 角色动作原型：`characters/cozy-town-actions/` 的 stand/sit/read/rest（项目派生，不是原始动作包）。
 
 **不要**把 Cozy Farm 与 Kenney 直接拼到同一正式图集：两者轮廓、调色板和阴影不同。Kenney 只作原型/临时填充，或单独做一个风格分区。
 
 ### 室内
 
-目前只有墙/地板，不能支撑完整室内。建议先保留 002 现有代码绘制占位房间，等家具套件确认后再拼；不要把不同作者的家具切碎混入一个图集。
+墙/地板来自 InThePixel；家具已有两套 CC-BY 候选（Pixelandbeans），覆盖床、书柜、椅子、地毯、灯等。它们不是 Cozy Farm 同作者，细节密度不同，必须先做统一性测试。建议保留 002 现有代码绘制占位房间，确认后再拼；不要把不同作者家具切碎混入一个图集。
 
 ### 音频
 
 推荐首批：`step-grass / step-wood / door-wood-open / door-wood-close / watering / sleep / ui-click / ui-confirm / forest_birds_1 / birds_and_wind_ambient`。
 
-## 6. 明确缺失
+## 6. 补充核心资源说明
 
-详见 `MISSING_ASSETS.md`。关键缺口：
+### 室内家具
 
-- 红瓦/木屋/烟囱/屋檐/窗门套件；
-- 床、书柜、书桌、茶桌、椅子、窗帘、灯、壁炉、地毯；
+新增两套 CC-BY 4.0 家具，独立目录：
+
+- `interiors/cottage-core-furniture/`
+- `interiors/warm-eclectic-furniture/`
+
+它们填补了床、书柜、椅子、地毯、灯、凳子等缺口，但来自 **Pixelandbeans**，不是 Cozy Farm 作者。细节密度和调色板与 Cozy Farm 不完全一致，**不能直接宣称完全同风格**；正式使用前需要单独做统一性测试，不能把两套家具切碎混成一张无来源图集。
+
+### 建筑
+
+新增 `buildings/cozy-town-lite/`：
+
+- 80×80 咖啡屋，红瓦屋顶、烟囱、窗户、花箱、遮阳棚；
+- 与 Cozy Farm 同一作者/调色板，作为红瓦建筑的首选；
+- 80×80 = 5×5 个 16px 格，可直接按底边落地。
+
+另收 `buildings/cottage-topdown-optional/` 的精细木屋，但它比例更细，未确认原生像素基准，**只作候选，不推荐直接进正式地图**。
+
+### 角色动作
+
+新增 `characters/cozy-town-actions/`：
+
+- stand：使用 Cozy Town 原始 idle 帧；
+- sit/read/rest：基于同一 player 帧派生，折叠腿部、加书、闭眼和 Z；
+- 4 列 = 下/左/右/上；4 行 = stand/sit/read/rest；24×24 帧；
+- **这是项目派生原型，不是第三方现成动作包**，不能对外宣称是原始作者提供的完整动作集。
+
+## 7. 明确缺失
+
+详见 `MISSING_ASSETS.md`。补充后仍然缺：
+
+- 与 Cozy Farm 完全同源的可组合 16px 住宅木屋；Cozy Town 咖啡屋是红瓦商业建筑，Cottage Top-down 木屋比例待确认；
+- 与 Cozy Farm 完全同源的家具；现有两套 Pixelandbeans 家具可作候选，但细节密度不同；
 - 樱花、紫藤、果树花期、池塘、木桥、花圃组合；
-- 四方向待机、坐下、起身、阅读、睡眠、使用物品、进出屋；
+- **原始作者提供的**坐下、起身、阅读、睡眠、使用物品、进出屋动作；当前只有项目派生原型；
 - 雨、雪、落叶、灯光、动物活动；
 - 翻书、流水、雨声、夜间虫鸣。
 
-## 7. 许可审计结论
+## 8. 许可审计结论
 
-- 12 套均使用 **CC0 1.0** 或 **CC-BY 4.0** 的 OGA 版本；
-- 4 套 Cozy Farm 系列需要署名，署名文本见 `ATTRIBUTION.md`；
+- 12 套基础素材加 5 个补充项均使用 **CC0 1.0** 或 **CC-BY 4.0**；
+- Cozy Farm / Cozy Town / Pixelandbeans / Lexaei 的 CC-BY 内容需要署名，署名文本见 `ATTRIBUTION.md`；
 - 没有 CC-BY-SA、付费或禁止再分发的素材进入公开仓库；
 - 未提交原始压缩包、2x/4x 重复图集、全部原始 WAV；
 - 001 未改动，未合并主分支，未发布。
 
-## 8. 体积
+## 9. 体积
 
-- `assets/vendor/`：**241 个文件，1,218,744 字节（约 1.16 MiB）**；
+- `assets/vendor/`：**268 个文件，1,283,652 字节（约 1.22 MiB）**；
 - 其中 Kenney 现有文件：13,436 字节；
-- 本轮新增 vendor 资源约 **1.20 MB**；
-- 预览图/文档另计，见 `docs/asset-previews/`；
+- 本轮新增 vendor 资源约 **1.27 MB**；
+- 预览图/文档另计，见 `docs/asset-previews/` 与 `docs/asset-previews/godot/`；
+- 许可证证据和修改记录见 `LICENSE_AUDIT.md`。
 - 没有使用 Git LFS；当前体积不需要修改仓库管理方式。若后续加入完整音频/大型图集，再提出 LFS 或独立归档方案，未经确认不启用。

@@ -78,9 +78,11 @@ python tools/make_placeholder_font.py \
 
 - 统一目录：`assets/vendor/terrain|buildings|interiors|vegetation|characters|animals|animations|weather|audio|ui/`
 - 完整目录与许可证审计：`assets/vendor/ASSET_CATALOG.md`
+- 许可证原始证据与修改记录：`assets/vendor/LICENSE_AUDIT.md`
 - 缺失清单：`assets/vendor/MISSING_ASSETS.md`
 - 署名：`assets/vendor/ATTRIBUTION.md`
 - 可视化预览与尺寸透视报告：`docs/asset-previews/`
+- Godot 实际播放预览：`docs/asset-previews/godot/`
 
 ## 素材许可
 
