@@ -80,6 +80,8 @@ func run() -> void:
 	for direction in range(4):
 		check(home.presentation.frames.get_frame_count("walk_%d"%direction)==6,"Six native walking frames direction %d"%direction)
 		check(home.presentation.frames.get_frame_count("idle_%d"%direction)==2,"Idle/blink frames direction %d"%direction)
+		var idle_frames: SpriteFrames=home.presentation.frames
+		check(idle_frames.get_frame_texture("idle_%d"%direction,0).get_image().get_data()!=idle_frames.get_frame_texture("idle_%d"%direction,1).get_image().get_data(),"Idle frames contain actual blink/breath changes direction %d"%direction)
 	for motion in ["read","rest","sit_down","stand_up","tea"]:
 		check(home.presentation.frames.get_frame_count(motion)>=3,"Reusable visible frames for "+motion)
 	var f: SpriteFrames=home.presentation.frames
@@ -116,6 +118,12 @@ func run() -> void:
 		community.size=dimensions;community._layout()
 		var shown: Vector2=community.HOME_SIZE * community.home.scale
 		check(shown.x<=community.map_clip.size.x+.01 and shown.y<=community.map_clip.size.y+.01,"Full plot fits viewport %s"%dimensions)
+		var outdoor_scale: float=community.home.scale.x
+		community.home.enter_house()
+		var room_size: Vector2=Vector2(224,176)*community.home.scale
+		check(room_size.x<=community.map_clip.size.x+.01 and room_size.y<=community.map_clip.size.y+.01,"Entire room fits viewport %s"%dimensions)
+		check(community.home.scale.x>=outdoor_scale,"Indoor camera uses available room space %s"%dimensions)
+		community.home.exit_house()
 	community.queue_free()
 	home.queue_free();await process_frame
 	print("RESULT: %d/%d home v3 checks passed"%[checks-failures,checks])

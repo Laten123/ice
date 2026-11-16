@@ -1,0 +1,51 @@
+{
+  "source": "Godot viewport captures",
+  "frame_duration_ms": 100,
+  "animations": {
+    "environment": {
+      "captured_frames": 40,
+      "distinct_captured_frames": 40,
+      "size": [
+        1248,
+        816
+      ]
+    },
+    "reading": {
+      "captured_frames": 25,
+      "distinct_captured_frames": 2,
+      "size": [
+        1248,
+        816
+      ]
+    },
+    "resting": {
+      "captured_frames": 25,
+      "distinct_captured_frames": 2,
+      "size": [
+        1248,
+        816
+      ]
+    },
+    "entering": {
+      "captured_frames": 18,
+      "distinct_captured_frames": 18,
+      "size": [
+        1248,
+        816
+      ]
+    },
+    "leaving": {
+      "captured_frames": 18,
+      "distinct_captured_frames": 18,
+      "size": [
+        1248,
+        816
+      ]
+    }
+  },
+  "pixel_checks": {
+    "outdoor": "exact nearest 3x blocks",
+    "indoor-reading": "exact nearest 3x blocks",
+    "indoor-rest": "exact nearest 3x blocks"
+  }
+}

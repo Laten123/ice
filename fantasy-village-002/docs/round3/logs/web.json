@@ -1,0 +1,35 @@
+{
+  "errors": [],
+  "responses": [
+    {
+      "url": "http://127.0.0.1:8765/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8765/index.js",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8765/index.wasm",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8765/index.pck",
+      "status": 200
+    }
+  ],
+  "console": [
+    "log: Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org",
+    "log: OpenGL API OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium)) - Compatibility - Using Device: WebKit - WebKit WebGL",
+    "log: Build configuration: Emscripten 4.0.20, single-threaded, no GDExtension support.",
+    "warning: The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio"
+  ],
+  "steps": [
+    "Touch nickname field, enter local identity, tap enter",
+    "Touch outdoor ground to move owner",
+    "Touch front door and wait for owner path/entry",
+    "Rotate viewport to landscape",
+    "360px portrait complete map check",
+    "Touch indoor doorway to leave"
+  ]
+}

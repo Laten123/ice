@@ -1,7 +1,7 @@
 """Reproducible project derivatives of licensed source art. Pillow only, nearest pixels."""
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter
-import json, random
+import json, random, hashlib
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'assets/derived/home_v3';OUT.mkdir(parents=True,exist_ok=True)
 source=(ROOT/'docs/art-review/round2/build_samples.py').read_text().split('# OUTDOOR')[0]
@@ -41,8 +41,15 @@ for x,y,w,h in [(176,128,3,9),(96,176,6,2),(304,176,4,4)]:ns['rect_tiles'](groun
 # Pond banks: stepped non-rectangular wet-earth shoreline and underwater depth.
 pond=[(45,216),(57,207),(88,211),(100,225),(95,242),(76,249),(50,242),(41,229)]
 d=ImageDraw.Draw(ground);d.polygon(pond,fill='#8b8e6b');d.line(pond+[pond[0]],fill='#b8b48b',width=2)
-# Soil furrows and distinct crops, not inventory icons.
-for y in [188,204,220]:d.line((311,y+5,361,y+5),fill='#816244',width=2)
+# Earth clods and raised rows replace the source tile's plank-like long stripes.
+d.polygon([(305,177),(365,177),(368,181),(367,236),(364,239),(306,238),(303,234),(304,181)],fill='#90704e',outline='#7b694b')
+soil_rng=random.Random(491)
+for i in range(210):
+ x,y=soil_rng.randrange(306,366),soil_rng.randrange(180,237)
+ d.line((x,y,x+soil_rng.randrange(1,3),y),fill=soil_rng.choice(['#987751','#a28259','#806445']))
+for y in [200,216,232]:
+ d.polygon([(308,y-5),(312,y-8),(362,y-8),(365,y-4),(362,y),(311,y)],fill='#a17c52')
+ for x in range(311,363,7):d.line((x,y,x+4,y),fill='#6f573e');d.point((x+1,y-5),fill='#bb9669')
 for row,k in enumerate(['carrot','tomato','wheat']):
  for col in range(3):
   st=[2,3,4][col];crop=asset(F+f'crops/{k}/{k}-{st}-'+{2:'sprout',3:'growing',4:'ready'}[st]+'.png');ground.alpha_composite(crop,(312+col*16,184+row*16-(crop.height-16)))
@@ -86,6 +93,8 @@ for direction in range(4):
   f=base.crop((0,direction*24,16,(direction+1)*24))
   if n and direction==0:
    dr=ImageDraw.Draw(f);dr.rectangle((4,10,6,11),fill='#f2d0b5');dr.rectangle((9,10,11,11),fill='#f2d0b5');dr.line((4,11,6,11),fill='#665244');dr.line((9,11,11,11),fill='#665244')
+  if n and direction!=0:
+   original=f.copy();f=Image.new('RGBA',(16,24));f.alpha_composite(original.crop((0,0,16,18)),(0,-1));f.alpha_composite(original.crop((0,17,16,24)),(0,17))
   save(body(f),f'idle_{direction}_{n}')
 front=base.crop((0,0,16,24))
 for phase in ['sit','read','rest','tea']:
@@ -108,8 +117,6 @@ save(ns['bed'].crop((4,27,49,57)),'blanket')
 chim=Image.new('RGBA',(12,21));dd=ImageDraw.Draw(chim);dd.rectangle((2,2,10,20),fill='#887465');dd.rectangle((0,0,11,3),fill='#b19a80')
 for y in [7,12,17]:dd.line((3,y,9,y),fill='#655b54')
 save(chim,'chimney')
-(OUT/'sources.json').write_text(json.dumps({'source_assets':list(used.values()),'project_drawn':['window','smoke_0..5','chimney','plank floor','skin action pixel edits'],'all_frames':'native size; nearest only'},ensure_ascii=False,indent=2)+'\n')
-print('Derived art built',len(list(OUT.glob('*.png'))),'PNGs')
 # Seat fronts are separate occluders, not whole sprites covering the resident.
 save(ns['chair'].crop((0,16,19,23)),'chair_front')
 save(ns['bench'].crop((0,10,31,15)),'bench_front')
@@ -124,3 +131,9 @@ for phase in ['open_book','close_book']:
  for n in range(3):
   im=Image.open(OUT/'sit_0.png').convert('RGBA');dr=ImageDraw.Draw(im);width=[3,7,12][n if phase=='open_book' else 2-n];left=16-width//2
   dr.rectangle((left,24,left+width,29),fill='#72553d');dr.rectangle((left+1,24,left+width-1,28),fill='#eedcb0');dr.line((16,24,16,28),fill='#a68c60');save(im,f'{phase}_{n}')
+
+# Final provenance describes actual runtime inputs, not unused helper experiments.
+source_assets=[v for v in used.values() if v['path'] not in ['assets/vendor/'+P,'assets/vendor/'+ns['D']]]
+source_assets.append({'path':'assets/vendor/'+P,'sha256':hashlib.sha256((ROOT/'assets/vendor'/P).read_bytes()).hexdigest(),'crop':'16x24 native frame grid','treatment':'original palette; project action pixel edits; optional actor tint in Godot'})
+(OUT/'sources.json').write_text(json.dumps({'source_assets':source_assets,'project_drawn':['interior window','smoke_0..5','chimney','plank floor','tea table','contact shadows and pond bank','skin action pixel edits and occluders'],'all_frames':'native size; nearest only','note':'Source helper may read other experiments, but these are not runtime action inputs.'},ensure_ascii=False,indent=2)+'\n')
+print('Derived art built',len(list(OUT.glob('*.png'))),'PNGs')

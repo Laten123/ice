@@ -1,0 +1,33 @@
+{
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "target": "Web single-thread release",
+  "command": "python3 tools/build.py --target web",
+  "success": true,
+  "files": {
+    "index.html": {
+      "bytes": 5284,
+      "sha256": "4c7873fc720a943fff98a9b2c04629578866d3c9ed1e3249d95690fd512c2371"
+    },
+    "index.js": {
+      "bytes": 315759,
+      "sha256": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981"
+    },
+    "index.audio.position.worklet.js": {
+      "bytes": 2973,
+      "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+    },
+    "index.wasm": {
+      "bytes": 37700666,
+      "sha256": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6"
+    },
+    "index.audio.worklet.js": {
+      "bytes": 7298,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+    },
+    "index.pck": {
+      "bytes": 5621996,
+      "sha256": "fd19324b4562eb67276202ab7747d4aa23994129e5be225b3deff289b12587a0"
+    }
+  },
+  "publication": "none; local browser only"
+}

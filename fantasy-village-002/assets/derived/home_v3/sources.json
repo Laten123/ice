@@ -1,50 +1,6 @@
 {
   "source_assets": [
     {
-      "path": "assets/vendor/buildings/cozy-town-lite/characters/player-1-walk.png",
-      "sha256": "772eaaeb9d71c63d54766eda5f3e3dba83c939f63f1224ac4909c72443b2e7b3",
-      "crop": [
-        0,
-        0,
-        16,
-        24
-      ],
-      "treatment": "soft"
-    },
-    {
-      "path": "assets/vendor/characters/cozy-town-actions/actions_sit_read_rest.png",
-      "sha256": "ea356891202d131888bbdc61a764f17428635ed9d6516c161fe5df60182586de",
-      "crop": [
-        0,
-        24,
-        18,
-        48
-      ],
-      "treatment": "soft"
-    },
-    {
-      "path": "assets/vendor/characters/cozy-town-actions/actions_sit_read_rest.png",
-      "sha256": "ea356891202d131888bbdc61a764f17428635ed9d6516c161fe5df60182586de",
-      "crop": [
-        0,
-        48,
-        18,
-        72
-      ],
-      "treatment": "soft"
-    },
-    {
-      "path": "assets/vendor/characters/cozy-town-actions/actions_sit_read_rest.png",
-      "sha256": "ea356891202d131888bbdc61a764f17428635ed9d6516c161fe5df60182586de",
-      "crop": [
-        0,
-        72,
-        18,
-        96
-      ],
-      "treatment": "soft"
-    },
-    {
       "path": "assets/vendor/buildings/cottage-topdown-optional/cabin.png",
       "sha256": "ce51575824998d59bff5fdf6cbbc7d31d32ee7b82e8985a7442e82138a570f80",
       "crop": [
@@ -366,14 +322,23 @@
       "sha256": "2703eef6f9b4de0847557e76ddbfb6aa0943fd21b350ca475e9e7dafb01cf478",
       "crop": null,
       "treatment": "water"
+    },
+    {
+      "path": "assets/vendor/buildings/cozy-town-lite/characters/player-1-walk.png",
+      "sha256": "772eaaeb9d71c63d54766eda5f3e3dba83c939f63f1224ac4909c72443b2e7b3",
+      "crop": "16x24 native frame grid",
+      "treatment": "original palette; project action pixel edits; optional actor tint in Godot"
     }
   ],
   "project_drawn": [
-    "window",
+    "interior window",
     "smoke_0..5",
     "chimney",
     "plank floor",
-    "skin action pixel edits"
+    "tea table",
+    "contact shadows and pond bank",
+    "skin action pixel edits and occluders"
   ],
-  "all_frames": "native size; nearest only"
+  "all_frames": "native size; nearest only",
+  "note": "Source helper may read other experiments, but these are not runtime action inputs."
 }

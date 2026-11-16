@@ -1,0 +1,68 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS: Ground stays above UI panel in nested community view
+PASS: Outdoor uses TileMapLayer
+PASS: Indoor has independent TileMapLayer
+PASS: Indoor furniture has collision footprints
+PASS: Pond rejects movement destination
+PASS: Bed rejects walking through furniture
+PASS: Indoor route reaches bed approach
+PASS: Entire indoor walk stays outside furniture
+PASS: Owner can path to outdoor door
+PASS: Owner crosses door and observes indoor view
+PASS: Owner can path to indoor door
+PASS: Owner leaves room via doorway
+PASS: Observer view changes do not teleport AI
+PASS: Owner movement never changes AI destination
+PASS: Controller reaches sit
+PASS: Controller reaches read
+PASS: Controller reaches rest
+PASS: Controller reaches enter
+PASS: Controller reaches exit
+PASS: Controller reaches interact
+PASS: AI actually enters independent indoor region
+PASS: Observer switching preserves current indoor action and position
+PASS: AI walks around pond and furniture in both regions
+PASS: Life activities execute in both regions
+PASS: Sprite parent follows physical region
+PASS: Six native walking frames direction 0
+PASS: Idle/blink frames direction 0
+PASS: Idle frames contain actual blink/breath changes direction 0
+PASS: Six native walking frames direction 1
+PASS: Idle/blink frames direction 1
+PASS: Idle frames contain actual blink/breath changes direction 1
+PASS: Six native walking frames direction 2
+PASS: Idle/blink frames direction 2
+PASS: Idle frames contain actual blink/breath changes direction 2
+PASS: Six native walking frames direction 3
+PASS: Idle/blink frames direction 3
+PASS: Idle frames contain actual blink/breath changes direction 3
+PASS: Reusable visible frames for read
+PASS: Reusable visible frames for rest
+PASS: Reusable visible frames for sit_down
+PASS: Reusable visible frames for stand_up
+PASS: Reusable visible frames for tea
+PASS: Reading actually changes page pixels
+PASS: Rest has visible breathing frames
+PASS: Facility reservation succeeds
+PASS: Another identity cannot take occupied facility
+PASS: Facility releases after use
+PASS: Occupied facility is skipped without teleporting or stealing
+PASS: Empty requesting identity rejected
+PASS: Forged neighbor request rejected
+PASS: Authenticated resident can request a visit
+PASS: Duplicate pending visit is idempotent
+PASS: Target UUID alone cannot impersonate authenticated owner
+PASS: Authenticated owner can approve owned land
+PASS: Resolved approval cannot be changed a second time
+PASS: Public view contains no chat or memory
+PASS: Full plot fits viewport (360.0, 800.0)
+PASS: Entire room fits viewport (360.0, 800.0)
+PASS: Indoor camera uses available room space (360.0, 800.0)
+PASS: Full plot fits viewport (480.0, 800.0)
+PASS: Entire room fits viewport (480.0, 800.0)
+PASS: Indoor camera uses available room space (480.0, 800.0)
+PASS: Full plot fits viewport (844.0, 390.0)
+PASS: Entire room fits viewport (844.0, 390.0)
+PASS: Indoor camera uses available room space (844.0, 390.0)
+RESULT: 65/65 home v3 checks passed

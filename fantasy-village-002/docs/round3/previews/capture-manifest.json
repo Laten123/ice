@@ -1,0 +1,954 @@
+[
+	{
+		"action": "idle",
+		"image": "outdoor.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "read",
+		"image": "outdoor-reading.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "enter",
+		"image": "enter-house.png",
+		"observer_inside": false,
+		"phase": "portal",
+		"region": "outside"
+	},
+	{
+		"action": "enter",
+		"image": "entering-000.png",
+		"observer_inside": false,
+		"phase": "portal",
+		"region": "outside"
+	},
+	{
+		"action": "enter",
+		"image": "entering-001.png",
+		"observer_inside": false,
+		"phase": "portal",
+		"region": "outside"
+	},
+	{
+		"action": "enter",
+		"image": "entering-002.png",
+		"observer_inside": false,
+		"phase": "portal",
+		"region": "outside"
+	},
+	{
+		"action": "enter",
+		"image": "entering-003.png",
+		"observer_inside": false,
+		"phase": "portal",
+		"region": "outside"
+	},
+	{
+		"action": "enter",
+		"image": "entering-004.png",
+		"observer_inside": false,
+		"phase": "portal",
+		"region": "outside"
+	},
+	{
+		"action": "enter",
+		"image": "entering-005.png",
+		"observer_inside": false,
+		"phase": "portal",
+		"region": "outside"
+	},
+	{
+		"action": "enter",
+		"image": "entering-006.png",
+		"observer_inside": false,
+		"phase": "portal",
+		"region": "outside"
+	},
+	{
+		"action": "enter",
+		"image": "entering-007.png",
+		"observer_inside": false,
+		"phase": "portal",
+		"region": "outside"
+	},
+	{
+		"action": "idle",
+		"image": "entering-008.png",
+		"observer_inside": true,
+		"phase": "idle",
+		"region": "inside"
+	},
+	{
+		"action": "walk",
+		"image": "entering-009.png",
+		"observer_inside": true,
+		"phase": "idle",
+		"region": "inside"
+	},
+	{
+		"action": "walk",
+		"image": "entering-010.png",
+		"observer_inside": true,
+		"phase": "idle",
+		"region": "inside"
+	},
+	{
+		"action": "walk",
+		"image": "entering-011.png",
+		"observer_inside": true,
+		"phase": "idle",
+		"region": "inside"
+	},
+	{
+		"action": "walk",
+		"image": "entering-012.png",
+		"observer_inside": true,
+		"phase": "idle",
+		"region": "inside"
+	},
+	{
+		"action": "walk",
+		"image": "entering-013.png",
+		"observer_inside": true,
+		"phase": "idle",
+		"region": "inside"
+	},
+	{
+		"action": "walk",
+		"image": "entering-014.png",
+		"observer_inside": true,
+		"phase": "idle",
+		"region": "inside"
+	},
+	{
+		"action": "walk",
+		"image": "entering-015.png",
+		"observer_inside": true,
+		"phase": "idle",
+		"region": "inside"
+	},
+	{
+		"action": "walk",
+		"image": "entering-016.png",
+		"observer_inside": true,
+		"phase": "idle",
+		"region": "inside"
+	},
+	{
+		"action": "walk",
+		"image": "entering-017.png",
+		"observer_inside": true,
+		"phase": "idle",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "indoor-reading.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-000.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-001.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-002.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-003.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-004.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-005.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-006.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-007.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-008.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-009.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-010.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-011.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-012.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-013.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-014.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-015.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-016.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-017.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-018.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-019.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-020.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-021.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-022.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-023.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "read",
+		"image": "reading-024.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "indoor-rest.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-000.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-001.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-002.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-003.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-004.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-005.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-006.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-007.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-008.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-009.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-010.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-011.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-012.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-013.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-014.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-015.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-016.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-017.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-018.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-019.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-020.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-021.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-022.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-023.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "rest",
+		"image": "resting-024.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "interact",
+		"image": "indoor-tea.png",
+		"observer_inside": true,
+		"phase": "hold",
+		"region": "inside"
+	},
+	{
+		"action": "exit",
+		"image": "exit-house.png",
+		"observer_inside": true,
+		"phase": "portal",
+		"region": "inside"
+	},
+	{
+		"action": "exit",
+		"image": "leaving-000.png",
+		"observer_inside": true,
+		"phase": "portal",
+		"region": "inside"
+	},
+	{
+		"action": "exit",
+		"image": "leaving-001.png",
+		"observer_inside": true,
+		"phase": "portal",
+		"region": "inside"
+	},
+	{
+		"action": "exit",
+		"image": "leaving-002.png",
+		"observer_inside": true,
+		"phase": "portal",
+		"region": "inside"
+	},
+	{
+		"action": "exit",
+		"image": "leaving-003.png",
+		"observer_inside": true,
+		"phase": "portal",
+		"region": "inside"
+	},
+	{
+		"action": "exit",
+		"image": "leaving-004.png",
+		"observer_inside": true,
+		"phase": "portal",
+		"region": "inside"
+	},
+	{
+		"action": "exit",
+		"image": "leaving-005.png",
+		"observer_inside": true,
+		"phase": "portal",
+		"region": "inside"
+	},
+	{
+		"action": "exit",
+		"image": "leaving-006.png",
+		"observer_inside": true,
+		"phase": "portal",
+		"region": "inside"
+	},
+	{
+		"action": "exit",
+		"image": "leaving-007.png",
+		"observer_inside": true,
+		"phase": "portal",
+		"region": "inside"
+	},
+	{
+		"action": "idle",
+		"image": "leaving-008.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "leaving-009.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "leaving-010.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "leaving-011.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "leaving-012.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "leaving-013.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "leaving-014.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "leaving-015.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "leaving-016.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "leaving-017.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "night.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-000.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-001.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-002.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-003.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-004.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-005.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-006.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-007.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-008.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-009.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-010.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-011.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-012.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-013.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-014.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-015.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-016.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "walk",
+		"image": "animation-017.png",
+		"observer_inside": false,
+		"phase": "idle",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-018.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-019.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-020.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-021.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-022.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-023.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-024.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-025.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-026.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-027.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-028.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-029.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-030.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-031.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-032.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-033.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-034.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-035.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-036.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-037.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-038.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "interact",
+		"image": "animation-039.png",
+		"observer_inside": false,
+		"phase": "hold",
+		"region": "outside"
+	},
+	{
+		"action": "ui",
+		"image": "portrait.png",
+		"observer_inside": false,
+		"phase": "ui",
+		"region": "ui"
+	},
+	{
+		"action": "ui",
+		"image": "landscape.png",
+		"observer_inside": false,
+		"phase": "ui",
+		"region": "ui"
+	}
+]

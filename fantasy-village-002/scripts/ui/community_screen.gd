@@ -137,11 +137,14 @@ func _layout() -> void:
 		_place(dock, right_x, body_bottom - DOCK_H_WIDE, RIGHT_COL_W, DOCK_H_WIDE)
 		_place(channel, right_x, body_top, RIGHT_COL_W,
 			dock.position.y - GAP - body_top)
-	_place(map_clip, 6, 6, map_panel.size.x - 12, map_panel.size.y - 12)
-	var fit := minf(map_clip.size.x / HOME_SIZE.x, map_clip.size.y / HOME_SIZE.y)
-	var scale_value := floorf(fit) if fit >= 1.0 else fit
+	_place(map_clip, 4, 4, map_panel.size.x - 8, map_panel.size.y - 8)
+	var inside := home.is_interior_visible()
+	var focus_size := Vector2(224,176) if inside else HOME_SIZE
+	var focus_origin := Vector2(96,48) if inside else Vector2.ZERO
+	var fit := minf(map_clip.size.x / focus_size.x, map_clip.size.y / focus_size.y)
+	var scale_value := floorf(fit) if fit >= (2.0 if inside else 1.0) else fit
 	home.scale = Vector2.ONE * scale_value
-	home.position = (map_clip.size - HOME_SIZE * scale_value) / 2.0
+	home.position = (map_clip.size - focus_size * scale_value) / 2.0 - focus_origin * scale_value
 
 
 func _place(control: Control, x: float, y: float, width: float, height: float) -> void:
@@ -170,6 +173,7 @@ func _on_notice(text: String) -> void:
 
 
 func _on_interior_changed(is_open: bool) -> void:
+	_layout()
 	if dock != null:
 		dock.show_notice("进入小屋" if is_open else "回到小院")
 

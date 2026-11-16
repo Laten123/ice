@@ -43,26 +43,28 @@ jobs:
       - name: Run the 002 behavioral suite
         shell: bash
         run: |
-          "$GODOT_BIN" --headless --path fantasy-village-002 \
-            --script res://tests/smoke_test.gd 2>&1 | tee "$RUNNER_TEMP/fantasy-village-002-smoke.log"
-          python3 - "$RUNNER_TEMP/fantasy-village-002-smoke.log" <<'PY'
+          for suite in smoke_test home_v3_test; do
+            "$GODOT_BIN" --headless --path fantasy-village-002 \
+              --script "res://tests/$suite.gd" 2>&1 | tee "$RUNNER_TEMP/fantasy-village-002-$suite.log"
+            python3 - "$RUNNER_TEMP/fantasy-village-002-$suite.log" <<'PYTEST'
           import pathlib
           import re
           import sys
           log = pathlib.Path(sys.argv[1]).read_text()
-          match = re.search(r'RESULT: (\d+)/(\d+) checks passed', log)
+          match = re.search(r'RESULT: (\d+)/(\d+) (?:home v3 )?checks passed', log)
           if not match or int(match[2]) == 0 or match[1] != match[2]:
-              raise SystemExit('002 smoke suite did not pass cleanly.')
+              raise SystemExit('002 suite did not pass cleanly.')
           if 'SCRIPT ERROR:' in log or '\nERROR:' in log:
-              raise SystemExit('002 smoke suite reported an engine error.')
+              raise SystemExit('002 suite reported an engine error.')
           print('002 suite:', match.group(0))
-          PY
+          PYTEST
+          done
 
       - name: Upload the 002 test log
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: fantasy-village-002-smoke
-          path: ${{ runner.temp }}/fantasy-village-002-smoke.log
+          path: ${{ runner.temp }}/fantasy-village-002-*.log
           if-no-files-found: warn
           retention-days: 7

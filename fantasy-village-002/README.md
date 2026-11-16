@@ -15,9 +15,10 @@
 
 ```sh
 godot --headless --path . --script res://tests/smoke_test.gd
+godot --headless --path . --script res://tests/home_v3_test.gd
 ```
 
-字体与 Kenney 素材都在运行时从原始文件读取，不依赖编辑器导入缓存。重新生成字体：
+源码运行支持原始字体/PNG读取，导出支持Godot导入资源重映射。美术来源及修改说明见 `assets/derived/home_v3/README.md`。重新生成字体：
 
 ```sh
 python tools/make_placeholder_font.py \
@@ -25,22 +26,18 @@ python tools/make_placeholder_font.py \
   --font-number 2
 ```
 
-## 当前验证状态（2026-11-16）
+## 第三轮实现与验证（2026-11-16）
 
-- 行为与布局测试：**129/129 通过**，Godot 4.6.3 stable；日志 `docs/test-results/002-smoke.txt`。
-- 覆盖：身份与异常存档、登录、家园只含主人与绑定 AI、点击 AI 只查看资料、点击地面只移动主人、设施行为接口/占用/释放、AI 自主完成长椅→小屋→休息→出门、室内入口、材质同步、私聊固定、480×800 与 844×390 布局、寻路回归、土地索引权限接口。
-- 预览：`docs/previews/` 下登录页、家园、AI 生活、室内、横屏（Xvfb + llvmpipe 实际渲染）。
-- 未验证：Web 导出与浏览器、Android/Windows 真机、真实模型/账号/网络；**Android 中文输入法（软键盘）仍待真机验收**。
-- 阶段 B 代码清理报告：`docs/002-阶段B-家园实现.md`。
-- 持续集成：`https://github.com/Laten123/ice/actions/runs/43828598386`（成功）。
+明亮林间木屋方向已接入 Godot：室外26×17、室内14×11独立区域，完整建筑与家具节点、原生角色帧、设施交互、模拟自主生活，以及水面/烟雾/树冠/日夜循环。点击地面只移动主人；AI实际所在区域与观察视图分离。
 
-![登录页](docs/previews/002-login.png)
+- Godot 4.6.3：原有129/129 + 家园专项65/65；CI执行两套测试。
+- Web单线程Release导出与Chromium移动触摸流程通过；360/480宽竖屏及844×390横屏已检查。未进行Android物理手机、中文软键盘或Windows真机验收。
+- 完整攀床/掀被/翻身、门扇开合与更丰富的阅读手臂帧仍待补绘；已实现位置过渡、遮挡及局部帧动画，不冒充完整手绘动作。
+- [第三轮详细报告、测试、素材署名、截图与GIF](docs/round3/README.md)。旧阶段B截图保留作历史记录。
 
-![家园与自主生活的 AI](docs/previews/002-home-life.png)
-
-![可进入的室内占位房间](docs/previews/002-home-interior.png)
-
-![横屏家园](docs/previews/002-home-landscape.png)
+![家园实际运行](docs/round3/previews/outdoor.png)
+![室内实际阅读](docs/round3/previews/indoor-reading.png)
+![环境实际播放](docs/round3/previews/environment.gif)
 
 ## 结构
 
@@ -54,7 +51,8 @@ python tools/make_placeholder_font.py \
 | `scripts/ui/owner_dock.gd` | 主人信息、创意工坊/材质切换、只读资料与绑定私聊 |
 | `scripts/models/identity.gd` | Account / Land / Resident / ModelBinding 契约 |
 | `scripts/state/app_state.gd` | 一对一规则、UUID、本地存档 |
-| `scripts/world/home_plot.gd` | 26×17 家园执行器：绘制、碰撞、寻路、动作、室内 |
+| `scripts/world/home_plot.gd` | 设施执行、两区域寻路/碰撞、动作阶段与观察视图 |
+| `scripts/world/home_presentation.gd` | TileMapLayer地面、Sprite2D建筑家具、AnimatedSprite2D居民与环境 |
 | `scripts/world/resident_agent.gd` | 复用 001 的 A* 寻路与移动 |
 | `scripts/world/resident_action_state.gd` | `idle / walk / sit / read / rest / enter / exit` 动作状态 |
 | `scripts/world/resident_controller.gd` | 只做决策的控制器接口 |
@@ -68,13 +66,13 @@ python tools/make_placeholder_font.py \
 
 ## 已实现与未实现
 
-已实现：26×17 独立家园、CC0/CC-BY 像素素材、主人 + 绑定 AI、AI 本地自主生活演示、设施行为接口与占用、动作状态与图集分离、室内占位房间、固定绑定私聊、世界频道、材质同步、身份/存档校验、土地索引 AI 接口。
+已实现：26×17 独立家园、CC0/CC-BY 像素素材、主人 + 绑定 AI、AI 本地自主生活演示、设施行为接口与占用、动作状态与图集分离、独立室内三个功能区、固定绑定私聊、世界频道、材质同步、身份/存档校验、土地索引 AI 接口。
 
 明确未实现：世界地图界面（阶段 C）、真实模型、真实跨账号拜访、私人记忆、经济系统、多人同步、材质持久化、完整室内装修。
 
 ## 素材库
 
-本轮只建立素材库，不改地图代码。
+以下为既有素材库；第三轮实际使用清单见 `assets/derived/home_v3/README.md`。
 
 - 统一目录：`assets/vendor/terrain|buildings|interiors|vegetation|characters|animals|animations|weather|audio|ui/`
 - 完整目录与许可证审计：`assets/vendor/ASSET_CATALOG.md`
@@ -89,7 +87,7 @@ python tools/make_placeholder_font.py \
 
 - Cozy Farm Lite / Village / Autumn / SFX：CC-BY 4.0，署名见 `assets/vendor/ATTRIBUTION.md`。
 - Kenney Tiny Town / Tiny Farm：CC0 1.0。
-- 其余动画、室内、角色、鸟鸣素材：CC0 1.0；逐项来源见 `assets/vendor/ASSET_CATALOG.md`。
+- Lexaei木屋、Pixelandbeans家具、Spaceyyy角色：CC BY 4.0；InThePixel水面：CC0。其他素材必须逐项查看 `assets/vendor/ASSET_CATALOG.md`，不能统一视为CC0。
 - 原始压缩包 SHA256、文件名和下载日期见 `assets/vendor/ASSET_CATALOG.md` 与 `assets/vendor/kenney/MANIFEST.md`。
 
 ## 与 001 的关系
