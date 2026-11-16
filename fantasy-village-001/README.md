@@ -4,6 +4,8 @@
 
 ## 试玩
 
+[Android 手机直接打开 Web 试玩](https://laten123.github.io/ice/)（GitHub Pages，无需下载 ZIP）。
+
 - **Windows**：完整解压交付包，双击 `launch_windows.bat`，优先运行 `builds/windows/FantasyVillage.exe`。只下载源码时，需要安装 Godot 4.6.3，并将 `GODOT_BIN` 指向其 EXE，或将 `godot.exe` 加入 PATH。
 - **Web / Android 浏览器**：完整解压交付包后，在 Windows 双击 `play_web.bat`（需要 Python 3），或运行 `python tools/serve_web.py --open-browser`。电脑打开 `http://127.0.0.1:8060/`；Android 与电脑连接同一 Wi-Fi，用支持 WebGL 2 的 Chrome 打开 `http://电脑的局域网IPv4:8060/`。保持服务器窗口打开，首次连接时允许本地网络访问。不能直接双击 `index.html` 运行。
 - Web 构建位于 `builds/web/`，也可以把其中的全部文件放到静态 HTTP(S) 服务器。采用单线程 Web 导出，不需要跨源隔离响应头。

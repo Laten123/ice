@@ -47,6 +47,36 @@
 - Pages 风格子路径下的 HTTP/MIME 检查通过；桌面 1280×900、手机竖屏 390×844、横屏 844×390 均通过浏览器测试，控制台无错误，中文正常显示，点击与触摸更新信息卡和移动状态。
 - 工作流结构、分支触发、固定 Actions 提交号、任务权限隔离与 Bash 语法检查通过。
 
-Actions 运行、公开地址和线上 HTTPS 验收的准确结果将在发布后填入。未发布前不将预期地址称为可用试玩链接。测试使用 Chromium 的手机视口和触摸模拟，不替代 Android 实体设备测试。
+线上部署和验收已于 2026-11-16 完成。测试使用 Chromium 的手机视口和触摸模拟，不替代 Android 实体设备测试。
 
 首次 GitHub 校验发现任务级 `env` 不允许使用 `runner.temp`，因此任务尚未启动。已将三项 XDG 路径改为允许的 `github.workspace` 下的临时构建目录。补充使用官方 actionlint 1.7.12 校验，退出码 0、无诊断；在修正后的目录设置下重新运行原有 41 项测试，全部通过。该修复仅影响 CI 临时目录。
+
+用户已明确批准发布任务的 Pages/OIDC 权限，以及在保留现有审核规则的前提下允许指定分支，并确认 Pages 来源已切换为 GitHub Actions。运行 `43806080531` 的云端构建成功：官方依赖校验、Web 导出、41/41 行为测试、HTTP 子路径检查及 Pages 产物上传全部通过。发布启动前曾被既有 `github-pages` 环境分支规则拒绝。仓库所有者随后确认已添加准确的 `feature/001-project-skeleton` 分支规则并保留原有规则；重试失败的发布任务后成功。未通过另建环境或取消保护规则绕过此限制。
+
+
+## 实际发布和线上验收结果
+
+- Android 手机直接打开：**https://laten123.github.io/ice/**，无需 ZIP 或本地服务器。
+- 发布源提交：`51aa268771924b87bcf950232b565a7d7a77736a`。
+- Actions 运行：[43806080531](https://github.com/Laten123/ice/actions/runs/43806080531)，第二次尝试；`build`、`deploy`、`verify-live` 全部成功。重试沿用原成功构建，没有更改游戏。
+- 构建来自指定分支的 `fantasy-village-001/`；引擎为官方 Godot 4.6.3。
+
+| 检查项 | 结果 |
+| --- | --- |
+| HTML HTTPS GET | HTTP 200，`text/html` |
+| `index.js` | HTTP 200，`application/javascript` |
+| `index.wasm` | HTTP 200，`application/wasm`，37,700,666 字节，大小匹配导出元数据 |
+| `index.pck` | HTTP 200，`application/octet-stream`，108,668 字节；完整下载长度校验通过 |
+| 两个 audio worklet | HTTP 200，`application/javascript`；仅引擎运行时文件，无新增音乐 |
+| 线上 PCK SHA256 | `da1e56e0a36642c0d6b110c5b444d05d62f874fc782e4575b3e00542564d7ab1` |
+| 原有行为测试 | 41/41 通过 |
+| 线上桌面 Chromium | 1280×900，通过 |
+| 线上手机竖屏模拟 | 390×844，通过 |
+| 线上手机横屏模拟 | 844×390，通过 |
+| 点击和触摸 | 房屋信息卡更新、头像切换及点击空地移动通过；截图可见选中 AI 的“正在散步”状态 |
+| 中文 | 已检查本次线上测试生成的实际截图，标题、角色名、信息卡、台词均正常显示 |
+| 浏览器与引擎错误 | 三种视口均 `errors: []`，无页面溢出 |
+
+线上 JSON 验收摘要保存在 `docs/test-results/001-pages-live.json`。截图、完整控制台记录和 HTTP 报告上传为 Actions 产物 `fantasy-village-001-live-verification`（保留 3 天）；公开运行日志包含永久可核对的状态和测试结果。
+
+本次源码改动仅为部署工作流、CI 验证助手、部署记录及 README 试玩入口。未修改场景、脚本、美术、字体、旧工程或 `main`。没有提交个人密钥、引擎、导出模板、Windows/Web 构建二进制或缓存。最后的记录提交使用 `[skip ci]`，只补充已完成的测试结果，避免对同一游戏产物重复部署。
