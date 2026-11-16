@@ -1,0 +1,154 @@
+name: Deploy Fantasy Village 001 to GitHub Pages
+
+on:
+  push:
+    branches:
+      - feature/001-project-skeleton
+    paths:
+      - fantasy-village-001/**
+      - .github/workflows/deploy-fantasy-village-001.yml
+      - .github/scripts/prepare-godot-web.py
+      - .github/scripts/check-pages-artifact.py
+      - .github/scripts/check-live-pages.py
+  workflow_dispatch:
+
+# Build reads source only. Deployment permissions are confined to its job.
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-fantasy-village-001
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.repository == 'Laten123/ice' && github.ref == 'refs/heads/feature/001-project-skeleton'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GODOT_BIN: ${{ github.workspace }}/fantasy-village-001/.build-tools/godot/Godot_v4.6.3-stable_linux.x86_64
+      XDG_CONFIG_HOME: ${{ runner.temp }}/fantasy-village-001/config
+      XDG_DATA_HOME: ${{ runner.temp }}/fantasy-village-001/data
+      XDG_CACHE_HOME: ${{ runner.temp }}/fantasy-village-001/cache
+    steps:
+      - name: Check out the authorized project branch
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Prepare official Godot 4.6.3 and Web templates
+        shell: bash
+        run: |
+          mkdir -p "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_CACHE_HOME"
+          python3 .github/scripts/prepare-godot-web.py --project fantasy-village-001
+
+      - name: Build the existing Web export
+        shell: bash
+        run: python3 fantasy-village-001/tools/build.py --godot "$GODOT_BIN" --target web
+
+      - name: Run the existing Godot behavioral smoke suite
+        shell: bash
+        run: |
+          "$GODOT_BIN" --headless --path fantasy-village-001 --script res://tests/smoke_test.gd 2>&1 | tee "$RUNNER_TEMP/fantasy-village-001-smoke.log"
+          python3 - "$RUNNER_TEMP/fantasy-village-001-smoke.log" <<'PY'
+          import pathlib, re, sys
+          log = pathlib.Path(sys.argv[1]).read_text()
+          match = re.search(r'RESULT: (\d+)/(\d+) checks passed', log)
+          if not match or int(match[2]) == 0 or match[1] != match[2] or 'SCRIPT ERROR:' in log or '\nERROR:' in log:
+              raise SystemExit('Godot smoke suite did not pass cleanly.')
+          PY
+
+      - name: Check Pages files and HTTP MIME types under a subpath
+        shell: bash
+        run: python3 .github/scripts/check-pages-artifact.py fantasy-village-001/builds/web
+
+      - name: Include required runtime and font license notices
+        shell: bash
+        run: |
+          cp -R fantasy-village-001/LICENSES fantasy-village-001/builds/web/LICENSES
+          touch fantasy-village-001/builds/web/.nojekyll
+
+      - name: Upload only the tested Web export
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          name: fantasy-village-001-pages
+          path: fantasy-village-001/builds/web
+          retention-days: 1
+
+  deploy:
+    if: github.repository == 'Laten123/ice' && github.ref == 'refs/heads/feature/001-project-skeleton'
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+    # Requires the user's explicit approval before this draft is committed/run.
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish the tested Pages artifact
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+        with:
+          artifact_name: fantasy-village-001-pages
+
+  verify-live:
+    needs: deploy
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    # Public URL checks and evidence upload need no deployment permissions.
+    permissions:
+      contents: read
+    env:
+      PLAY_URL: ${{ needs.deploy.outputs.page_url }}
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    steps:
+      - name: Check out the same source commit for its existing browser tests
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Wait for the public HTTPS export and verify asset responses
+        shell: bash
+        run: |
+          mkdir -p fantasy-village-001/test-results
+          python3 .github/scripts/check-live-pages.py "$PLAY_URL" --output fantasy-village-001/test-results/live-http.json 2>&1 | tee fantasy-village-001/test-results/live-http.txt
+
+      - name: Prepare the pinned browser test library outside source
+        shell: bash
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pages-browser-check" --no-save --no-package-lock --ignore-scripts playwright@1.62.1
+
+      - name: Test the live site on desktop and Android viewport simulations
+        shell: bash
+        run: |
+          for browser_name in google-chrome google-chrome-stable chromium chromium-browser; do
+            if command -v "$browser_name" >/dev/null 2>&1; then
+              CHROMIUM_BIN="$(command -v "$browser_name")"
+              break
+            fi
+          done
+          if [ -z "${CHROMIUM_BIN:-}" ]; then
+            echo "No runner-installed Chrome or Chromium executable was found."
+            exit 1
+          fi
+          export CHROMIUM_BIN
+          export NODE_PATH="$RUNNER_TEMP/pages-browser-check/node_modules"
+          node fantasy-village-001/tests/browser_smoke.cjs 2>&1 | tee fantasy-village-001/test-results/live-browser.txt
+
+      - name: Upload live verification screenshots, console logs and results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: fantasy-village-001-live-verification
+          path: fantasy-village-001/test-results
+          if-no-files-found: warn
+          retention-days: 3
+
+
