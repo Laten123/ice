@@ -51,7 +51,7 @@ for name,title,variant in [('forest','林间旅人',0),('moon','月白居民',1)
     if not c[3]:continue
     r,g,b,a=c
     if variant:
-     if y<14 and r<150:c=(210+min(25,r//5),202+min(25,g//5),226+min(20,b//6),a)
+     if y<14 and r>=50 and g<150:c=(100,91,119,a) if (r+g+b)//3<60 else (192,184,207,a) if (r+g+b)//3<110 else (231,224,239,a)
      elif 14<=y<20 and not(r>180 and g>120):c=(96+g//4,64+b//4,145+g//5,a)
     part='head' if y<14 else ('arm_l' if x<6 else 'arm_r' if x>=10 else 'torso') if y<19 else ('leg_l' if x<8 else 'leg_r')
     layers[part].putpixel((16+x,17+y),c)

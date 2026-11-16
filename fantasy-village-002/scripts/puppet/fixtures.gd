@@ -23,12 +23,12 @@ static func layers(kind: String) -> Array:
 	return result
 static func door_image(open_weight: float) -> Image:
 	var source=Lib.png("res://assets/derived/puppet/door.png")
-	var im=Image.create(32,37,false,Image.FORMAT_RGBA8)
-	im.fill(Color("342c28"))
-	var width=maxi(2,roundi(32*(1-clampf(open_weight,0,1))))
+	var im=source.duplicate()
+	im.fill_rect(Rect2i(3,3,26,32),Color("342c28"))
+	var width=maxi(2,roundi(26*(1-clampf(open_weight,0,1))))
 	# Pixel hinge: copy original columns without interpolating/recoloring pixels.
-	for y in range(37):
-		for x in range(width):im.set_pixel(x,y,source.get_pixel(mini(31,int(float(x)*32/width)),y))
+	for y in range(3,35):
+		for x in range(width):im.set_pixel(x+3,y,source.get_pixel(3+mini(25,int(float(x)*26/width)),y))
 	return im
 static func openness(action: String,frame: int) -> float:
 	if action=="open_door":return float(frame)/5
@@ -43,3 +43,9 @@ static func preview_offset(kind: String,action: String,t: float) -> Vector2:
 		if action=="exit_house":return Vector2(0,16*t)
 		return Vector2(0,16)
 	return Vector2.ZERO
+
+static var _door_textures: Dictionary={}
+static func door_texture(weight: float) -> Texture2D:
+	var index=clampi(roundi(weight*5),0,5)
+	if not _door_textures.has(index):_door_textures[index]=ImageTexture.create_from_image(door_image(float(index)/5))
+	return _door_textures[index]

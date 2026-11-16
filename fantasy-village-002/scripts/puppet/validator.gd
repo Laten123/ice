@@ -50,6 +50,7 @@ static func load_skin(root: String) -> Dictionary:
 		if key not in ALLOWED:errors.append("未授权清单字段："+str(key))
 	for field in ["skin_id","version","display_name","author","author_id","source","license","license_url","attribution"]:
 		if not m.get(field) is String or m[field].strip_edges().is_empty():errors.append("缺少元数据："+field)
+		elif m[field].length()>2048:errors.append("元数据过长："+field)
 	if not safe_path(str(m.get("skin_id",""))) or "/" in str(m.get("skin_id","")) or str(m.get("skin_id","")).length()>64:errors.append("skin_id必须为安全标识符")
 	if m.get("schema_version")!=1 or m.get("rig_version")!="1.0":errors.append("不兼容的皮肤或骨架版本")
 	if not point(m.get("canvas")) or Lib.v(m.canvas)!=Vector2i(48,48):errors.append("画布必须48×48")
