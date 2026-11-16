@@ -1,0 +1,68 @@
+name: Test Fantasy Village 002
+
+on:
+  push:
+    branches:
+      - feature/002-community-ui
+    paths:
+      - fantasy-village-002/**
+      - .github/workflows/ci-fantasy-village-002.yml
+      - .github/scripts/prepare-godot-headless.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-fantasy-village-002
+  cancel-in-progress: true
+
+jobs:
+  test:
+    if: github.repository == 'Laten123/ice'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GODOT_BIN: ${{ github.workspace }}/fantasy-village-002/.build-tools/godot/Godot_v4.6.3-stable_linux.x86_64
+      XDG_CONFIG_HOME: ${{ github.workspace }}/fantasy-village-002/.build-tools/xdg/config
+      XDG_DATA_HOME: ${{ github.workspace }}/fantasy-village-002/.build-tools/xdg/data
+      XDG_CACHE_HOME: ${{ github.workspace }}/fantasy-village-002/.build-tools/xdg/cache
+    steps:
+      - name: Check out the 002 source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Prepare official Godot 4.6.3
+        shell: bash
+        run: |
+          mkdir -p "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_CACHE_HOME"
+          python3 .github/scripts/prepare-godot-headless.py --project fantasy-village-002
+          "$GODOT_BIN" --version
+
+      - name: Run the 002 behavioral suite
+        shell: bash
+        run: |
+          "$GODOT_BIN" --headless --path fantasy-village-002 \
+            --script res://tests/smoke_test.gd 2>&1 | tee "$RUNNER_TEMP/fantasy-village-002-smoke.log"
+          python3 - "$RUNNER_TEMP/fantasy-village-002-smoke.log" <<'PY'
+          import pathlib
+          import re
+          import sys
+          log = pathlib.Path(sys.argv[1]).read_text()
+          match = re.search(r'RESULT: (\d+)/(\d+) checks passed', log)
+          if not match or int(match[2]) == 0 or match[1] != match[2]:
+              raise SystemExit('002 smoke suite did not pass cleanly.')
+          if 'SCRIPT ERROR:' in log or '\nERROR:' in log:
+              raise SystemExit('002 smoke suite reported an engine error.')
+          print('002 suite:', match.group(0))
+          PY
+
+      - name: Upload the 002 test log
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: fantasy-village-002-smoke
+          path: ${{ runner.temp }}/fantasy-village-002-smoke.log
+          if-no-files-found: warn
+          retention-days: 7
