@@ -1,0 +1,166 @@
+{
+  "repository": "Laten123/ice",
+  "base_commit": "b37073ecbdbdf37561310cf8325d3f103c232772",
+  "implementation_commit": "618eb44ddc2348339df41b990ec15c7b1145257d",
+  "total_files": 39,
+  "all_changes_added_in_independent_directory": true,
+  "old_project_modified": false,
+  "files": [
+    {
+      "path": "fantasy-village-001/.gitignore",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/LICENSES/GODOT-COPYRIGHT.txt",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/LICENSES/GODOT.txt",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/LICENSES/NOTO-CJK.txt",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/README.md",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/assets/ui/placeholder_ui.otf",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/assets/ui/placeholder_ui.otf.import",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/data/community_data.gd",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/data/community_data.gd.uid",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/docs/001-项目骨架搭建.md",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/docs/previews/001-android-portrait.png",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/docs/previews/001-desktop.png",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/docs/test-results/001-android-landscape-console.txt",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/docs/test-results/001-android-portrait-console.txt",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/docs/test-results/001-browser.json",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/docs/test-results/001-build-sha256.txt",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/docs/test-results/001-build.txt",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/docs/test-results/001-desktop-console.txt",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/docs/test-results/001-smoke.txt",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/export_presets.cfg",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/launch_windows.bat",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/play_web.bat",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/project.godot",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/scenes/main.tscn",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/scripts/main.gd",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/scripts/main.gd.uid",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/scripts/ui/avatar.gd",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/scripts/ui/avatar.gd.uid",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/scripts/world/community_world.gd",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/scripts/world/community_world.gd.uid",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/scripts/world/resident_agent.gd",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/scripts/world/resident_agent.gd.uid",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/tests/browser_smoke.cjs",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/tests/smoke_test.gd",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/tests/smoke_test.gd.uid",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/tools/build.py",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/tools/fetch_export_templates.py",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/tools/make_placeholder_font.py",
+      "status": "added"
+    },
+    {
+      "path": "fantasy-village-001/tools/serve_web.py",
+      "status": "added"
+    }
+  ]
+}
