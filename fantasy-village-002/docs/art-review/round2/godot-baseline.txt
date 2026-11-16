@@ -1,0 +1,260 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+002 smoke test — Godot 4.6.3-stable (official)
+PASS: A fresh local state has no identity
+PASS: A valid account name creates a local identity
+PASS: The created state reports an identity
+PASS: The account UUID is a UUID v4
+PASS: The resident UUID is a UUID v4
+PASS: The model UUID is a UUID v4
+PASS: Resident UUID and model UUID are independent
+PASS: The one land points at the one bound resident
+PASS: The one land belongs to the account
+PASS: The community contains the bound model and one neighbor
+PASS: Exactly one resident is bound to the account
+PASS: A model binding can be replaced
+PASS: Replacing the model keeps the resident UUID
+PASS: The replacement model has its own UUID
+PASS: A null model binding is rejected
+PASS: An empty model UUID is rejected
+PASS: An empty model ID is rejected
+PASS: An empty model display name is rejected
+PASS: A model UUID already used by another resident is rejected
+PASS: A rejected model binding leaves the bound model unchanged
+PASS: A rejected model binding leaves the community entry unchanged
+PASS: A rejected model binding leaves identity and community count unchanged
+PASS: A valid identity can be persisted
+PASS: A persisted identity can be loaded
+PASS: Loading preserves the account UUID
+PASS: Loading preserves the resident UUID
+PASS: Loading preserves the replaced model binding
+PASS: Loading preserves the community model count
+WARNING: 002 profile violates the one-account/one-land/one-resident rule
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:95)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:107)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile with two bound residents is rejected
+PASS: A profile with two bound residents is rejected leaves no partial identity
+WARNING: 002 profile violates the one-account/one-land/one-resident rule
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:95)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:112)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile with a duplicate model UUID is rejected
+PASS: A profile with a duplicate model UUID is rejected leaves no partial identity
+WARNING: 002 profile violates the one-account/one-land/one-resident rule
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:95)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:117)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile with a duplicate resident UUID is rejected
+PASS: A profile with a duplicate resident UUID is rejected leaves no partial identity
+WARNING: 002 bound resident is missing from the community list
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:92)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:121)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound resident is absent is rejected
+PASS: A profile whose bound resident is absent is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:125)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile with an empty bound model UUID is rejected
+PASS: A profile with an empty bound model UUID is rejected leaves no partial identity
+WARNING: 002 profile violates the one-account/one-land/one-resident rule
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:95)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:129)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose land points at another resident is rejected
+PASS: A profile whose land points at another resident is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:134)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile with a bound/community model mismatch is rejected
+PASS: A profile with a bound/community model mismatch is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:138)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound name differs from the community is rejected
+PASS: A profile whose bound name differs from the community is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:142)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound status differs from the community is rejected
+PASS: A profile whose bound status differs from the community is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:146)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound model name differs is rejected
+PASS: A profile whose bound model name differs is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:150)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound model ID differs is rejected
+PASS: A profile whose bound model ID differs is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:154)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound model presence differs is rejected
+PASS: A profile whose bound model presence differs is rejected leaves no partial identity
+WARNING: 002 bound resident and community entry disagree on identity data
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:88)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:158)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile whose bound flag is false is rejected
+PASS: A profile whose bound flag is false is rejected leaves no partial identity
+WARNING: 002 profile is missing required identity sections
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:71)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:162)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile without an account section is rejected
+PASS: A profile without an account section is rejected leaves no partial identity
+WARNING: Unsupported 002 profile version
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:64)
+         [2] _expect_rejected (res://tests/smoke_test.gd:414)
+         [3] _test_identity (res://tests/smoke_test.gd:166)
+         [4] _run (res://tests/smoke_test.gd:32)
+PASS: A profile with an unsupported version is rejected
+PASS: A profile with an unsupported version is rejected leaves no partial identity
+WARNING: 002 profile is not valid JSON
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _reject_profile (res://scripts/state/app_state.gd:191)
+         [1] load_identity (res://scripts/state/app_state.gd:58)
+         [2] _test_identity (res://tests/smoke_test.gd:173)
+         [3] _run (res://tests/smoke_test.gd:32)
+PASS: Malformed JSON is rejected
+PASS: Malformed JSON leaves no partial identity
+PASS: The resident walking script still loads
+PASS: A route can cross the map around a building
+PASS: The walk stays inside bounds and outside obstacles
+PASS: The walk reaches its destination and stops
+PASS: The 002 app scene loads
+PASS: The app scene has its script
+PASS: The packaged 002 UI font is imported and loaded
+PASS: The app starts on the login screen
+PASS: The login screen shows the community title
+PASS: The login screen shows the subtitle
+PASS: The login screen presents the owner entry
+PASS: The entry button is disabled while the account name is empty
+PASS: Typing a name enables the entry button
+PASS: Submitting the login opens the community screen
+PASS: The login created the local identity
+PASS: The login persisted the local identity
+PASS: The community screen has the four sketch regions
+PASS: The top bar shows the bound model name
+PASS: The top bar shows the model UUID label
+PASS: The top bar shows the community model count
+PASS: The world channel section is visible
+PASS: The world channel seeds one owner and one model message
+PASS: The owner dock shows the owner name
+PASS: The owner dock shows the owner UUID
+PASS: The home contains only the owner and the bound AI
+PASS: The home resident carries the bound resident UUID
+PASS: The old public-village neighbor is not in the home
+PASS: The bound resident is the only AI in the home
+PASS: Clicking the bound AI updates only the read-only model profile
+PASS: Clicking the bound AI keeps the bound private chat visible
+PASS: Private chat stays bound to the account resident
+PASS: Material switch changes the home resident appearance
+PASS: Material switch keeps the top avatar in sync with the home resident
+PASS: Material switch does not change the resident UUID
+PASS: The workshop button gives an explicit placeholder notice
+PASS: The bench exposes an AI-callable affordance
+PASS: The house door is an AI-callable entrance
+PASS: The plot registry exposes six demo plots
+PASS: An AI visit request can be recorded
+PASS: The visited resident can accept a request
+PASS: An accepted request opens the plot permission
+PASS: The bound resident can return to its own home
+PASS: A facility can be reserved by a resident
+PASS: Reservation records the occupying resident
+PASS: An occupied facility rejects a second resident
+PASS: Releasing a facility clears its occupancy
+PASS: Clicking the owner opens the owner profile, not a movement command
+PASS: Clicking the owner does not start movement
+PASS: Clicking empty ground starts the owner avatar moving
+PASS: The owner avatar moves after a ground click
+PASS: Clicking ground does not move the bound AI
+PASS: The mock controller makes the AI sit on the bench
+PASS: The mock controller makes the AI enter the house
+PASS: The mock controller makes the AI rest in the house
+PASS: The mock controller makes the AI leave the house
+PASS: The AI uses a known action state independent from its sprite
+PASS: Sending clears the private input
+PASS: The private dialog shows the sent message
+PASS: The private dialog shows the local placeholder reply
+PASS: The portrait map sits below the top bar
+PASS: The portrait world channel sits below the map
+PASS: The portrait owner dock sits below the world channel
+PASS: The portrait dock fits inside the 480x800 viewport
+PASS: The portrait top bar fits the viewport width
+PASS: The landscape channel sits to the right of the map
+PASS: The landscape owner dock sits to the right of the map
+PASS: The landscape dock sits below the world channel
+PASS: The landscape map is not squeezed below 240 pixels
+PASS: The landscape dock fits inside the 844x390 viewport
+RESULT: 129/129 checks passed

@@ -1,0 +1,43 @@
+{
+  "images": [
+    {
+      "image": "outdoor",
+      "native": [
+        416,
+        272
+      ],
+      "preview": [
+        1664,
+        1088
+      ],
+      "nearest_exact": true
+    },
+    {
+      "image": "interior",
+      "native": [
+        224,
+        176
+      ],
+      "preview": [
+        896,
+        704
+      ],
+      "nearest_exact": true
+    },
+    {
+      "image": "proportions",
+      "native": [
+        416,
+        176
+      ],
+      "preview": [
+        1664,
+        704
+      ],
+      "nearest_exact": true
+    }
+  ],
+  "source_sha256_verified": true,
+  "godot_smoke": "129/129",
+  "runtime_changed": false
+}
